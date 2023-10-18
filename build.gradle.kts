@@ -19,9 +19,13 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter:3.1.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("se.akerfeldt:okhttp-signpost:1.1.0")
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("oauth.signpost:signpost-core:2.1.1")
+    implementation("org.json:json:20231013")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.0")
 }
 
 tasks.withType<KotlinCompile> {
