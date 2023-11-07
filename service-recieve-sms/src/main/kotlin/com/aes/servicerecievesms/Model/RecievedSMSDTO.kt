@@ -1,11 +1,15 @@
 package com.aes.servicerecievesms.Model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 class RecievedSMSDTO(
-    var id: Int,                //The ID of the MO SMS
-    var msisdn: Int,            // The MSISDN of the mobile device who sent the SMS.
-    var receiver: Int,          //The short code on which the SMS was received.
-    var message: String,        //The body of the SMS, incl. keyword.
-    var senttime: Int,          //The UNIX Timestamp when the SMS was sent.
+    var id: Int = 0,                //The ID of the MO SMS
+    var msisdn: Long = 0,            // The MSISDN of the mobile device who sent the SMS.
+    var receiver: Long = 0,          //The short code on which the SMS was received.
+    var message: String = "",        //The body of the SMS, incl. keyword.
+    var senttime: Int = 0,          //The UNIX Timestamp when the SMS was sent.
     var webhook_label: String? = null, //Label of the webhook who matched the SMS.
     var sender: String? = null,        //If the SMS was sent with a text based sender, then this field is set. Optional.
     var mcc: Int? = null,              //MCC, mobile country code. Optional.
