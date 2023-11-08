@@ -1,7 +1,3 @@
-
-//@Repositoy=
-//interface=xyzRepository:  CRUDRepository<my_entity, entity_id>{}
-//entity_id=should ve a strig
 //in=service inject xyzReposiory in constructor by val xyzRepo : XyzRepository
 
 @Entity
