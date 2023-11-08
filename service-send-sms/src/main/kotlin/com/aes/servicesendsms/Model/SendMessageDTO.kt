@@ -26,5 +26,4 @@ class SendMessageDTO(
     var max_parts: Int? = null, //1-255 can't be used w tags or binary sms'. Limits number of sms messages a single message will send. Useful if sent by machine
     var extra_details: String? = null, //To get more details about the number of parts sent to each recipient, set this to “recipients_usage”.
     var recipients: List<RecipientDTO> //List of recipients
-) {
-}
+)

@@ -4,14 +4,15 @@ import com.aes.servicerecievesms.Model.RecievedSMSDTO
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
-import java.util.logging.Logger
+import com.aes.common.logging.Logging
+import com.aes.common.logging.logger
 
 @RestController("/message")
-class RecieveSMSController() {
+class RecieveSMSController : Logging {
 
     @PostMapping("/receive")
     fun receiveSMS(@RequestBody resource: RecievedSMSDTO) {
-        Logger.getAnonymousLogger().info("Received Message !! ${resource.message}")
+        logger().info("Received Message !! ${resource.message}")
     }
 
 

@@ -1,3 +1,2 @@
 rootProject.name = "AES"
-include("service-recieve-sms")
-include("service-send-sms")
+include(":common", ":service-recieve-sms", ":service-send-sms")

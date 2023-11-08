@@ -20,6 +20,4 @@ class RecievedSMSDTO(
     var payload: String? = null,       //Binary payload of the received SMS. Optional.
     var country_code: String? = null,  //Country code of the msisdn. Optional
     var country_prefix: Int? = null    //Country prefix of the msisdn. Optional
-) {
-
-}
+)
