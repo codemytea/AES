@@ -1,11 +1,8 @@
 package com.aes.serviceshared.entities
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.ManyToOne
+import com.aes.serviceshared.Models.Gender
+import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
-import org.springframework.data.annotation.Id
 import java.time.LocalDate
 
 @Entity
