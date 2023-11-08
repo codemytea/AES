@@ -1,0 +1,130 @@
+
+//@Repositoy=
+//interface=xyzRepository:  CRUDRepository<my_entity, entity_id>{}
+//entity_id=should ve a strig
+//in=service inject xyzReposiory in constructor by val xyzRepo : XyzRepository
+
+@Entity
+data class UserEntity(
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column
+    val user_id: Long,
+
+    @Column
+    val name: String? = null,
+
+    @Column
+    val phone_number: String,
+
+    @Column
+    val location: String? = null,
+
+    @Column
+    val farm_size_acres: String? = null,
+
+    @Column
+    val soil_type: String? = null,
+
+    @Column
+    val main_crop_type: String? = null,
+
+    @Column
+    val age: Int? = null
+
+    @Enumerated(value = EnumType.STRING)
+    @Column
+    val gender: Gender? = null
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Column
+    val message_history: List<Message>? = emptyList();
+
+    @Column
+    val created_at: LocalDate? = null
+
+    @Column
+    val updated_at: LocalDate? = null
+)
+
+@Repository
+interface UserRepository: CRUD<UserEntity, String>
+
+@Entity
+data class MessageEntity(
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column
+    val message_id: Long,
+
+    @Column
+    val content: String? = null,
+
+    @Column
+    val timestamp: LocalDate? = null,
+
+    @Column
+    val is_sent_by_user: Boolean? = null,
+
+    @Enumerated(value = EnumType.STRING)
+    @Column
+    val status: MessageStatus? = null, //PENDING, FAILED, DELIVERED etc
+
+    @Enumerated(value = EnumType.STRING)
+    @Column
+    val category: MessageCategory? = null,
+
+    @Column
+    val sent_at: LocalDate? = null
+)
+
+@Repository
+interface MessageRepository: CRUD<MessageEntity, String>
+
+
+@Entity
+data class NotificationEntity(
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column
+    val notification_id: Long? = null,
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @Column
+    val user: User? = null,
+
+    @Enumerated(value = EnumType.STRING)
+    @Column
+    val notification_type: NotificationTypes? = null,
+)
+
+@Repository
+interface NotificationEntity: CRUD<NotificationEntity, String>
+
+@Entity
+data class MessageLocalisationEntity(
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column
+    val localization_id: Long? = null,
+
+    @ManyToOne
+    @JoinColumn(name = "message_id")
+    @Column
+    val message: Message? = null,
+
+    @Column
+    val language_code: String? = null,
+
+    @Column
+    val translated_content: String? = null
+)
+
+@Repository
+interface MessageLocalisationRepository: CRUD<MessageLocalisationEntity, String>
+
