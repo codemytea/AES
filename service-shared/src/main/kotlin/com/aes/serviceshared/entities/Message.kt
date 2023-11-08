@@ -4,14 +4,14 @@ import com.aes.serviceshared.Models.MessageStatus
 import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
 import java.time.LocalDate
+import java.util.*
 
 @Entity
 class Message(
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column
-    val message_id: Long,
+    val message_id: UUID,
 
     @Column
     val content: String? = null,

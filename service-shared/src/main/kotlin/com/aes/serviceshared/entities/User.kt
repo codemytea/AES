@@ -4,14 +4,14 @@ import com.aes.serviceshared.Models.Gender
 import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
 import java.time.LocalDate
+import java.util.*
 
 @Entity
 class User(
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column
-    val user_id: Long,
+    val user_id: UUID,
 
     @Column
     val name: String? = null,

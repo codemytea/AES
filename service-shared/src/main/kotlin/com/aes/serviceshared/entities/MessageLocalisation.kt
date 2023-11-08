@@ -2,14 +2,14 @@ package com.aes.serviceshared.entities
 
 import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
+import java.util.*
 
 @Entity
 class MessageLocalisation(
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column
-    val localization_id: Long? = null,
+    val localization_id: UUID,
 
     @ManyToOne
     @JoinColumn(name = "message_id")
