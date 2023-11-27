@@ -3,6 +3,8 @@ package com.aes.serviceshared.entities
 import com.aes.serviceshared.Models.Gender
 import jakarta.persistence.*
 import org.hibernate.annotations.GenericGenerator
+import java.io.Serial
+import java.io.Serializable
 import java.time.LocalDate
 import java.util.*
 
@@ -10,26 +12,13 @@ import java.util.*
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column
-    val user_id: UUID,
+    val id: UUID,
 
     @Column
     val name: String? = null,
 
     @Column
-    val phone_number: String,
-
-    @Column
-    val location: String? = null,
-
-    @Column
-    val farm_size_acres: String? = null,
-
-    @Column
-    val soil_type: String? = null,
-
-    @Column
-    val main_crop_type: String? = null,
+    val phoneNumber: String,
 
     @Column
     val age: Int? = null,
@@ -38,13 +27,6 @@ class User(
     @Column
     val gender: Gender? = null,
 
-    @OneToMany(fetch = FetchType.LAZY)
     @Column
-    val message_history: List<Message>? = emptyList(),
-
-    @Column
-    val created_at: LocalDate? = null,
-
-    @Column
-    val updated_at: LocalDate? = null,
-)
+    val literacy: Float? = null,
+): Serializable

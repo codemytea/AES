@@ -27,7 +27,6 @@ class RetrieveSMSService() : Logging {
         }
     }
 
-
     fun retrieveMessages(): Page?{
         return restTemplate.getForEntity(uri, Page::class.java).also {
             if(!it.statusCode.is2xxSuccessful) throw Exception("Error ${it.statusCode.value()}")

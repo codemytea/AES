@@ -1,31 +1,47 @@
 package com.aes.serviceshared.entities
 
+import com.aes.serviceshared.Models.LanguageCode
 import com.aes.serviceshared.Models.MessageStatus
+import com.aes.serviceshared.Models.MessageType
 import jakarta.persistence.*
-import org.hibernate.annotations.GenericGenerator
-import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 @Entity
 class Message(
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column
-    val message_id: UUID,
 
     @Column
-    val content: String? = null,
+    val message: String,
 
     @Column
-    val timestamp: LocalDate? = null,
-
-    @Column
-    val is_sent_by_user: Boolean? = null,
+    val sentAt: LocalDateTime,
 
     @Enumerated(value = EnumType.STRING)
     @Column
-    val status: MessageStatus? = null, //PENDING, FAILED, DELIVERED etc
+    val type: MessageType,
 
+    @Enumerated(value = EnumType.STRING)
     @Column
-    val sent_at: LocalDate? = null
-)
+    val status: MessageStatus,
+
+    @Enumerated(value = EnumType.STRING)
+    @Column
+    val language: LanguageCode,
+
+    @OneToMany
+    val messageTopics: List<MessageTopics> = listOf()
+    )
+{
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    lateinit var id: UUID
+
+    @ManyToOne
+    var user: User? = null
+
+}
+
+
+
+
+
