@@ -5,6 +5,7 @@ import com.aes.smsservices.Entities.Message
 import com.aes.smsservices.Entities.User
 import com.aes.smsservices.Enums.LanguageCode
 import com.aes.smsservices.Enums.MessageType
+import com.aes.smsservices.Mappers.getLanguageCodeForCountry
 import com.aes.smsservices.Models.RecievedMessageDTO
 import com.aes.smsservices.Repositories.MessageRepository
 import com.aes.smsservices.Repositories.UserRepository
@@ -35,13 +36,15 @@ class RecieveSmsService(
                 User(
                     UUID.randomUUID(),
                     listOf(resource.phoneNumber),
-                    resource.country,
+                    LanguageCode.fromLanguage(getLanguageCodeForCountry(resource.country)) ?: LanguageCode.EN,
                 )
             )
         }
 
-        if (resource.country != LanguageCode.GB){
-            resource.message = translateSmsService.translateMessage(resource.message, fromLanguage = resource.country)
+        val lang = user.preferredLanguage ?: LanguageCode.EN
+
+        if (lang != LanguageCode.EN){
+            resource.message = translateSmsService.translateMessage(resource.message, fromLanguage = lang)
         }
 
         return Message(

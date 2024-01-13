@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 class NewMessageDetailsDTO(
     val messages: List<NewAPIMessageDTO>
 ){
-    fun toMessageDTOs(contents: String): MessageDTO{
-        return messages.flatMap { it.toMessageDTOs(contents) }
+    fun toMessageDTOs(contents: String): MessageDTO?{
+        return messages.firstOrNull()?.toMessageDTOs(contents)
     }
 }

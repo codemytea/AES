@@ -1,7 +1,7 @@
 package com.aes.smsservices.Models
 
-import com.aes.smsservices.Enums.LanguageCode
 import com.aes.smsservices.Enums.MessageStatus
+
 class MessageDTO(
     /**
      * Each message has unique id. This is via an HTTP request to the webhook when there is first an update with a message.
@@ -12,7 +12,7 @@ class MessageDTO(
     /**
      * The message
      * */
-    val content: String = "",
+    var content: String = "",
 
     /**
      * The msisdn of the recipient/sender
@@ -23,7 +23,12 @@ class MessageDTO(
      * The current status of the message
      * */
     val status: MessageStatus = MessageStatus.PENDING,
-)
+) {
+    /**
+     * Country message has come from. useful for setting users preferred lang if not set yet
+     * */
+    var country: String? = null
+}
 
 
 //every message has an id sent by the system

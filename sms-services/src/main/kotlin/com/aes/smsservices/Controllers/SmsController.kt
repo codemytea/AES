@@ -2,6 +2,7 @@ package com.aes.smsservices.Controllers
 
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
+import com.aes.smsservices.Mappers.toDTO
 import com.aes.smsservices.Models.MessageDTO
 import com.aes.smsservices.Models.MessageStatusDTO
 import com.aes.smsservices.Models.RecievedMessageDTO
@@ -29,7 +30,7 @@ class SmsController(
 
         val sms = recieveSmsService.save(resource)
 
-        return sms
+        return sms.toDTO()
 
     }
 
@@ -42,7 +43,7 @@ class SmsController(
 
         val sms = updateSmsService.update(resource)
 
-        return sms
+        return sms.toDTO()
 
     }
 }

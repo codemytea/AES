@@ -31,5 +31,5 @@ class RecievedMessageDTO(
      * The country code of where the message was sent from
      * */
     @JsonAlias("country_code")
-    var country: LanguageCode
+    var country: String
 )

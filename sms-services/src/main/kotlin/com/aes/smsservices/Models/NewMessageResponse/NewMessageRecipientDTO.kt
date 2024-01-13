@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 class NewMessageRecipientDTO(
-    val country: String,
-    val msisdn: Long
+    private val country: String,
+    private val msisdn: Long
 ){
 
     fun toMessageDTO(id: Long, content: String): MessageDTO{
@@ -16,8 +16,9 @@ class NewMessageRecipientDTO(
             content,
             msisdn,
             MessageStatus.PENDING,
-            country
-        )
+        ).apply {
+           this@apply.country = this@NewMessageRecipientDTO.country
+        }
     }
 
 }

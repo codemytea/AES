@@ -10,7 +10,7 @@ class NewMessageResponseDTO(
     val details: NewMessageDetailsDTO,
 
 ){
-    fun toMessageDTOs(contents: String): MessageDTO{
+    fun toMessageDTOs(contents: String): MessageDTO?{
         return details.toMessageDTOs(contents)
     }
 }

@@ -3,9 +3,7 @@ package com.aes.smsservices.Entities
 import com.aes.smsservices.Enums.Gender
 import com.aes.smsservices.Enums.LanguageCode
 import jakarta.persistence.*
-import java.io.Serializable
 import java.util.*
-import kotlin.collections.List
 
 @Entity
 class User(
@@ -27,7 +25,7 @@ class User(
      * The language the user sends messages in and the language the system sends messages back in
      * */
     @Column
-    val preferredLanguage: LanguageCode?,
+    var preferredLanguage: LanguageCode?,
 
     /**
      * The name of the user

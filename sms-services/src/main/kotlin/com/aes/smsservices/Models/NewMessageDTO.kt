@@ -28,17 +28,15 @@ class NewMessageDTO(
     /**
      * UK Shortcode all messages are sent from
      * */
-    var sender: String = "447418372559",
+    val sender: String = "447418372559",
 
 
     /**
      * Get an extra verbose response from GatewayAPI
      * */
-    var extra_details: String = "recipients_usage",
+    val extra_details: String = "recipients_usage",
 
     ){
-
-    //TODO should this be here? Can't I translate the message accpuding to teh user associate with each recipient (thier lang preference)
 
     /**
      * The recipients of the message
