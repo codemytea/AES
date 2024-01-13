@@ -20,22 +20,22 @@ class SendSMSServiceTest(
 
     override fun run(args: ApplicationArguments?) {
 
-        val user = userRepository.findByPhoneNumberContaining(447565533834) ?: let{
-            userRepository.save(
-                User(
-                    UUID.randomUUID(),
-                    listOf(447565533834),
-                    LanguageCode.FR
-                )
-            )
-        }
-
-        sendSMSService.sendSMS(NewMessageDTO(
-            "New test",
-            recipient = RecipientDTO(
-                447565533834
-            )
-        ))
+//        val user = userRepository.findByPhoneNumberContaining(447565533834) ?: let{
+//            userRepository.save(
+//                User(
+//                    UUID.randomUUID(),
+//                    listOf(447565533834),
+//                    LanguageCode.FR
+//                )
+//            )
+//        }
+//
+//        sendSMSService.sendSMS(NewMessageDTO(
+//            "New test",
+//            recipient = RecipientDTO(
+//                447565533834
+//            )
+//        ))
 
 
     }
