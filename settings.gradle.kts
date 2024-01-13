@@ -1,2 +1,2 @@
-rootProject.name = "AES"
-include("common", "service-recieve-sms", "service-send-sms", "service-shared")
+include("common")
+include("sms-services")
