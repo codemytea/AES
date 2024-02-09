@@ -1,4 +1,4 @@
-package com.aes.smsservices.Enums
+package com.aes.common.Enums
 
 enum class MessageType {
     INCOMING,  //sent by user

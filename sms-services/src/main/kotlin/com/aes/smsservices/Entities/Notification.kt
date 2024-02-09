@@ -1,8 +1,8 @@
 package com.aes.smsservices.Entities
 
+import com.aes.common.Entities.User
 import jakarta.persistence.*
 import java.io.Serializable
-import java.util.*
 
 @Entity
 class Notification(

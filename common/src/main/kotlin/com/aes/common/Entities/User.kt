@@ -1,7 +1,7 @@
-package com.aes.smsservices.Entities
+package com.aes.common.Entities
 
-import com.aes.smsservices.Enums.Gender
-import com.aes.smsservices.Enums.LanguageCode
+import com.aes.common.Enums.Gender
+import com.aes.common.Enums.LanguageCode
 import jakarta.persistence.*
 import java.util.*
 

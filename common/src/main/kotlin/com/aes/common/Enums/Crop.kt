@@ -1,4 +1,4 @@
-package com.aes.usercharacteristicsservice.Enums
+package com.aes.common.Enums
 
 enum class Crop {
     MAIZE,

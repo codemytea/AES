@@ -1,7 +1,7 @@
-package com.aes.smsservices.Entities
+package com.aes.common.Entities
 
-import com.aes.smsservices.Enums.MessageStatus
-import com.aes.smsservices.Enums.MessageType
+import com.aes.common.Enums.MessageStatus
+import com.aes.common.Enums.MessageType
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -63,10 +63,10 @@ class Message(
      * The calculated message topics
      * */
     @OneToMany
-    val messageTopics: List<MessageTopics>? = null,
+    val messageTopics: List<MessageTopics> = listOf(),
 
 
-)
+    )
 
 
 

@@ -1,6 +1,6 @@
-package com.aes.smsservices.Repositories
+package com.aes.common.Repositories
 
-import com.aes.smsservices.Entities.User
+import com.aes.common.Entities.User
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import java.util.*

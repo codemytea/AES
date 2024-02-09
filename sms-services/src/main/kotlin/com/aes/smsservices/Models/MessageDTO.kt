@@ -1,6 +1,6 @@
 package com.aes.smsservices.Models
 
-import com.aes.smsservices.Enums.MessageStatus
+import com.aes.common.Enums.MessageStatus
 
 class MessageDTO(
     /**

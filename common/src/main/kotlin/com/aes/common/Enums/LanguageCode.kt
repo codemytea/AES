@@ -1,4 +1,4 @@
-package com.aes.smsservices.Enums
+package com.aes.common.Enums
 
 import net.suuft.libretranslate.Language
 import java.util.*
@@ -22,7 +22,7 @@ enum class LanguageCode(val language: Language) {
 
     companion object{
         fun fromLanguage(language: Language) : LanguageCode? {
-            return entries.find {
+            return values().find {
                 it.language == language
             }
         }

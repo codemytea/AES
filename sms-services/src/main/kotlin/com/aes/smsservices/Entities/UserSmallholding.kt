@@ -1,6 +1,7 @@
 package com.aes.smsservices.Entities
 
-import com.aes.smsservices.Enums.Crop
+import com.aes.common.Entities.User
+import com.aes.common.Enums.Crop
 import com.aes.smsservices.Enums.SoilType
 import jakarta.persistence.*
 import java.io.Serializable

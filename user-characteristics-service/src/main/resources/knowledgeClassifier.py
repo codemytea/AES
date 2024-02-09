@@ -23,18 +23,18 @@ class Topic(str, Enum):
     BUYING_SEEDS = "Buying Seeds"
 
 
-def getCropCycleTopicsOfMessage(message):
+def getTopicOfMessage(message):
     pipe = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
     return pipe(message, list(map(str, Topic)))['labels'][0]
 
 
-def getCropTopicsOfMessage(message):
+def getCropOfMessage(message):
     pipe = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
     return pipe(message, list(map(str, Crop)))['labels'][0]
 
 
 
-kotlinInterop.registerFunction('getCropCycleTopicsOfMessage', getCropCycleTopicsOfMessage)
-kotlinInterop.registerFunction('getCropTopicsOfMessage', getCropTopicsOfMessage)
+kotlinInterop.registerFunction('getTopicOfMessage', getTopicOfMessage)
+kotlinInterop.registerFunction('getCropOfMessage', getCropOfMessage)
 
 kotlinInterop.execute()

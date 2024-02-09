@@ -32,7 +32,7 @@ dependencies {
     runtimeOnly("ai.djl.pytorch:pytorch-engine")
     runtimeOnly("ai.djl.pytorch:pytorch-model-zoo")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation(project(mapOf("path" to ":sms-services")))
+    implementation(project(mapOf("path" to ":common")))
     implementation("net.clojars.suuft:libretranslate-java:1.0.5")
     implementation("org.languagetool:languagetool-core:6.3")
     implementation ("org.jetbrains.kotlinx:kotlin-deeplearning-onnx:0.5.2")

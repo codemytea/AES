@@ -1,18 +1,18 @@
 package com.aes.smsservices.Services
 
+import com.aes.common.Entities.Message
+import com.aes.common.Entities.User
+import com.aes.common.Enums.LanguageCode
+import com.aes.common.Enums.MessageType
+import com.aes.common.Repositories.MessageRepository
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
-import com.aes.smsservices.Entities.Message
-import com.aes.smsservices.Entities.User
-import com.aes.smsservices.Enums.LanguageCode
-import com.aes.smsservices.Enums.MessageType
 import com.aes.smsservices.Exceptions.MessageRequestException
 import com.aes.smsservices.Mappers.getLanguageCodeForCountry
 import com.aes.smsservices.Models.MessageDTO
 import com.aes.smsservices.Models.NewMessageDTO
 import com.aes.smsservices.Models.NewMessageResponse.NewMessageResponseDTO
-import com.aes.smsservices.Repositories.MessageRepository
-import com.aes.smsservices.Repositories.UserRepository
+import com.aes.common.Repositories.UserRepository
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service

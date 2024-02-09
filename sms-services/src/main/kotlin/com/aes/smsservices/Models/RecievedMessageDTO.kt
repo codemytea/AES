@@ -1,6 +1,5 @@
 package com.aes.smsservices.Models
 
-import com.aes.smsservices.Enums.LanguageCode
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 

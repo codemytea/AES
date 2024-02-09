@@ -1,6 +1,6 @@
 package com.aes.smsservices.Models.NewMessageResponse
 
-import com.aes.smsservices.Enums.MessageStatus
+import com.aes.common.Enums.MessageStatus
 import com.aes.smsservices.Models.MessageDTO
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 

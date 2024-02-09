@@ -1,16 +1,12 @@
 package com.aes.smsservices.Services
 
-import org.springframework.stereotype.Service
+import com.aes.common.Entities.Message
+import com.aes.common.Repositories.MessageRepository
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
-import com.aes.smsservices.Entities.Message
-import com.aes.smsservices.Models.MessageDTO
-import com.aes.smsservices.Models.TranslateMessageDTO
-import com.aes.smsservices.Repositories.MessageRepository
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.stereotype.Service
 
 @Service
 class DeleteSmsService(

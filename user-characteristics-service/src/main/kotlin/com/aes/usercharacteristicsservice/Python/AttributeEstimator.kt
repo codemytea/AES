@@ -1,7 +1,7 @@
 package com.aes.usercharacteristicsservice.Python
 
-import com.aes.usercharacteristicsservice.Enums.Age
-import com.aes.usercharacteristicsservice.Enums.Gender
+import com.aes.common.Enums.Age
+import com.aes.common.Enums.Gender
 import org.springframework.stereotype.Service
 
 @Service

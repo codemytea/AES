@@ -1,5 +1,6 @@
 package com.aes.smsservices.Entities
 
+import com.aes.common.Entities.KnowledgeArea
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.IdClass

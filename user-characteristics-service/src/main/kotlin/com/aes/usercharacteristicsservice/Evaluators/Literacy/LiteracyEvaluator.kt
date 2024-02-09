@@ -1,6 +1,6 @@
 package com.aes.usercharacteristicsservice.Evaluators.Literacy
 
-import com.aes.smsservices.Repositories.MessageRepository
+import com.aes.common.Repositories.MessageRepository
 import com.aes.usercharacteristicsservice.Utilities.Utils.scaleProbability
 import org.languagetool.JLanguageTool
 import org.languagetool.Languages
@@ -15,7 +15,7 @@ class LiteracyEvaluator(
 ) {
 
     fun calculateLiteracyLevel(userId: UUID): Int {
-        val messages = messageRepository.getMessagesByUser(userId)
+        val messages = messageRepository.getMessagesByUserId(userId)
 
         if (messages.isNullOrEmpty()) return 0
 

@@ -1,4 +1,4 @@
-package com.aes.smsservices.Entities
+package com.aes.common.Entities
 
 import jakarta.persistence.*
 import java.io.Serializable

@@ -15,6 +15,10 @@ java {
 }
 
 repositories {
+    maven {
+        name = "clojars.org"
+        url = uri("https://repo.clojars.org")
+    }
     mavenCentral()
 }
 
@@ -27,6 +31,7 @@ dependencyManagement {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
+    implementation("net.clojars.suuft:libretranslate-java:1.0.5")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 tasks.withType<KotlinCompile> {

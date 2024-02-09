@@ -1,8 +1,7 @@
-package com.aes.smsservices.Repositories
+package com.aes.common.Repositories
 
-import com.aes.smsservices.Entities.Message
-import com.aes.smsservices.Entities.MessageTopics
-import com.aes.smsservices.Entities.MessageTopicsId
+import com.aes.common.Entities.MessageTopics
+import com.aes.common.Entities.MessageTopicsId
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 

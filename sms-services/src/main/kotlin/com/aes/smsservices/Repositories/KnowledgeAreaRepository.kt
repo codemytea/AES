@@ -1,7 +1,7 @@
 package com.aes.smsservices.Repositories
 
-import com.aes.smsservices.Entities.KnowledgeAreaId
-import com.aes.smsservices.Entities.KnowledgeArea
+import com.aes.common.Entities.KnowledgeAreaId
+import com.aes.common.Entities.KnowledgeArea
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 

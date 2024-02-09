@@ -1,10 +1,6 @@
 package com.aes.smsservices.Models
 
-import com.aes.smsservices.Enums.Crop
-import com.aes.smsservices.Enums.Topic
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 import java.time.ZoneId
 
