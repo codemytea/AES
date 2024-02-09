@@ -1,6 +1,6 @@
 package com.aes.smsservices.Entities
 
-import com.aes.common.model.TimeIdentifiers
+import com.aes.common.Enums.TimeIdentifiers
 import jakarta.persistence.*
 import java.time.LocalDateTime
 import java.util.*

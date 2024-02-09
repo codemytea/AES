@@ -1,4 +1,4 @@
-package com.aes.common.model
+package com.aes.common.Enums
 
 enum class TimeIdentifiers {
     YEAR,

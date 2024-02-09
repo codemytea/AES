@@ -1,6 +1,6 @@
 package com.aes.common.Utilities
 
-import com.aes.common.model.TimeIdentifiers
+import com.aes.common.Enums.TimeIdentifiers
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset

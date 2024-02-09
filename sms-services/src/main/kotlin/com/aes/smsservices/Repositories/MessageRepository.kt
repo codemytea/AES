@@ -6,7 +6,9 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-interface MessageRepository: CrudRepository<Message, Long>
+interface MessageRepository: CrudRepository<Message, Long>{
+    fun getMessagesByUser(userUUID: UUID): List<Message>?
+}
 
 
 

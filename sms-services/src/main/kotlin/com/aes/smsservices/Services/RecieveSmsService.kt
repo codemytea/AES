@@ -8,6 +8,7 @@ import com.aes.smsservices.Enums.MessageType
 import com.aes.smsservices.Mappers.getLanguageCodeForCountry
 import com.aes.smsservices.Models.RecievedMessageDTO
 import com.aes.smsservices.Repositories.MessageRepository
+import com.aes.smsservices.Repositories.MessageTopicsRepository
 import com.aes.smsservices.Repositories.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -18,8 +19,14 @@ import java.util.*
 class RecieveSmsService(
     val messageRepository: MessageRepository,
     val userRepository: UserRepository,
+    val messageTopicsRepository: MessageTopicsRepository,
     val translateSmsService: TranslateSmsService
 ) : Logging {
+
+    @Transactional
+    fun tagIncomingMessage(smsId : Long) {
+        KnowledgeEvaluator.
+    }
 
     /**
      * Saves incoming message to db, in english
@@ -46,6 +53,8 @@ class RecieveSmsService(
         if (lang != LanguageCode.EN){
             resource.message = translateSmsService.translateMessage(resource.message, fromLanguage = lang)
         }
+
+        tagIncomingMessage(resource.id)
 
         return Message(
             resource.id,

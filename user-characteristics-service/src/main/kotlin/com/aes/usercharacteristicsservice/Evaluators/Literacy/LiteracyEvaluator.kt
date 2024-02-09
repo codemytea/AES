@@ -1,40 +1,115 @@
 package com.aes.usercharacteristicsservice.Evaluators.Literacy
 
-/**
- *     Word Count:
- *         Calculate the average word count per message.
- *         Longer messages may suggest a more extensive vocabulary and possibly higher literacy.
- *
- *     Vocabulary Complexity:
- *         Create a list of common words (stop words) and calculate the percentage of non-stop words in each message.
- *         Higher percentage of non-stop words may indicate a more diverse vocabulary.
- *
- *     Spelling and Grammar:
- *         Use a spell-checking library to identify spelling mistakes.
- *         Count the number of grammatical errors (subject-verb agreement, tense issues, etc.).
- *         More errors might suggest lower literacy.
- *
- *     Sentence Structure:
- *         Analyze sentence length and complexity.
- *         Longer and more complex sentences might indicate a higher literacy level.
- *
- *     Punctuation:
- *         Count the usage of punctuation marks.
- *         Proper punctuation may be associated with better writing skills.
- *
- *     Readability Scores:
- *         Utilize readability scores like Flesch-Kincaid, Gunning Fog, or Coleman-Liau.
- *         Higher readability scores generally correlate with higher literacy.
- *
- *     Topic Modeling:
- *         Analyze the topics discussed in the messages.
- *         Sophisticated and varied topics may suggest a higher literacy level.
- *
- *     Machine Learning (Optional):
- *         Train a machine learning model using labeled data to predict literacy levels.
- *         Use features such as word frequency, syntactic complexity, and sentiment.
- *
- *
- * */
-class LiteracyEvaluator {
+import com.aes.smsservices.Repositories.MessageRepository
+import com.aes.usercharacteristicsservice.Utilities.Utils.scaleProbability
+import org.languagetool.JLanguageTool
+import org.languagetool.Languages
+import org.languagetool.rules.RuleMatch
+import org.springframework.stereotype.Service
+import java.util.*
+
+
+@Service
+class LiteracyEvaluator(
+    private val messageRepository: MessageRepository,
+) {
+
+    fun calculateLiteracyLevel(userId: UUID): Int {
+        val messages = messageRepository.getMessagesByUser(userId)
+
+        if (messages.isNullOrEmpty()) return 0
+
+        // Calculate average word count per message
+        val averageWordCount = calculateWordCountScore(messages.map { it.message.length }.average())
+
+        // Calculate average number of errors per message - weighted
+        val averageErrorsPerMessage = messages.map { errorsInMessage(it.message) }.average() * 6
+
+        // Calculate average message readability - weighted
+        val averageReadability = messages.map { messageReadability(it.message) }.average() * 2
+
+        // Calculate average vocabulary complexity (Type-Token Ratio)
+        val averageVocabularyComplexity = messages.map { calculateTypeTokenRatio(it.message) }.average()
+
+        // Combine individual metrics to calculate overall user literacy level
+        return ((averageWordCount + averageErrorsPerMessage + averageReadability + averageVocabularyComplexity) / 10.0).toInt()
+    }
+
+    private fun calculateWordCountScore(averageWordCount: Double): Double {
+        return scaleProbability(averageWordCount, 17.5) * 100.0
+    }
+
+    /**
+     * Number of errors in a message, suh as typos, syntactical errors etc
+     * 100 represents no mistakes and 0 represents mistakes everywhere
+     * */
+    private fun errorsInMessage(message: String): Double {
+
+        val langTool = JLanguageTool(Languages.getLanguageForShortCode("en-GB"))
+        val matches: List<RuleMatch> = langTool.check(message)
+
+        // Calculate the percentage of mistakes in the message
+        val mistakePercentage = (matches.size.toDouble() / message.split("\\s+".toRegex()).size) * 100.0
+
+        // Return the inverted percentage to scale it from 0 to 100
+        return 100.0 - mistakePercentage
+    }
+
+    /**
+     * Number of syllables in a word
+     * */
+    private fun countSyllables(word: String): Int {
+        var syllableCount = 0
+        var prevCharWasVowel = false
+
+        for (ch in word) {
+            val isVowel = ch.lowercaseChar() in "aeiouy"
+            if (isVowel && !prevCharWasVowel) {
+                syllableCount++
+            }
+            prevCharWasVowel = isVowel
+        }
+
+        if (syllableCount == 0 && word.isNotEmpty()) {
+            syllableCount = 1
+        }
+
+        return syllableCount
+    }
+
+
+    /**
+     * Calculates a messages' readability based on Flesch reading-ease score (FRES) test
+     * 100.0 is most easy to read, 0.0 is extremely difficult to read.
+     * */
+    private fun messageReadability(message: String): Double {
+        val words = message.split("\\s+".toRegex()).size
+        val sentences = message.split("[.!?]+".toRegex()).size
+
+        val syllableCount = message.split("\\s+".toRegex()).sumOf { countSyllables(it) }
+
+        return 206.835 - 1.015 * (words.toDouble() / sentences) - 84.6 * (syllableCount.toDouble() / words)
+    }
+
+    /**
+     * Calculates a messages' vocabulary complexity in a rudimentary way
+     * by getting number of unique words in a message. It is assumed
+     * that the greater number of unique words, the greater the messages
+     * vocabulary complexity.
+     *
+     * 100 represents the greatest vocabulary complexity and 0 represents the least
+     * */
+    fun calculateTypeTokenRatio(message: String): Double {
+        val words = message.split("\\s+".toRegex())
+        val totalWords = words.size
+
+        // Count the number of unique words (types)
+        val uniqueWords = words.toSet().size
+
+        // Calculate the Type-Token Ratio (TTR)
+        val typeTokenRatio = uniqueWords.toDouble() / totalWords
+
+        // Scale the result to a range between 0 and 100
+        return typeTokenRatio * 100.0
+    }
 }
