@@ -1,23 +1,31 @@
 package com.aes.usercharacteristicsservice.Evaluators.Literacy
 
 import com.aes.common.Repositories.MessageRepository
+import com.aes.common.Repositories.UserRepository
 import com.aes.usercharacteristicsservice.Utilities.Utils.scaleProbability
 import org.languagetool.JLanguageTool
 import org.languagetool.Languages
 import org.languagetool.rules.RuleMatch
+import org.springframework.context.annotation.Configuration
+import org.springframework.scheduling.annotation.EnableScheduling
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.util.*
 
 
 @Service
+@Configuration
+@EnableScheduling
 class LiteracyEvaluator(
     private val messageRepository: MessageRepository,
+    private val userRepository: UserRepository,
 ) {
 
-    fun calculateLiteracyLevel(userId: UUID): Int {
+    @Scheduled(cron = "0 0 1 * * ?")
+    fun calculateLiteracyLevel(userId: UUID): Float {
         val messages = messageRepository.getMessagesByUserId(userId)
 
-        if (messages.isNullOrEmpty()) return 0
+        if (messages.isNullOrEmpty()) return 0f
 
         // Calculate average word count per message
         val averageWordCount = calculateWordCountScore(messages.map { it.message.length }.average())
@@ -32,7 +40,13 @@ class LiteracyEvaluator(
         val averageVocabularyComplexity = messages.map { calculateTypeTokenRatio(it.message) }.average()
 
         // Combine individual metrics to calculate overall user literacy level
-        return ((averageWordCount + averageErrorsPerMessage + averageReadability + averageVocabularyComplexity) / 10.0).toInt()
+        val literacy =  ((averageWordCount + averageErrorsPerMessage + averageReadability + averageVocabularyComplexity) / 10.0).toFloat()
+
+        val user = userRepository.findById(userId).get()
+        user.literacy = literacy
+        userRepository.save(user)
+
+        return literacy
     }
 
     private fun calculateWordCountScore(averageWordCount: Double): Double {

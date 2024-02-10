@@ -1,5 +1,6 @@
 package com.aes.common.Entities
 
+import com.aes.common.Enums.Age
 import com.aes.common.Enums.Gender
 import com.aes.common.Enums.LanguageCode
 import jakarta.persistence.*
@@ -25,6 +26,7 @@ class User(
      * The language the user sends messages in and the language the system sends messages back in
      * */
     @Column
+    @Enumerated(value = EnumType.STRING)
     var preferredLanguage: LanguageCode?,
 
     /**
@@ -37,17 +39,19 @@ class User(
      * The age of the user
      * */
     @Column
-    val age: Int? = null,
+    @Enumerated(value = EnumType.STRING)
+    var age: Age? = null,
 
     /**
      * The gender of the user
      * */
     @Column
-    val gender: Gender? = null,
+    @Enumerated(value = EnumType.STRING)
+    var gender: Gender? = null,
 
     /**
      * The literacy level of the user
      * */
     @Column
-    val literacy: Float? = null,
+    var literacy: Float? = null,
 )

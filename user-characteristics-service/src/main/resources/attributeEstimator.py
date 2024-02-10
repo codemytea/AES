@@ -44,6 +44,6 @@ def getGenderForMessages(messages):
     return genderResultToEnum(result["label"])
 
 kotlinInterop.registerFunction('getAgeForMessages', getAgeForMessages)
-kotlinInterop.registerFunction('getGenderForMessage', getGenderForMessages)
+kotlinInterop.registerFunction('getGenderForMessages', getGenderForMessages)
 
 kotlinInterop.execute()

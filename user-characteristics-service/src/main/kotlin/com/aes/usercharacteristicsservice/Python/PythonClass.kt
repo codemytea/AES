@@ -3,6 +3,7 @@ package com.aes.usercharacteristicsservice.Python
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import kotlinx.coroutines.*
 import java.io.File
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.findAnnotations
@@ -45,8 +46,28 @@ abstract class PythonClass {
     }
     inline fun <reified T> executeProgram(scriptName: String, functionName: String, arguments: List<Any?>): T{
         writeArgumentsToFile(arguments, "args.json")
-        val process = Runtime.getRuntime().exec(arrayOf("python3", getPythonProgram(scriptName), functionName, getPathForFile("")))
-        process.onExit().join()
+        val outputFile = File(getPathForFile("out.txt"))
+        outputFile.writeText("")
+        val process = ProcessBuilder()
+            .command(mutableListOf("python3", getPythonProgram(scriptName), functionName, getPathForFile("")))
+            .redirectOutput(outputFile)
+            .redirectError(outputFile)
+            .start()
+        val job = CoroutineScope(Dispatchers.IO).async {
+            var currentLines = 0
+            while(true) {
+                delay(100)
+                val lines = outputFile.readLines()
+                for (i in currentLines until lines.size) {
+                    println(lines[i])
+                }
+                currentLines = lines.size
+            }
+        }
+        val result = process.onExit().join()
+        runBlocking {
+            job.cancelAndJoin()
+        }
         return readResultFromFile<T>("result.json")
     }
 }

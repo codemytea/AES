@@ -17,9 +17,11 @@ class UserKnowledge(
     val knowledgeLevel: Double? = null,
 
     @Id
+    @Enumerated(value = EnumType.STRING)
     val topic: Topic? = null,
 
     @Id
+    @Enumerated(value = EnumType.STRING)
     val crop: Crop? = null
 
     )

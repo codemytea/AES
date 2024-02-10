@@ -9,10 +9,16 @@ import com.aes.common.Repositories.UserKnowledgeRepository
 import com.aes.common.Repositories.UserRepository
 import com.aes.usercharacteristicsservice.Python.KnowledgeClassifiers
 import com.aes.usercharacteristicsservice.Utilities.Utils
+import jakarta.transaction.Transactional
+import org.springframework.context.annotation.Configuration
+import org.springframework.scheduling.annotation.EnableScheduling
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
+@Configuration
+@EnableScheduling
 class KnowledgeEvaluator(
     private val knowledgeClassifier: KnowledgeClassifiers,
     private val messageRepository: MessageRepository,
@@ -29,6 +35,8 @@ class KnowledgeEvaluator(
     }
 
 
+    @Scheduled(cron = "0 0 1 * * ?")
+    @Transactional
     fun calculateUserExpertiseOfCrop(crop: Crop, userId: UUID): List<Pair<Crop, Int>> {
         val messages = messageRepository.getMessagesByUserId(userId).map {
             it.messageTopics.firstOrNull()
@@ -55,6 +63,9 @@ class KnowledgeEvaluator(
         return crops
     }
 
+
+    @Scheduled(cron = "0 0 1 * * ?")
+    @Transactional
     fun calculateUserExpertiseOfTopic(userId: UUID): List<Pair<Topic, Int>> {
         val messages = messageRepository.getMessagesByUserId(userId).map {
             it.messageTopics.firstOrNull()
