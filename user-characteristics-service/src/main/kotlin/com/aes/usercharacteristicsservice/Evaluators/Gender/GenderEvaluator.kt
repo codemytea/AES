@@ -3,6 +3,8 @@ package com.aes.usercharacteristicsservice.Evaluators.Gender;
 import com.aes.common.Enums.Gender
 import com.aes.common.Repositories.MessageRepository
 import com.aes.common.Repositories.UserRepository
+import com.aes.common.logging.Logging
+import com.aes.common.logging.logger
 import com.aes.usercharacteristicsservice.Python.AttributeEstimator
 import jakarta.transaction.Transactional
 import org.springframework.context.annotation.Configuration
@@ -18,21 +20,24 @@ class GenderEvaluator(
     private val messageRepository: MessageRepository,
     private val userRepository: UserRepository,
     private val attributeEstimator: AttributeEstimator
-) {
+) : Logging {
 
     @Scheduled(cron = "0 0 1 * * ?")
     @Transactional
-    fun getGenderEstimate(userId: UUID): Gender? {
-        val messages = messageRepository.getMessagesByUserId(userId)
+    //@Scheduled(cron = "0/10 * * ? * *")
+    fun getGenderEstimate(){
 
-        if (messages.isNullOrEmpty()) return null
+        userRepository.findAll().forEach { user ->
 
-        val gender = attributeEstimator.estimateGender(messages.map { it.message })
+            val messages = messageRepository.getMessageByUserIdAndType(user.id).also {
+                if (it.isEmpty()) return@forEach
+            }
+            val gender = attributeEstimator.estimateGender(messages.map { it.message })
 
-        val user = userRepository.findById(userId).get()
-        user.gender = gender
-        userRepository.save(user)
+            logger().info("User ${user.id} estimated gender is $gender")
 
-        return gender
+            user.gender = gender
+            userRepository.save(user)
+        }
     }
 }

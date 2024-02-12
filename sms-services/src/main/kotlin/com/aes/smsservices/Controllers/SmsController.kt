@@ -30,6 +30,9 @@ class SmsController(
 
         val sms = recieveSmsService.save(resource)
 
+        logger().info("tagging message with id ${sms.id}")
+        recieveSmsService.tagIncomingMessage(sms)
+
         return sms.toDTO()
 
     }

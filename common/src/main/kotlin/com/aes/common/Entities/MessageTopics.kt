@@ -8,14 +8,14 @@ import java.io.Serializable
 class MessageTopics(
     @Id
     @ManyToOne
-    val knowledgeArea: KnowledgeArea
-){
+    val knowledgeArea: KnowledgeArea = KnowledgeArea(),
+
     @Id
     @ManyToOne
-    val sms: Message? = null
-}
+    val sms: Message = Message()
+)
 
 data class MessageTopicsId(
-    val sms: Message? = null,
-    val knowledgeArea: KnowledgeArea? = null
+    val sms: Message = Message(),
+    val knowledgeArea: KnowledgeArea = KnowledgeArea()
 ): Serializable

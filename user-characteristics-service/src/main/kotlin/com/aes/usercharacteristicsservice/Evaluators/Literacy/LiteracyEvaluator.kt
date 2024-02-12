@@ -2,8 +2,12 @@ package com.aes.usercharacteristicsservice.Evaluators.Literacy
 
 import com.aes.common.Repositories.MessageRepository
 import com.aes.common.Repositories.UserRepository
+import com.aes.common.logging.Logging
+import com.aes.common.logging.logger
 import com.aes.usercharacteristicsservice.Utilities.Utils.scaleProbability
+import jakarta.transaction.Transactional
 import org.languagetool.JLanguageTool
+import org.languagetool.Language
 import org.languagetool.Languages
 import org.languagetool.rules.RuleMatch
 import org.springframework.context.annotation.Configuration
@@ -19,34 +23,38 @@ import java.util.*
 class LiteracyEvaluator(
     private val messageRepository: MessageRepository,
     private val userRepository: UserRepository,
-) {
+) : Logging {
 
     @Scheduled(cron = "0 0 1 * * ?")
-    fun calculateLiteracyLevel(userId: UUID): Float {
-        val messages = messageRepository.getMessagesByUserId(userId)
+    //@Scheduled(cron = "0/10 * * ? * *")
+    @Transactional
+    fun calculateLiteracyLevel(){
 
-        if (messages.isNullOrEmpty()) return 0f
+        userRepository.findAll().forEach { user ->
+            val messages = messageRepository.getMessageByUserIdAndType(user.id).also {
+                if (it.isEmpty()) return@forEach
+            }
 
-        // Calculate average word count per message
-        val averageWordCount = calculateWordCountScore(messages.map { it.message.length }.average())
+            // Calculate average word count per message
+            val averageWordCount = calculateWordCountScore(messages.map { it.message.length }.average())
 
-        // Calculate average number of errors per message - weighted
-        val averageErrorsPerMessage = messages.map { errorsInMessage(it.message) }.average() * 6
+            // Calculate average number of errors per message - weighted
+            val averageErrorsPerMessage = messages.map { errorsInMessage(it.message) }.average() * 6
 
-        // Calculate average message readability - weighted
-        val averageReadability = messages.map { messageReadability(it.message) }.average() * 2
+            // Calculate average message readability - weighted
+            val averageReadability = messages.map { messageReadability(it.message) }.average() * 2
 
-        // Calculate average vocabulary complexity (Type-Token Ratio)
-        val averageVocabularyComplexity = messages.map { calculateTypeTokenRatio(it.message) }.average()
+            // Calculate average vocabulary complexity (Type-Token Ratio)
+            val averageVocabularyComplexity = messages.map { calculateTypeTokenRatio(it.message) }.average()
 
-        // Combine individual metrics to calculate overall user literacy level
-        val literacy =  ((averageWordCount + averageErrorsPerMessage + averageReadability + averageVocabularyComplexity) / 10.0).toFloat()
+            // Combine individual metrics to calculate overall user literacy level
+            val literacy =  ((averageWordCount + averageErrorsPerMessage + averageReadability + averageVocabularyComplexity) / 10.0).toFloat()
 
-        val user = userRepository.findById(userId).get()
-        user.literacy = literacy
-        userRepository.save(user)
+            user.literacy = literacy
+            userRepository.save(user)
 
-        return literacy
+            logger().info("User ${user.id} estimated literacy level is $literacy")
+        }
     }
 
     private fun calculateWordCountScore(averageWordCount: Double): Double {

@@ -11,7 +11,7 @@ class UserKnowledge(
 
     @Id
     @ManyToOne
-    val user: User,
+    val user: User = User(),
 
     @Column
     val knowledgeLevel: Double? = null,

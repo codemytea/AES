@@ -13,21 +13,21 @@ class User(
      * */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    val id: UUID,
+    val id: UUID = UUID.randomUUID(),
 
     /**
      * The phone number(s) of the user. The user could have multiple phones/
      * change phone number. Don't want data to be lost.
      * */
     @ElementCollection
-    val phoneNumber: List<Long> = listOf(),
+    val phoneNumber: List<Long> = mutableListOf(),
 
     /**
      * The language the user sends messages in and the language the system sends messages back in
      * */
     @Column
     @Enumerated(value = EnumType.STRING)
-    var preferredLanguage: LanguageCode?,
+    var preferredLanguage: LanguageCode? = null,
 
     /**
      * The name of the user

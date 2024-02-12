@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Page(
-    val messages: List<RecievedMessageDTO> = emptyList(),
+    val messages: List<RecievedMessageDTO> = listOf(),
     val page: Int = 0,
     val pages: Int = 1,
 

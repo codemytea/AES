@@ -10,12 +10,12 @@ class AttributeEstimator: PythonClass() {
 
     @PythonFunction("getAgeForMessages", "attributeEstimator.py")
     fun estimateAge(messages: List<String>): Age {
-       return execute(::estimateAge, *messages.toTypedArray())
+       return execute(::estimateAge, messages.toTypedArray())
     }
 
     @PythonFunction("getGenderForMessages", "attributeEstimator.py")
     fun estimateGender(messages: List<String>): Gender {
-        return execute(::estimateGender, *messages.toTypedArray())
+        return execute(::estimateGender, messages.toTypedArray())
     }
 
 

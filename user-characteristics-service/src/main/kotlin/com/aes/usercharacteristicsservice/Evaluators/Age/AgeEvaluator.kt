@@ -3,6 +3,8 @@ package com.aes.usercharacteristicsservice.Evaluators.Age
 import com.aes.common.Enums.Age
 import com.aes.common.Repositories.MessageRepository
 import com.aes.common.Repositories.UserRepository
+import com.aes.common.logging.Logging
+import com.aes.common.logging.logger
 import com.aes.usercharacteristicsservice.Python.AttributeEstimator
 import jakarta.transaction.Transactional
 import org.springframework.context.annotation.Configuration
@@ -18,21 +20,23 @@ class AgeEvaluator(
     private val messageRepository: MessageRepository,
     private val userRepository: UserRepository,
     private val attributeEstimator: AttributeEstimator
-) {
+) : Logging {
 
     @Scheduled(cron = "0 0 1 * * ?")
+    //@Scheduled(cron = "0/10 * * ? * *")
     @Transactional
-    fun getAgeEstimate(userId: UUID): Age? {
-        val messages = messageRepository.getMessagesByUserId(userId)
+    fun getAgeEstimate() {
+        userRepository.findAll().forEach { user ->
+            val messages = messageRepository.getMessageByUserIdAndType(user.id).also {
+                if (it.isEmpty()) return@forEach
+            }
 
-        if (messages.isNullOrEmpty()) return null
+            val age = attributeEstimator.estimateAge(messages.map { it.message })
 
-        val age = attributeEstimator.estimateAge(messages.map { it.message })
+            user.age = age
+            userRepository.save(user)
 
-        val user = userRepository.findById(userId).get()
-        user.age = age
-        userRepository.save(user)
-
-        return age
+            logger().info("User ${user.id} estimated age is $age")
+        }
     }
 }

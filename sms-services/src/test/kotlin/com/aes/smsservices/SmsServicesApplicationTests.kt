@@ -1,13 +1,30 @@
 package com.aes.smsservices
 
+import com.aes.smsservices.Models.NewMessageDTO
+import com.aes.smsservices.Models.RecipientDTO
+import com.aes.smsservices.Services.SendSmsService
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class SmsServicesApplicationTests {
+class SmsServicesApplicationTests(
+
+) {
+    @Autowired
+    lateinit var sendSmsService: SendSmsService
 
     @Test
-    fun contextLoads() {
+    fun sendMessage() {
+        sendSmsService.sendSMS(
+            NewMessageDTO(
+                message = "this is a test!",
+                recipient = RecipientDTO(
+                    447565533834
+                )
+            )
+        )
     }
 
 }
+

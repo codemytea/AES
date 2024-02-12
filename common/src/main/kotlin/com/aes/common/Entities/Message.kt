@@ -12,38 +12,38 @@ class Message(
      * Set by system
      * */
     @Id
-    var id: Long,
+    var id: Long = 0,
 
     /**
      * Number message sent to/received from
      * */
     @Column
-    var phoneNumber: Long,
+    var phoneNumber: Long = 0,
 
     /**
      * Contents of message
      * */
     @Column
-    val message: String,
+    val message: String = "",
 
     /**
      * When the message was first sent/received
      * */
     @Column
-    val createdAt: LocalDateTime,
+    val createdAt: LocalDateTime = LocalDateTime.now(),
 
     /**
      * Who the message is actually associated with
      * */
     @ManyToOne
-    var user: User,
+    var user: User = User(),
 
     /**
      * Whether the message was sent by the system or a user
      * */
     @Enumerated(value = EnumType.STRING)
     @Column
-    val type: MessageType,
+    val type: MessageType = MessageType.INCOMING,
 
     /**
      * When the message was last updated
@@ -63,7 +63,7 @@ class Message(
      * The calculated message topics
      * */
     @OneToMany
-    val messageTopics: List<MessageTopics> = listOf(),
+    val messageTopics: List<MessageTopics> = mutableListOf(),
 
 
     )

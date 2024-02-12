@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import java.net.URI
 import java.time.LocalDateTime
+import java.util.*
 
 @Service
 class SendSmsService(
@@ -69,7 +70,11 @@ class SendSmsService(
 
         return newMessageDTO.recipients.mapNotNull { recipient ->
             val user = userRepository.findByPhoneNumberContaining(recipient.phoneNumber)
-                ?: throw Exception("User with id ${recipient.phoneNumber} not found!")
+                ?: userRepository.save(
+                    User(
+                        phoneNumber = listOf(recipient.phoneNumber)
+                    )
+                )
             newMessageDTO.message = translateSmsService.translateMessage(
                 newMessageDTO.message,
                 user.preferredLanguage ?: getPossibleLanguage(recipient.phoneNumber).also {

@@ -1,9 +1,6 @@
 package com.aes.smsservices.Services
 
-import com.aes.common.Entities.KnowledgeArea
-import com.aes.common.Entities.Message
-import com.aes.common.Entities.MessageTopics
-import com.aes.common.Entities.User
+import com.aes.common.Entities.*
 import com.aes.common.Enums.LanguageCode
 import com.aes.common.Enums.MessageType
 import com.aes.common.Repositories.MessageRepository
@@ -11,7 +8,10 @@ import com.aes.common.logging.Logging
 import com.aes.smsservices.Mappers.getLanguageCodeForCountry
 import com.aes.smsservices.Models.RecievedMessageDTO
 import com.aes.common.Repositories.MessageTopicsRepository
+import com.aes.common.Repositories.UserKnowledgeRepository
 import com.aes.common.Repositories.UserRepository
+import com.aes.common.logging.logger
+import com.aes.smsservices.Repositories.KnowledgeAreaRepository
 import com.aes.usercharacteristicsservice.Evaluators.Knowledge.KnowledgeEvaluator
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -24,17 +24,24 @@ class RecieveSmsService(
     val userRepository: UserRepository,
     val messageTopicsRepository: MessageTopicsRepository,
     val translateSmsService: TranslateSmsService,
+    val knowledgeRepository: KnowledgeAreaRepository,
     val knowledgeEvaluator: KnowledgeEvaluator
 ) : Logging {
 
     @Transactional
-    fun tagIncomingMessage(smsId: Long) {
-        val crop = knowledgeEvaluator.getCropOfMessage(messageRepository.getMessageById(smsId)?.message)
-        val topic = knowledgeEvaluator.getTopicOfMessage(messageRepository.getMessageById(smsId)?.message)
+    fun tagIncomingMessage(sms: Message) {
+        if (sms.messageTopics.isEmpty()){
+            val crop = knowledgeEvaluator.getCropOfMessage(sms.message)
+            val topic = knowledgeEvaluator.getTopicOfMessage(sms.message)
 
-        if (crop != null && topic != null){
-            messageTopicsRepository.save(MessageTopics(KnowledgeArea(topic, crop)))
+            logger().info("Message crop is $crop and topic is $topic")
+
+            if (crop != null && topic != null){
+                knowledgeRepository.save(KnowledgeArea(topic, crop))
+                messageTopicsRepository.save(MessageTopics(knowledgeRepository.findById(KnowledgeAreaId(topic, crop)).get(), sms))
+            }
         }
+
     }
 
     /**
@@ -62,8 +69,6 @@ class RecieveSmsService(
         if (lang != LanguageCode.EN) {
             resource.message = translateSmsService.translateMessage(resource.message, fromLanguage = lang)
         }
-
-        tagIncomingMessage(resource.id)
 
         return Message(
             resource.id,
