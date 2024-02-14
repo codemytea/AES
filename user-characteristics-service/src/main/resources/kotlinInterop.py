@@ -31,3 +31,5 @@ def execute():
     except Exception:
         print(traceback.format_exc())
         writeResultToFile(workingDir+ "/result.json", "", traceback.format_exc())
+
+

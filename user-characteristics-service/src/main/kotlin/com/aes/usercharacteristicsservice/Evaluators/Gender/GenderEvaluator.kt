@@ -24,11 +24,9 @@ class GenderEvaluator(
 
     @Scheduled(cron = "0 0 1 * * ?")
     @Transactional
-    //@Scheduled(cron = "0/10 * * ? * *")
     fun getGenderEstimate(){
 
         userRepository.findAll().forEach { user ->
-
             val messages = messageRepository.getMessageByUserIdAndType(user.id).also {
                 if (it.isEmpty()) return@forEach
             }
@@ -41,3 +39,7 @@ class GenderEvaluator(
         }
     }
 }
+
+
+
+

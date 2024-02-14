@@ -34,7 +34,6 @@ class SmsController(
         recieveSmsService.tagIncomingMessage(sms)
 
         return sms.toDTO()
-
     }
 
     /**
@@ -42,13 +41,12 @@ class SmsController(
      * */
     @PostMapping("/status")
     fun smsStatusChange(@RequestBody resource: MessageStatusDTO): MessageDTO {
-        logger().info("Received Message Status update for message with id ${resource.id} and new status ${resource.status.name}")
-
-        val sms = updateSmsService.update(resource)
-
-        return sms.toDTO()
-
+        logger().info("Received Message Status update for message with id " +
+                "${resource.id} and new status ${resource.status.name}")
+        return updateSmsService.update(resource).toDTO()
     }
 }
+
+
 
 

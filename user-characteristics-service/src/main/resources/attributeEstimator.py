@@ -2,9 +2,6 @@ from enum import Enum
 import kotlinInterop
 from transformers import pipeline
 
-
-
-
 class Gender(str, Enum):
     MALE = "MALE",
     FEMALE = "FEMALE"
@@ -13,7 +10,6 @@ class Age(str, Enum):
     ADULT = "ADULT",
     AGED = "AGED"
     YOUNG = "YOUNG"
-
 
 def ageResultToEnum(label):
     match label:
@@ -31,8 +27,6 @@ def genderResultToEnum(label):
         case _:
             return Gender.FEMALE
 
-
-
 def getAgeForMessages(messages):
     pipe = pipeline("text-classification", model="Abderrahim2/bert-finetuned-Age")
     result = pipe(" ".join(messages))[0]
@@ -45,5 +39,6 @@ def getGenderForMessages(messages):
 
 kotlinInterop.registerFunction('getAgeForMessages', getAgeForMessages)
 kotlinInterop.registerFunction('getGenderForMessages', getGenderForMessages)
-
 kotlinInterop.execute()
+
+
