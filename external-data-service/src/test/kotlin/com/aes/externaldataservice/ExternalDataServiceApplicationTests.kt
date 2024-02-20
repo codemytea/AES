@@ -1,0 +1,13 @@
+package com.aes.externaldataservice
+
+import org.junit.jupiter.api.Test
+import org.springframework.boot.test.context.SpringBootTest
+
+@SpringBootTest
+class ExternalDataServiceApplicationTests {
+
+	@Test
+	fun contextLoads() {
+	}
+
+}

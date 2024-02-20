@@ -29,6 +29,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(project(mapOf("path" to ":common")))
+    implementation(project(mapOf("path" to ":kotlin-python-interop")))
     implementation("net.clojars.suuft:libretranslate-java:1.0.5")
     implementation("org.languagetool:language-en:6.3")
     implementation ("org.jetbrains.kotlinx:kotlin-deeplearning-onnx:0.5.2")

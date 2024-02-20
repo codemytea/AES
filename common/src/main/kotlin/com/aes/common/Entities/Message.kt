@@ -63,7 +63,7 @@ class Message(
      * The calculated message topics
      * */
     @OneToMany
-    val messageTopics: List<MessageTopics> = mutableListOf(),
+    val messageTopics: MutableSet<MessageTopics> = mutableSetOf(),
 
 
     )

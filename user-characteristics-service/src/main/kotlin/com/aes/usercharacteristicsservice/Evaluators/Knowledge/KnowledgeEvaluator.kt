@@ -24,7 +24,6 @@ import java.util.*
 class KnowledgeEvaluator(
     private val knowledgeClassifier: KnowledgeClassifiers,
     private val messageRepository: MessageRepository,
-    private val messageTopicsRepository: MessageTopicsRepository,
     private val userKnowledgeRepository: UserKnowledgeRepository,
     private val userRepository: UserRepository,
 ) : Logging {
@@ -40,7 +39,7 @@ class KnowledgeEvaluator(
     @Scheduled(cron = "0 0 1 * * ?")
     @Transactional
     //@Scheduled(cron = "0/10 * * ? * *")
-    fun calculateUserExpertiseOfCrop() {
+    fun calculateUserExpertiseOfTopicAndCrop() {
 
         userRepository.findAll().forEach { user ->
             val messages = messageRepository.getMessageByUserIdAndType(user.id).map {
@@ -48,7 +47,7 @@ class KnowledgeEvaluator(
             }
 
             messages.groupBy {
-                it?.knowledgeArea?.cropName
+                it?.knowledgeArea
             }.mapNotNull {
                 (it.key ?: return@mapNotNull null) to it.value.size
             }.sortedByDescending {
@@ -56,47 +55,21 @@ class KnowledgeEvaluator(
             }.onEach {
                 val scaledKnowledge = Utils.scaleProbability(it.second.toDouble(), messages.size.toDouble(), true)
                 logger().info("User ${user.id} estimated knowledge on crop ${it.first} is $scaledKnowledge")
-                userKnowledgeRepository.save(
-                    UserKnowledge(
-                        userRepository.findById(user.id).get(),
-                        //btw 0.0 and 1.0 where 0.0 = most messages and tfr least knowledgeable
-                        scaledKnowledge,
-                        null,
-                        it.first
+                if(!user.knowledgeAreas.any { ka->
+                    ka.topic == it.first.topic && ka.crop == it.first.cropName
+                }){
+                    val ka = userKnowledgeRepository.save(
+                        UserKnowledge(
+                            user.id,
+                            //btw 0.0 and 1.0 where 0.0 = most messages and tfr least knowledgeable
+                            scaledKnowledge,
+                            it.first.topic,
+                            it.first.cropName
+                        )
                     )
-                )
-            }
-        }
+                    user.knowledgeAreas.add(ka)
+                }
 
-    }
-
-
-    @Scheduled(cron = "0 0 1 * * ?")
-    //@Scheduled(cron = "0/10 * * ? * *")
-    @Transactional
-    fun calculateUserExpertiseOfTopic(){
-        userRepository.findAll().forEach { user ->
-            val messages = messageRepository.getMessageByUserIdAndType(user.id).map {
-                it.messageTopics.firstOrNull()
-            }
-
-            messages.groupBy {
-                it?.knowledgeArea?.topic
-            }.mapNotNull {
-                (it.key ?: return@mapNotNull null) to it.value.size
-            }.sortedByDescending {
-                it.second
-            }.onEach {
-                val scaledKnowledge = Utils.scaleProbability(it.second.toDouble(), messages.size.toDouble(), true)
-                logger().info("User ${user.id} estimated knowledge on topic ${it.first} is $scaledKnowledge")
-                userKnowledgeRepository.save(
-                    UserKnowledge(
-                        userRepository.findById(user.id).get(),
-                        //btw 0.0 and 1.0 where 0.0 = most messages and tfr least knowledgeable
-                        scaledKnowledge,
-                        it.first
-                    )
-                )
             }
         }
 

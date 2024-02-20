@@ -10,7 +10,7 @@ object Utils {
      * This can be inversed by setting inverse result to true
      * */
     fun scaleProbability(actual: Double, bound: Double, inverseResult: Boolean = false) : Double {
-        if (inverseResult) return 1.0-(1.0/(1.0+ exp(-0.01*(actual-bound))))
+        if (inverseResult) return 1.0-(1.0/(1.0+ exp(-0.1*(actual-bound))))
         return 1.0/(1.0+ exp(-0.01*(actual-bound)))
 
     }

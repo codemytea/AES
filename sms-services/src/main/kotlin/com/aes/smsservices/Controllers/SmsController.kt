@@ -8,6 +8,8 @@ import com.aes.smsservices.Models.MessageStatusDTO
 import com.aes.smsservices.Models.RecievedMessageDTO
 import com.aes.smsservices.Services.RecieveSmsService
 import com.aes.smsservices.Services.UpdateSmsService
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/message")
 class SmsController(
     val recieveSmsService: RecieveSmsService,
-    val updateSmsService: UpdateSmsService
+    val updateSmsService: UpdateSmsService,
 ) : Logging {
 
     /**

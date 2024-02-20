@@ -1,4 +1,4 @@
-package com.aes.usercharacteristicsservice.Python
+package com.aes.kotlinpythoninterop
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 

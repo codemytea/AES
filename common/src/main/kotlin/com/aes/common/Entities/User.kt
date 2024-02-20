@@ -54,4 +54,8 @@ class User(
      * */
     @Column
     var literacy: Float? = null,
+
+    @OneToMany
+    @JoinColumn(name="userId", referencedColumnName = "id")
+    val knowledgeAreas: MutableList<UserKnowledge> = mutableListOf()
 )

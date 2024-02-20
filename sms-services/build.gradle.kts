@@ -36,7 +36,6 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("net.clojars.suuft:libretranslate-java:1.0.5")
     implementation(project(mapOf("path" to ":common")))
-    implementation(project(mapOf("path" to ":user-characteristics-service")))
     runtimeOnly("com.mysql:mysql-connector-j")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 

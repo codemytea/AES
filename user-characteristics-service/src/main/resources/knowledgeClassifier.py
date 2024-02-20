@@ -72,7 +72,7 @@ def getCropOfMessage(message):
     result = pipe(message, classifiers)[0]
     if result['scores'][0] < 0.4:
         return None
-    return cropResultToEnum(result)
+    return cropResultToEnum(result['labels'][0])
 
 
 

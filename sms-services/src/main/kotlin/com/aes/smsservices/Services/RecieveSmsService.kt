@@ -1,18 +1,15 @@
 package com.aes.smsservices.Services
 
-import com.aes.common.Entities.*
+import com.aes.common.Entities.Message
+import com.aes.common.Entities.User
 import com.aes.common.Enums.LanguageCode
 import com.aes.common.Enums.MessageType
+import com.aes.common.Queue.LocalQueueService
 import com.aes.common.Repositories.MessageRepository
+import com.aes.common.Repositories.UserRepository
 import com.aes.common.logging.Logging
 import com.aes.smsservices.Mappers.getLanguageCodeForCountry
 import com.aes.smsservices.Models.RecievedMessageDTO
-import com.aes.common.Repositories.MessageTopicsRepository
-import com.aes.common.Repositories.UserKnowledgeRepository
-import com.aes.common.Repositories.UserRepository
-import com.aes.common.logging.logger
-import com.aes.smsservices.Repositories.KnowledgeAreaRepository
-import com.aes.usercharacteristicsservice.Evaluators.Knowledge.KnowledgeEvaluator
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -22,25 +19,18 @@ import java.util.*
 class RecieveSmsService(
     val messageRepository: MessageRepository,
     val userRepository: UserRepository,
-    val messageTopicsRepository: MessageTopicsRepository,
     val translateSmsService: TranslateSmsService,
-    val knowledgeRepository: KnowledgeAreaRepository,
-    val knowledgeEvaluator: KnowledgeEvaluator
+    val localQueueService: LocalQueueService
 ) : Logging {
 
     @Transactional
     fun tagIncomingMessage(sms: Message) {
         if (sms.messageTopics.isEmpty()){
-            val crop = knowledgeEvaluator.getCropOfMessage(sms.message)
-            val topic = knowledgeEvaluator.getTopicOfMessage(sms.message)
-
-            logger().info("Message crop is $crop and topic is $topic")
-
-            if (crop != null && topic != null){
-                knowledgeRepository.save(KnowledgeArea(topic, crop))
-                messageTopicsRepository.save(MessageTopics(knowledgeRepository.findById(KnowledgeAreaId(topic, crop)).get(), sms))
-            }
+            localQueueService.writeItemToQueue("message_tag_queue", sms)
         }
+
+        //todo if either null, pass to conversational chatbot
+        //else pass to normal chatbot
 
     }
 

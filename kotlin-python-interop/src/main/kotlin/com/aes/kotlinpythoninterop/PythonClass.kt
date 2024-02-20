@@ -1,10 +1,10 @@
-package com.aes.usercharacteristicsservice.Python
+package com.aes.kotlinpythoninterop
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.*
 import java.io.File
+import java.util.*
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.findAnnotations
 
@@ -45,11 +45,12 @@ abstract class PythonClass {
         return resultObj
     }
     inline fun <reified T> executeProgram(scriptName: String, functionName: String, arguments: List<Any?>): T{
-        writeArgumentsToFile(arguments, "args.json")
-        val outputFile = File(getPathForFile("out.txt"))
+        val programRunUID = UUID.randomUUID().toString()
+        writeArgumentsToFile(arguments, "$programRunUID.args.json")
+        val outputFile = File(getPathForFile("$programRunUID.out.txt"))
         outputFile.writeText("")
         val process = ProcessBuilder()
-            .command(mutableListOf("python3", getPythonProgram(scriptName), functionName, getPathForFile("")))
+            .command(mutableListOf("python3", getPythonProgram(scriptName), programRunUID, functionName, getPathForFile("")))
             .redirectOutput(outputFile)
             .redirectError(outputFile)
             .start()
@@ -68,6 +69,6 @@ abstract class PythonClass {
         runBlocking {
             job.cancelAndJoin()
         }
-        return readResultFromFile<T>("result.json")
+        return readResultFromFile<T>("$programRunUID.result.json")
     }
 }

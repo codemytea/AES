@@ -23,13 +23,14 @@ def writeResultToFile(filename, result, errorMessage):
 def execute():
     try:
         args = sys.argv
-        function = functionMap[args[1]]
-        workingDir = args[2]
-        functionArgs = readArgsFromFile(workingDir + "/args.json")["args"]
+        uniqueId = args[1]
+        function = functionMap[args[2]]
+        workingDir = args[3]
+        functionArgs = readArgsFromFile(workingDir + "/" + uniqueId + ".args.json")["args"]
         result = function(*functionArgs)
-        writeResultToFile(workingDir + "/result.json", result, None)
+        writeResultToFile(workingDir + "/" + uniqueId + ".result.json", result, None)
     except Exception:
         print(traceback.format_exc())
-        writeResultToFile(workingDir+ "/result.json", "", traceback.format_exc())
+        writeResultToFile(workingDir+ "/" + uniqueId + ".result.json", "", traceback.format_exc())
 
 
