@@ -60,14 +60,18 @@ def topicResultToEnum(label):
 def getTopicOfMessage(message):
     pipe = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
     classifiers = list(map(str, [e.value for e in Topic]))
-    result = pipe(message, classifiers)[0]['labels'][0]
-    return topicResultToEnum(result)
+    result = pipe(message, classifiers)[0]
+    if result['scores'][0] < 0.4:
+        return None
+    return topicResultToEnum(result['labels'][0])
 
 
 def getCropOfMessage(message):
     pipe = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
     classifiers = list(map(str, [e.value for e in Crop]))
-    result = pipe(message, classifiers)[0]['labels'][0]
+    result = pipe(message, classifiers)[0]
+    if result['scores'][0] < 0.4:
+        return None
     return cropResultToEnum(result)
 
 
