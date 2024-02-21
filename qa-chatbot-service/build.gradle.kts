@@ -21,6 +21,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation(project(mapOf("path" to ":common")))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

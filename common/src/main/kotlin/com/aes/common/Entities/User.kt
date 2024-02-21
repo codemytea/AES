@@ -57,5 +57,9 @@ class User(
 
     @OneToMany
     @JoinColumn(name="userId", referencedColumnName = "id")
-    val knowledgeAreas: MutableList<UserKnowledge> = mutableListOf()
+    val knowledgeAreas: MutableList<UserKnowledge> = mutableListOf(),
+
+    @OneToMany
+    @JoinColumn(name="userId", referencedColumnName = "id")
+    val userSmallholdingInfo: MutableList<UserSmallholding> = mutableListOf()
 )

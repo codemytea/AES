@@ -1,4 +1,4 @@
-package com.aes.smsservices.Repositories
+package com.aes.common.Repositories
 
 import com.aes.common.Entities.User
 import com.aes.smsservices.Entities.UserSmallholding

@@ -1,27 +1,26 @@
-package com.aes.smsservices.Entities
+package com.aes.common.Entities
 
-import com.aes.common.Entities.User
 import com.aes.common.Enums.Crop
-import com.aes.smsservices.Enums.SoilType
+import com.aes.common.Enums.SoilType
 import jakarta.persistence.*
 import java.io.Serializable
+import java.util.*
 
 
 data class UserSmallholdingPoint(
-    val lat:Int,
+    val lat: Int,
     var lng: Int
-): Serializable
+) : Serializable
 
 @Entity
 @IdClass(UserSmallholdingId::class)
 class UserSmallholding(
 
     @Id
-    @ManyToOne
-    val user: User,
+    val userId: UUID = UUID.randomUUID(),
 
     @Id
-    val location: UserSmallholdingPoint? = null,
+    val location: UserSmallholdingPoint = UserSmallholdingPoint(0, 0),
 
     @Column
     val smallholdingSize: Float? = null,
@@ -40,4 +39,4 @@ class UserSmallholding(
 data class UserSmallholdingId(
     val user: User? = null,
     val location: UserSmallholdingPoint? = null
-): Serializable
+) : Serializable
