@@ -4,6 +4,7 @@ import com.aes.common.Entities.Message
 import com.aes.common.Entities.User
 import com.aes.common.Enums.LanguageCode
 import com.aes.common.Enums.MessageType
+import com.aes.common.Enums.UserDetails
 import com.aes.common.Repositories.MessageRepository
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
@@ -13,6 +14,7 @@ import com.aes.smsservices.Models.MessageDTO
 import com.aes.smsservices.Models.NewMessageDTO
 import com.aes.smsservices.Models.NewMessageResponse.NewMessageResponseDTO
 import com.aes.common.Repositories.UserRepository
+import com.aes.smsservices.Models.RecipientDTO
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -33,6 +35,18 @@ class SendSmsService(
 
     val restTemplate: RestTemplate by lazy {
         RestTemplate()
+    }
+
+    @Transactional
+    fun collect(unknownInformation : List<UserDetails>, userPhoneNumber : Long): List<MessageDTO> {
+
+        return sendSMS(NewMessageDTO(
+            message = "To be able to give you a more tailored answer in the future, " +
+                      "do you mind letting me know " +
+                      unknownInformation.map { it to it.question }.joinToString(", ", postfix = "?"),
+            recipient = RecipientDTO(userPhoneNumber),
+        ))
+
     }
 
     /**

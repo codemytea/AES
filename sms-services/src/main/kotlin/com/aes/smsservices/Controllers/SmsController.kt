@@ -2,11 +2,14 @@ package com.aes.smsservices.Controllers
 
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
+import com.aes.qachatbotservice.Information.InformationCollector
 import com.aes.smsservices.Mappers.toDTO
 import com.aes.smsservices.Models.MessageDTO
 import com.aes.smsservices.Models.MessageStatusDTO
+import com.aes.smsservices.Models.NewMessageDTO
 import com.aes.smsservices.Models.RecievedMessageDTO
 import com.aes.smsservices.Services.RecieveSmsService
+import com.aes.smsservices.Services.SendSmsService
 import com.aes.smsservices.Services.UpdateSmsService
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -21,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController
 class SmsController(
     val recieveSmsService: RecieveSmsService,
     val updateSmsService: UpdateSmsService,
+    val informationCollector: InformationCollector,
+    val sendSmsService: SendSmsService,
 ) : Logging {
 
     /**
@@ -34,6 +39,9 @@ class SmsController(
 
         logger().info("tagging message with id ${sms.id}")
         recieveSmsService.tagIncomingMessage(sms)
+        informationCollector.moreDetailsToDetermine(sms.message, sms.user.id).also {
+            sendSmsService.collect(it, sms.user.phoneNumber.first())
+        }
 
         return sms.toDTO()
     }
