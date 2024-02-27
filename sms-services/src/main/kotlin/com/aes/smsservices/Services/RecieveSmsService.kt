@@ -25,13 +25,10 @@ class RecieveSmsService(
 
     @Transactional
     fun tagIncomingMessage(sms: Message) {
+        //TODO change so only tags extracted agricultural question
         if (sms.messageTopics.isEmpty()){
             localQueueService.writeItemToQueue("message_tag_queue", sms)
         }
-
-        //todo if either null, pass to conversational chatbot
-        //else pass to normal chatbot
-
     }
 
     /**

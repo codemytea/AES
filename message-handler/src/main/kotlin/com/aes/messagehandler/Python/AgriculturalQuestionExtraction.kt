@@ -1,7 +1,5 @@
-package com.aes.qachatbotservice.Python
+package com.aes.messagehandler.Python
 
-import com.aes.common.Enums.Age
-import com.aes.common.Enums.Gender
 import com.aes.kotlinpythoninterop.PythonClass
 import com.aes.kotlinpythoninterop.PythonFunction
 import org.springframework.stereotype.Service

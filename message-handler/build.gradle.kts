@@ -24,6 +24,10 @@ dependencies {
     implementation(project(mapOf("path" to ":common")))
     implementation(project(mapOf("path" to ":kotlin-python-interop")))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+
 }
 
 tasks.withType<KotlinCompile> {

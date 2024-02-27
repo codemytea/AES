@@ -33,7 +33,7 @@ class User(
      * The name of the user
      * */
     @Column
-    val name: String? = null,
+    var name: String? = null,
 
     /**
      * The age of the user
@@ -54,6 +54,12 @@ class User(
      * */
     @Column
     var literacy: Float? = null,
+
+    /**
+     * Whether or not the user has asked to stop having information collected about them
+     * */
+    @Column
+    var stopCollectingInformation : Boolean = false,
 
     @OneToMany
     @JoinColumn(name="userId", referencedColumnName = "id")

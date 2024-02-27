@@ -1,15 +1,19 @@
-package com.aes.qachatbotservice.Hub
+package com.aes.messagehandler.Hub
 
-import com.aes.common.Entities.Message
+import com.aes.common.Models.MessageDTO
 import com.aes.common.logging.Logging
-import com.aes.qachatbotservice.AgriculturalQuestionAnswerer.ExpertSystem.ExpertSystem
-import com.aes.qachatbotservice.Information.InformationCollector
-import com.aes.qachatbotservice.Python.AgriculturalQuestionExtraction
+import com.aes.messagehandler.AgriculturalQuestionAnswerer.ExpertSystem.ExpertSystem
+import com.aes.messagehandler.Information.InformationCollector
+import com.aes.messagehandler.Python.AgriculturalQuestionExtraction
+import com.aes.messagehandler.Python.GeneralChatbot
+import org.springframework.stereotype.Service
 
+@Service
 class MessagePipeline(
     private val agriculturalQuestionExtraction: AgriculturalQuestionExtraction,
     private val expertSystem: ExpertSystem,
-    private val informationCollector: InformationCollector
+    private val informationCollector: InformationCollector,
+    private val generalChatbot: GeneralChatbot,
 ) : Logging {
 
     /**
@@ -28,7 +32,8 @@ class MessagePipeline(
             //if the question exists
             it.first?.let { questions ->
                 questions.forEach { question ->
-                    getAgriculturalAnswer(question)?.let { answer -> responses["agriculturalQuestionAnswer${count}"] = answer }
+                    message.content = question
+                    getAgriculturalAnswer(message)?.let { answer -> responses["agriculturalQuestionAnswer${count}"] = answer }
                     count++
                 }
                 //try to get an answer for it, and add it to the responses array
@@ -47,8 +52,12 @@ class MessagePipeline(
 
                 }
 
+                it.second?.let { generalMessage ->
+                     message.content = generalMessage
+                }
+
                 //pass rest of user input to general chatbot
-                getGeneralAnswer(it.second)?.let { general ->
+                getGeneralAnswer(message)?.let { general ->
                     responses.put("chat", general)
                 }
             }
@@ -58,22 +67,25 @@ class MessagePipeline(
     }
 
 
-    private fun getAgriculturalQuestion(message: Message): Pair<List<String>?, Message>? {
-        val rawExtraction = agriculturalQuestionExtraction.firstLine(message.message)
-        message.message = rawExtraction.second
+    private fun getAgriculturalQuestion(message: MessageDTO): Pair<List<String>?, MessageDTO> {
+        val rawExtraction = agriculturalQuestionExtraction.firstLine(message.content)
+        if (rawExtraction != null) {
+            message.content = rawExtraction.second
+        }
+        return Pair(rawExtraction?.first, message)
     }
 
 
-    private fun getAgriculturalAnswer(message: Message): String? {
+    private fun getAgriculturalAnswer(message: MessageDTO): String? {
         return expertSystem.getAgriculturalAnswer()
     }
 
-    private fun collectRemainingInfo(message: Message): Pair<String?, String>? {
-        return Pair("", "")
+    private fun collectRemainingInfo(message: MessageDTO): Pair<String?, String?>? {
+        return informationCollector.askFormoreInfo(message)
     }
 
-    private fun getGeneralAnswer(message: Message): String?{
-        return ""
+    private fun getGeneralAnswer(message: MessageDTO): String?{
+        return generalChatbot.generalChatbot(message.content)
     }
 
 }

@@ -4,8 +4,8 @@ import com.aes.common.Repositories.MessageRepository
 import com.aes.common.Repositories.UserRepository
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
-import com.aes.qachatbotservice.Information.InformationCollector
-import com.aes.qachatbotservice.Python.InformationCollectionNER
+import com.aes.messagehandler.Information.InformationCollector
+import com.aes.messagehandler.Python.InformationCollectionNER
 import com.aes.smsservices.Mappers.toDTO
 import com.aes.common.Models.MessageDTO
 import com.aes.smsservices.Models.MessageStatusDTO

@@ -1,4 +1,4 @@
-package com.aes.qachatbotservice.AgriculturalQuestionAnswerer.ExpertSystem
+package com.aes.messagehandler.AgriculturalQuestionAnswerer.ExpertSystem
 
 class ExpertSystem {
 

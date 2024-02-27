@@ -19,20 +19,20 @@ class UserSmallholding(
     val userId: UUID = UUID.randomUUID(),
 
     @Column
-    val location_city: String? = null,
+    var location_city: String? = null,
 
     @Column
-    val location_country: String? = null,
+    var location_country: String? = null,
 
     @Column
-    val smallholdingSize: Float? = null,
+    var smallholdingSize: Float? = null,
 
     @Column
-    val isCommercial: Boolean? = null,
+    var isCommercial: Boolean? = null,
 
     @Enumerated(value = EnumType.STRING)
     @Column
-    val cashCrop: Crop? = null,
+    var cashCrop: Crop? = null,
 
     @Enumerated(value = EnumType.STRING)
     @Column

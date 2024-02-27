@@ -7,5 +7,5 @@ import java.util.*
 
 @Repository
 interface UserSmallholdingRepository : CrudRepository<UserSmallholding, UUID> {
-    fun findUserSmallholdingById(id : UUID): UserSmallholding?
+    fun findUserSmallholdingByUserId(id : UUID): UserSmallholding?
 }
