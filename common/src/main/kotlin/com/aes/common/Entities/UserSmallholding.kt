@@ -13,17 +13,22 @@ data class UserSmallholdingPoint(
 ) : Serializable
 
 @Entity
-@IdClass(UserSmallholdingId::class)
 class UserSmallholding(
 
     @Id
     val userId: UUID = UUID.randomUUID(),
 
-    @Id
-    val location: UserSmallholdingPoint = UserSmallholdingPoint(0, 0),
+    @Column
+    val location_city: String? = null,
+
+    @Column
+    val location_country: String? = null,
 
     @Column
     val smallholdingSize: Float? = null,
+
+    @Column
+    val isCommercial: Boolean? = null,
 
     @Enumerated(value = EnumType.STRING)
     @Column
@@ -36,7 +41,3 @@ class UserSmallholding(
     )
 
 
-data class UserSmallholdingId(
-    val user: User? = null,
-    val location: UserSmallholdingPoint? = null
-) : Serializable

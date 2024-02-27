@@ -42,22 +42,22 @@ class KnowledgeEvaluator(
     fun calculateUserExpertiseOfTopicAndCrop() {
 
         userRepository.findAll().forEach { user ->
-            val messages = messageRepository.getMessageByUserIdAndType(user.id).map {
+            val messages = messageRepository.getMessageByUserIdAndType(user.id)?.map {
                 it.messageTopics.firstOrNull()
             }
 
-            messages.groupBy {
+            messages?.groupBy {
                 it?.knowledgeArea
-            }.mapNotNull {
+            }?.mapNotNull {
                 (it.key ?: return@mapNotNull null) to it.value.size
-            }.sortedByDescending {
+            }?.sortedByDescending {
                 it.second
-            }.onEach {
+            }?.onEach {
                 val scaledKnowledge = Utils.scaleProbability(it.second.toDouble(), messages.size.toDouble(), true)
                 logger().info("User ${user.id} estimated knowledge on crop ${it.first} is $scaledKnowledge")
                 if(!user.knowledgeAreas.any { ka->
-                    ka.topic == it.first.topic && ka.crop == it.first.cropName
-                }){
+                        ka.topic == it.first.topic && ka.crop == it.first.cropName
+                    }){
                     val ka = userKnowledgeRepository.save(
                         UserKnowledge(
                             user.id,

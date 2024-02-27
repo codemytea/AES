@@ -28,10 +28,10 @@ class AgeEvaluator(
     fun getAgeEstimate() {
         userRepository.findAll().forEach { user ->
             val messages = messageRepository.getMessageByUserIdAndType(user.id).also {
-                if (it.isEmpty()) return@forEach
+                if (it.isNullOrEmpty()) return@forEach
             }
 
-            val age = attributeEstimator.estimateAge(messages.map { it.message })
+            val age = messages?.let { attributeEstimator.estimateAge(it.map { it.message }) }
 
             user.age = age
             userRepository.save(user)

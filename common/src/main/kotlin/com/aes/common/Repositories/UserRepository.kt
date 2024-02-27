@@ -10,4 +10,6 @@ import java.util.*
 interface UserRepository: CrudRepository<User, UUID>{
 
     fun findByPhoneNumberContaining(phoneNumber: Long): User?
+
+    fun findUserById(id : UUID): User?
 }

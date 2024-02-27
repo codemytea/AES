@@ -28,9 +28,9 @@ class GenderEvaluator(
 
         userRepository.findAll().forEach { user ->
             val messages = messageRepository.getMessageByUserIdAndType(user.id).also {
-                if (it.isEmpty()) return@forEach
+                    if (it.isNullOrEmpty()) return@forEach
             }
-            val gender = attributeEstimator.estimateGender(messages.map { it.message })
+            val gender = messages?.let { attributeEstimator.estimateGender(it.map { it.message }) }
 
             logger().info("User ${user.id} estimated gender is $gender")
 

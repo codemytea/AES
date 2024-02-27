@@ -22,6 +22,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(project(mapOf("path" to ":common")))
+    implementation(project(mapOf("path" to ":kotlin-python-interop")))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

@@ -1,18 +1,18 @@
 package com.aes.smsservices.Controllers
 
+import com.aes.common.Repositories.MessageRepository
+import com.aes.common.Repositories.UserRepository
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
 import com.aes.qachatbotservice.Information.InformationCollector
+import com.aes.qachatbotservice.Python.InformationCollectionNER
 import com.aes.smsservices.Mappers.toDTO
 import com.aes.smsservices.Models.MessageDTO
 import com.aes.smsservices.Models.MessageStatusDTO
-import com.aes.smsservices.Models.NewMessageDTO
 import com.aes.smsservices.Models.RecievedMessageDTO
 import com.aes.smsservices.Services.RecieveSmsService
 import com.aes.smsservices.Services.SendSmsService
 import com.aes.smsservices.Services.UpdateSmsService
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -24,8 +24,11 @@ import org.springframework.web.bind.annotation.RestController
 class SmsController(
     val recieveSmsService: RecieveSmsService,
     val updateSmsService: UpdateSmsService,
-    val informationCollector: InformationCollector,
     val sendSmsService: SendSmsService,
+    val messageRepository: MessageRepository,
+    val userRepository: UserRepository,
+    val informationCollectionNER: InformationCollectionNER,
+    val informationCollector: InformationCollector,
 ) : Logging {
 
     /**
@@ -39,8 +42,21 @@ class SmsController(
 
         logger().info("tagging message with id ${sms.id}")
         recieveSmsService.tagIncomingMessage(sms)
+
+        //TODO if important flag, determine if message is giving detail or not, if not provide answer, if yes,
+        userRepository.findByPhoneNumberContaining(resource.phoneNumber).also {
+            if (it != null){
+                if (messageRepository.isLatestMessageIncomingCollection(it)){
+                    informationCollectionNER.collect()
+                }
+            }
+        }
+
+        //provide answer
+
+        //TODO If more details to determine
         informationCollector.moreDetailsToDetermine(sms.message, sms.user.id).also {
-            sendSmsService.collect(it, sms.user.phoneNumber.first())
+            sendSmsService.collect(it, sms.user.phoneNumber.first()) //TODO set up flag somewhere notifying next response is important
         }
 
         return sms.toDTO()

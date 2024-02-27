@@ -32,20 +32,22 @@ class LiteracyEvaluator(
 
         userRepository.findAll().forEach { user ->
             val messages = messageRepository.getMessageByUserIdAndType(user.id).also {
-                if (it.isEmpty()) return@forEach
+                if (it != null) {
+                    if (it.isEmpty()) return@forEach
+                }
             }
 
             // Calculate average word count per message
-            val averageWordCount = calculateWordCountScore(messages.map { it.message.length }.average())
+            val averageWordCount = calculateWordCountScore(messages?.map { it.message.length }.average())
 
             // Calculate average number of errors per message - weighted
-            val averageErrorsPerMessage = messages.map { errorsInMessage(it.message) }.average() * 6
+            val averageErrorsPerMessage = messages?.map { errorsInMessage(it.message) }.average() * 6
 
             // Calculate average message readability - weighted
-            val averageReadability = messages.map { messageReadability(it.message) }.average() * 2
+            val averageReadability = messages?.map { messageReadability(it.message) }.average() * 2
 
             // Calculate average vocabulary complexity (Type-Token Ratio)
-            val averageVocabularyComplexity = messages.map { calculateTypeTokenRatio(it.message) }.average()
+            val averageVocabularyComplexity = messages?.map { calculateTypeTokenRatio(it.message) }.average()
 
             // Combine individual metrics to calculate overall user literacy level
             val literacy =  ((averageWordCount + averageErrorsPerMessage + averageReadability + averageVocabularyComplexity) / 10.0).toFloat()

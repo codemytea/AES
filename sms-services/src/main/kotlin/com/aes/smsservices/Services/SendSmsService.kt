@@ -45,7 +45,7 @@ class SendSmsService(
                       "do you mind letting me know " +
                       unknownInformation.map { it to it.question }.joinToString(", ", postfix = "?"),
             recipient = RecipientDTO(userPhoneNumber),
-        ))
+        ), MessageType.OUTGOING_COLLECTION)
 
     }
 
@@ -53,7 +53,7 @@ class SendSmsService(
      * Method to send SMS to specified user
      * */
     @Transactional
-    fun sendSMS(resource: NewMessageDTO): List<MessageDTO> {
+    fun sendSMS(resource: NewMessageDTO, messageType: MessageType = MessageType.OUTGOING): List<MessageDTO> {
         logger().info("Sending message at ${resource.sendtime}")
 
         val internalMessage = resource.message
@@ -61,7 +61,7 @@ class SendSmsService(
         val messages = sendMessage(resource)
 
         messages.forEach {
-            saveMessage(it.first.apply { content = internalMessage }, it.second)
+            saveMessage(it.first.apply { content = internalMessage }, it.second, messageType)
         }
 
         return messages.map { it.first }
@@ -104,7 +104,7 @@ class SendSmsService(
     /**
      * Saves the message to the db
      * */
-    fun saveMessage(messageDTO: MessageDTO, user: User): Message {
+    fun saveMessage(messageDTO: MessageDTO, user: User, msgType: MessageType): Message {
         return messageRepository.save(
             Message(
                 messageDTO.id,
@@ -112,7 +112,7 @@ class SendSmsService(
                 messageDTO.content,
                 LocalDateTime.now(),
                 user,
-                MessageType.OUTGOING
+                msgType
             )
         )
     }
