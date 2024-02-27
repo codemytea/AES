@@ -49,8 +49,8 @@ class LiteracyEvaluator(
 
             // Combine individual metrics to calculate overall user literacy level
             val literacy = ((averageWordCount ?: 0.0) +
-                        (averageErrorsPerMessage ?: 0.0) +
-                        (averageReadability ?: 0.0) +
+                        (averageErrorsPerMessage) +
+                        (averageReadability) +
                         (averageVocabularyComplexity ?: 0.0) / 10.0).toFloat()
 
             user.literacy = literacy
@@ -65,7 +65,7 @@ class LiteracyEvaluator(
     }
 
     /**
-     * Number of errors in a message, suh as typos, syntactical errors etc
+     * Number of errors in a message, suh as typos, syntactical errors etc.
      * 100 represents no mistakes and 0 represents mistakes everywhere
      * */
     private fun errorsInMessage(message: String): Double {
