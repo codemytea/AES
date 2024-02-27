@@ -7,7 +7,7 @@ import com.aes.common.logging.logger
 import com.aes.qachatbotservice.Information.InformationCollector
 import com.aes.qachatbotservice.Python.InformationCollectionNER
 import com.aes.smsservices.Mappers.toDTO
-import com.aes.smsservices.Models.MessageDTO
+import com.aes.common.Models.MessageDTO
 import com.aes.smsservices.Models.MessageStatusDTO
 import com.aes.smsservices.Models.RecievedMessageDTO
 import com.aes.smsservices.Services.RecieveSmsService

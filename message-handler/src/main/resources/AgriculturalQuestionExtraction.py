@@ -4,7 +4,7 @@ import json
 client = OpenAI()
 
 def extractQuestion(question, messageWithoutQuestion):
-    """passes question on to agricultural question answerer"""
+    """passes question(s) on to agricultural question answerer"""
     return json.dumps({"question": question, "messageWithoutQuestion": messageWithoutQuestion,})
 
 
@@ -17,7 +17,11 @@ def firstLine(userMessage):
         messages=[
             {
                 "role": "system",
-                "content": "You want to check if user input contains an agricultural question. If it does extract the question and pass it to extractQuestion with the left over message as well. Else pass None with the full message"
+                "content": """
+                           You want to check if user input contains an agricultural question. There could be more than one.
+                           If it does extract the question(s) and pass it to extractQuestion with the left over message as well. 
+                           Else pass None with the full message
+                           """
             },
             {
                 "role": "user",
@@ -29,14 +33,14 @@ def firstLine(userMessage):
                 "type": "function",
                 "function": {
                     "name": "extractQuestion",
-                    "description": "Use this function if the user has asked an agricultural question",
+                    "description": "Use this function if the user has asked agricultural question(s)",
 
                     "parameters": {
                         "type": "object",
                         "properties": {
                             "question": {
                                 "type": "string",
-                                "description": "the agricultural question the user asked. If they have not asked an agricultural question, pass in None"
+                                "description": "the agricultural question(s) the user asked. If they have not asked an agricultural question, pass in None"
                             },
                             "messageWithoutQuestion": {
                                 "type": "string",

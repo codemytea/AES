@@ -1,6 +1,7 @@
-package com.aes.smsservices.Models
+package com.aes.common.Models
 
 import com.aes.common.Enums.MessageStatus
+import java.util.*
 
 class MessageDTO(
     /**
@@ -8,6 +9,12 @@ class MessageDTO(
      * This id is then used when getting and deleting specific messaged.
      * */
     val id: Long,
+
+
+    /**
+     * The users ID
+     * */
+    val userID: UUID,
 
     /**
      * The message
@@ -29,16 +36,5 @@ class MessageDTO(
      * */
     var country: String? = null
 }
-
-
-//every message has an id sent by the system
-//every user has an id - their phone number
-
-//eventually will need to translate outgoing message to specified language if gotten message from them before
-
-//maybe piece of logic to detect country of country code of phone I'm sending the message to if first time and then send in that lang
-
-
-//standard use case will be someone sending system message FIRST and then system responding.
 
 

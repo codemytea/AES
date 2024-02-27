@@ -10,7 +10,7 @@ import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
 import com.aes.smsservices.Exceptions.MessageRequestException
 import com.aes.smsservices.Mappers.getLanguageCodeForCountry
-import com.aes.smsservices.Models.MessageDTO
+import com.aes.common.Models.MessageDTO
 import com.aes.smsservices.Models.NewMessageDTO
 import com.aes.smsservices.Models.NewMessageResponse.NewMessageResponseDTO
 import com.aes.common.Repositories.UserRepository
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import java.net.URI
 import java.time.LocalDateTime
-import java.util.*
 
 @Service
 class SendSmsService(

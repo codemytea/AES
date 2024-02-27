@@ -1,5 +1,6 @@
 package com.aes.qachatbotservice.Hub
 
+import com.aes.common.Entities.Message
 import com.aes.common.logging.Logging
 import com.aes.qachatbotservice.AgriculturalQuestionAnswerer.ExpertSystem.ExpertSystem
 import com.aes.qachatbotservice.Information.InformationCollector
@@ -11,16 +12,27 @@ class MessagePipeline(
     private val informationCollector: InformationCollector
 ) : Logging {
 
-    fun messagePipeline(message: String): Map<String, String>? {
+    /**
+     * Returns a map of messages that need to be post-processed (tailored to user characteristics + limited to 255 chars) ond what type there are
+     * Note: As there may be more than one agricultural question, each one is tagged agriculturalQuestionAnswer0, agriculturalQuestionAnswer1 etc
+     *
+     * */
+    fun messagePipeline(message: MessageDTO): Map<String, String>? {
         val responses = mutableMapOf<String, String>()
+
+        var count = 0
 
         //try extracting the agricultural question and rest of message from user input
         getAgriculturalQuestion(message)?.let {
 
             //if the question exists
-            it.first?.let { question ->
+            it.first?.let { questions ->
+                questions.forEach { question ->
+                    getAgriculturalAnswer(question)?.let { answer -> responses["agriculturalQuestionAnswer${count}"] = answer }
+                    count++
+                }
                 //try to get an answer for it, and add it to the responses array
-                getAgriculturalAnswer(question)?.let { answer -> responses.put("agriculturalQuestionAnswer", answer) }
+
             }
 
             //with the rest of the message see if there's any useful information
@@ -46,20 +58,21 @@ class MessagePipeline(
     }
 
 
-    private fun getAgriculturalQuestion(message: String): Pair<String?, String>? {
-        return agriculturalQuestionExtraction.firstLine(message)
+    private fun getAgriculturalQuestion(message: Message): Pair<List<String>?, Message>? {
+        val rawExtraction = agriculturalQuestionExtraction.firstLine(message.message)
+        message.message = rawExtraction.second
     }
 
 
-    private fun getAgriculturalAnswer(message: String): String? {
+    private fun getAgriculturalAnswer(message: Message): String? {
         return expertSystem.getAgriculturalAnswer()
     }
 
-    private fun collectRemainingInfo(message: String): Pair<String?, String>? {
+    private fun collectRemainingInfo(message: Message): Pair<String?, String>? {
         return Pair("", "")
     }
 
-    private fun getGeneralAnswer(message: String): String?{
+    private fun getGeneralAnswer(message: Message): String?{
         return ""
     }
 

@@ -1,6 +1,6 @@
 package com.aes.smsservices.Models.NewMessageResponse
 
-import com.aes.smsservices.Models.MessageDTO
+import com.aes.common.Models.MessageDTO
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 
