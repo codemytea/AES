@@ -94,7 +94,7 @@ class SendSmsService(
                     user.preferredLanguage = it
                 }
             )
-            makeRequest(newMessageDTO)?.toMessageDTOs(newMessageDTO.message)?.let {
+            makeRequest(newMessageDTO)?.toMessageDTOs(newMessageDTO.message, user.id)?.let {
                 Pair(it, user)
             }
         }
