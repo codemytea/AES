@@ -39,10 +39,10 @@ class LiteracyEvaluator(
             val averageWordCount = messages?.map { it.message.length }?.let { calculateWordCountScore(it.average()) }
 
             // Calculate average number of errors per message - weighted
-            val averageErrorsPerMessage = (messages?.map { errorsInMessage(it.message) }?.average() ?:) * 6
+            val averageErrorsPerMessage = (messages?.map { errorsInMessage(it.message) }?.average() ?: 0.0) * 6
 
             // Calculate average message readability - weighted
-            val averageReadability = (messages?.map { messageReadability(it.message) }?.average() ?:) * 2
+            val averageReadability = (messages?.map { messageReadability(it.message) }?.average() ?: 0.0) * 2
 
             // Calculate average vocabulary complexity (Type-Token Ratio)
             val averageVocabularyComplexity = messages?.map { calculateTypeTokenRatio(it.message) }?.average()
