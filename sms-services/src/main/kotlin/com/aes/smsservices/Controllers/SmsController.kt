@@ -43,22 +43,6 @@ class SmsController(
         logger().info("tagging message with id ${sms.id}")
         recieveSmsService.tagIncomingMessage(sms)
 
-        //TODO if important flag, determine if message is giving detail or not, if not provide answer, if yes,
-        userRepository.findByPhoneNumberContaining(resource.phoneNumber).also {
-            if (it != null){
-                if (messageRepository.isLatestMessageIncomingCollection(it)){
-                    informationCollectionNER.collect()
-                }
-            }
-        }
-
-        //provide answer
-
-        //TODO If more details to determine
-        informationCollector.moreDetailsToDetermine(sms.message, sms.user.id).also {
-            sendSmsService.collect(it, sms.user.phoneNumber.first()) //TODO set up flag somewhere notifying next response is important
-        }
-
         return sms.toDTO()
     }
 
