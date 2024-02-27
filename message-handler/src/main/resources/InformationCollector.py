@@ -1,5 +1,7 @@
 from openai import OpenAI
 
+import kotlinInterop
+
 
 class UserDetails(str, Enum):
     LOCATION_CITY = "LOCATION_CITY"
@@ -36,6 +38,5 @@ def collect(userDetails):
     return response.choices[0].message.content
 
 
-kotlinInterop.registerFunction('collect'
-userDetails)
+kotlinInterop.registerFunction('collect', collect)
 kotlinInterop.execute()

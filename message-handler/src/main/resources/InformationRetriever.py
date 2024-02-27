@@ -1,6 +1,8 @@
 import json
 from openai import OpenAI
 
+import kotlinInterop
+
 
 class UserDetails(str, Enum):
     LOCATION_CITY = "LOCATION_CITY"
@@ -125,5 +127,5 @@ def secondLine(userMessage, userDetails):
             return function_response
 
 
-kotlinInterop.registerFunction('secondLine', userMessage, userDetails)
+kotlinInterop.registerFunction('secondLine', secondLine)
 kotlinInterop.execute()

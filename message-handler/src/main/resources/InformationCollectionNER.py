@@ -2,6 +2,8 @@ import geonamescache
 import re
 import spacy
 
+import kotlinInterop
+
 
 class UserDetails(str, Enum):
     LOCATION_CITY = "LOCATION_CITY"

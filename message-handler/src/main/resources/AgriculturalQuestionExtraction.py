@@ -1,11 +1,14 @@
 import json
 from openai import OpenAI
 
+import kotlinInterop
+
 client = OpenAI()
+
 
 def extractQuestion(question, messageWithoutQuestion):
     """passes question(s) on to agricultural question answerer"""
-    return json.dumps({"question": question, "messageWithoutQuestion": messageWithoutQuestion,})
+    return json.dumps({"question": question, "messageWithoutQuestion": messageWithoutQuestion, })
 
 
 client = OpenAI()
@@ -77,5 +80,5 @@ def firstLine(userMessage):
             return function_response
 
 
-kotlinInterop.registerFunction('firstLine', userMessage)
+kotlinInterop.registerFunction('firstLine', firstLine)
 kotlinInterop.execute()

@@ -1,5 +1,7 @@
 from openai import OpenAI
 
+import kotlinInterop
+
 client = OpenAI()
 
 
@@ -63,5 +65,5 @@ def generalChatbot(userMessage):
     return response.choices[0].message.content
 
 
-kotlinInterop.registerFunction('generalChatbot', userMessage)
+kotlinInterop.registerFunction('generalChatbot', generalChatbot)
 kotlinInterop.execute()
