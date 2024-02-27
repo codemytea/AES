@@ -10,11 +10,14 @@ import com.aes.messagehandler.Mappers.toCrop
 import com.aes.messagehandler.Mappers.toUserDetails
 import com.aes.messagehandler.Python.InformationCollection
 import jakarta.transaction.Transactional
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Service
 import java.util.*
 
 
 @Service
+@Configuration
 class InformationCollector(
     val userRepository: UserRepository,
     val userSmallholdingRepository: UserSmallholdingRepository,

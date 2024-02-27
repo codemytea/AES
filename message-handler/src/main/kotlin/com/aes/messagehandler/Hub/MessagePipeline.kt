@@ -6,9 +6,11 @@ import com.aes.messagehandler.AgriculturalQuestionAnswerer.ExpertSystem.ExpertSy
 import com.aes.messagehandler.Information.InformationCollector
 import com.aes.messagehandler.Python.AgriculturalQuestionExtraction
 import com.aes.messagehandler.Python.GeneralChatbot
+import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Service
 
 @Service
+@Configuration
 class MessagePipeline(
     private val agriculturalQuestionExtraction: AgriculturalQuestionExtraction,
     private val expertSystem: ExpertSystem,
