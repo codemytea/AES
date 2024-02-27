@@ -53,7 +53,7 @@ class MessagePipeline(
                 }
 
                 it.second?.let { generalMessage ->
-                     message.content = generalMessage
+                    message.content = generalMessage
                 }
 
                 //pass rest of user input to general chatbot

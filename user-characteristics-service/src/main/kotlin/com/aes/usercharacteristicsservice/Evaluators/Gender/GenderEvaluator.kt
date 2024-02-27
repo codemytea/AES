@@ -1,4 +1,4 @@
-package com.aes.usercharacteristicsservice.Evaluators.Gender;
+package com.aes.usercharacteristicsservice.Evaluators.Gender
 
 import com.aes.common.Enums.Gender
 import com.aes.common.Repositories.MessageRepository

@@ -7,5 +7,4 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface NotificationTopicsRepository : CrudRepository<NotificationTopics, NotificationTopicsId> {
-}
+interface NotificationTopicsRepository : CrudRepository<NotificationTopics, NotificationTopicsId>

@@ -1,17 +1,12 @@
 package com.aes.smsservices.Controllers
 
-import com.aes.common.Repositories.MessageRepository
-import com.aes.common.Repositories.UserRepository
+import com.aes.common.Models.MessageDTO
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
-import com.aes.messagehandler.Information.InformationCollector
-import com.aes.messagehandler.Python.InformationCollectionNER
 import com.aes.smsservices.Mappers.toDTO
-import com.aes.common.Models.MessageDTO
 import com.aes.smsservices.Models.MessageStatusDTO
 import com.aes.smsservices.Models.RecievedMessageDTO
 import com.aes.smsservices.Services.RecieveSmsService
-import com.aes.smsservices.Services.SendSmsService
 import com.aes.smsservices.Services.UpdateSmsService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -24,11 +19,6 @@ import org.springframework.web.bind.annotation.RestController
 class SmsController(
     val recieveSmsService: RecieveSmsService,
     val updateSmsService: UpdateSmsService,
-    val sendSmsService: SendSmsService,
-    val messageRepository: MessageRepository,
-    val userRepository: UserRepository,
-    val informationCollectionNER: InformationCollectionNER,
-    val informationCollector: InformationCollector,
 ) : Logging {
 
     /**
@@ -43,6 +33,8 @@ class SmsController(
         logger().info("tagging message with id ${sms.id}")
         recieveSmsService.tagIncomingMessage(sms)
 
+        //TODO put on queue to go through message pipeline - when returned + compiled call send message service
+
         return sms.toDTO()
     }
 
@@ -51,8 +43,10 @@ class SmsController(
      * */
     @PostMapping("/status")
     fun smsStatusChange(@RequestBody resource: MessageStatusDTO): MessageDTO {
-        logger().info("Received Message Status update for message with id " +
-                "${resource.id} and new status ${resource.status.name}")
+        logger().info(
+            "Received Message Status update for message with id " +
+                    "${resource.id} and new status ${resource.status.name}"
+        )
         return updateSmsService.update(resource).toDTO()
     }
 }

@@ -2,7 +2,7 @@ package com.aes.messagehandler.AgriculturalQuestionAnswerer.ExpertSystem
 
 class ExpertSystem {
 
-    fun getAgriculturalAnswer(): String?{
+    fun getAgriculturalAnswer(): String {
         return ""
     }
 }
