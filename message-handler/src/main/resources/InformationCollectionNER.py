@@ -1,6 +1,6 @@
-import spacy
 import geonamescache
 import re
+import spacy
 
 
 class UserDetails(str, Enum):
@@ -84,7 +84,7 @@ def getSmallholdingCountry(text):
 
 
 def collect(items, text):
-    x = {item: "" for item in items} #maybe item.value?
+    x = {item: "" for item in items}  # maybe item.value?
     for item in items:
         match item:
             case UserDetails.LOCATION_COUNTRY:

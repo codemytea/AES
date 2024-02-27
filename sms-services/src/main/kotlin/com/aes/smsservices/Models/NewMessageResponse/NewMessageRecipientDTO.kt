@@ -9,7 +9,7 @@ import java.util.*
 class NewMessageRecipientDTO(
     private val country: String,
     private val msisdn: Long
-){
+) {
 
     fun toMessageDTO(id: Long, userID: UUID, content: String): MessageDTO {
         return MessageDTO(
@@ -19,7 +19,7 @@ class NewMessageRecipientDTO(
             msisdn,
             MessageStatus.PENDING,
         ).apply {
-           this@apply.country = this@NewMessageRecipientDTO.country
+            this@apply.country = this@NewMessageRecipientDTO.country
         }
     }
 

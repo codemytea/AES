@@ -33,7 +33,9 @@ class MessagePipeline(
             it.first?.let { questions ->
                 questions.forEach { question ->
                     message.content = question
-                    getAgriculturalAnswer(message)?.let { answer -> responses["agriculturalQuestionAnswer${count}"] = answer }
+                    getAgriculturalAnswer(message)?.let { answer ->
+                        responses["agriculturalQuestionAnswer${count}"] = answer
+                    }
                     count++
                 }
                 //try to get an answer for it, and add it to the responses array
@@ -84,7 +86,7 @@ class MessagePipeline(
         return informationCollector.askFormoreInfo(message)
     }
 
-    private fun getGeneralAnswer(message: MessageDTO): String?{
+    private fun getGeneralAnswer(message: MessageDTO): String? {
         return generalChatbot.generalChatbot(message.content)
     }
 

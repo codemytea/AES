@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 @Entity
-class TimedNotifications (
+class TimedNotifications(
 
     @OneToOne
     val notification: Notification,
@@ -21,7 +21,8 @@ class TimedNotifications (
     @Column
     val notificationFrequency: TimeIdentifiers? = null
 
-){
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
+) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     lateinit var id: UUID
 }

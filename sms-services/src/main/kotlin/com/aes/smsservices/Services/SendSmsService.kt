@@ -5,15 +5,15 @@ import com.aes.common.Entities.User
 import com.aes.common.Enums.LanguageCode
 import com.aes.common.Enums.MessageType
 import com.aes.common.Enums.UserDetails
+import com.aes.common.Models.MessageDTO
 import com.aes.common.Repositories.MessageRepository
+import com.aes.common.Repositories.UserRepository
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
 import com.aes.smsservices.Exceptions.MessageRequestException
 import com.aes.smsservices.Mappers.getLanguageCodeForCountry
-import com.aes.common.Models.MessageDTO
 import com.aes.smsservices.Models.NewMessageDTO
 import com.aes.smsservices.Models.NewMessageResponse.NewMessageResponseDTO
-import com.aes.common.Repositories.UserRepository
 import com.aes.smsservices.Models.RecipientDTO
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import jakarta.transaction.Transactional
@@ -37,14 +37,16 @@ class SendSmsService(
     }
 
     @Transactional
-    fun collect(unknownInformation : List<UserDetails>, userPhoneNumber : Long): List<MessageDTO> {
+    fun collect(unknownInformation: List<UserDetails>, userPhoneNumber: Long): List<MessageDTO> {
 
-        return sendSMS(NewMessageDTO(
-            message = "To be able to give you a more tailored answer in the future, " +
-                      "do you mind letting me know " +
-                      unknownInformation.map { it to it.question }.joinToString(", ", postfix = "?"),
-            recipient = RecipientDTO(userPhoneNumber),
-        ), MessageType.OUTGOING_COLLECTION)
+        return sendSMS(
+            NewMessageDTO(
+                message = "To be able to give you a more tailored answer in the future, " +
+                        "do you mind letting me know " +
+                        unknownInformation.map { it to it.question }.joinToString(", ", postfix = "?"),
+                recipient = RecipientDTO(userPhoneNumber),
+            ), MessageType.OUTGOING_COLLECTION
+        )
 
     }
 

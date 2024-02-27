@@ -1,13 +1,15 @@
-import sys
 import json
+import sys
 import traceback
 
 functionMap = {
 
 }
 
+
 def registerFunction(name, function):
     functionMap[name] = function
+
 
 def readArgsFromFile(file):
     with open(file, 'r') as file:
@@ -31,6 +33,4 @@ def execute():
         writeResultToFile(workingDir + "/" + uniqueId + ".result.json", result, None)
     except Exception:
         print(traceback.format_exc())
-        writeResultToFile(workingDir+ "/" + uniqueId + ".result.json", "", traceback.format_exc())
-
-
+        writeResultToFile(workingDir + "/" + uniqueId + ".result.json", "", traceback.format_exc())

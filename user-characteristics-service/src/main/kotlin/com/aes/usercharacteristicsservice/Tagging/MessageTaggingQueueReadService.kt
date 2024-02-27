@@ -1,16 +1,12 @@
 package com.aes.usercharacteristicsservice.Tagging
 
-import com.aes.common.Entities.KnowledgeArea
 import com.aes.common.Entities.Message
-import com.aes.common.Entities.MessageTopics
 import com.aes.common.Queue.LocalQueueService
-import com.aes.common.Repositories.KnowledgeAreaRepository
-import com.aes.common.Repositories.MessageTopicsRepository
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
-import com.aes.usercharacteristicsservice.Evaluators.Knowledge.KnowledgeEvaluator
-import jakarta.transaction.Transactional
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
@@ -19,25 +15,23 @@ import java.util.concurrent.TimeUnit
 class MessageTaggingQueueReadService(
     val localQueueService: LocalQueueService,
     val messageTaggingService: MessageTaggingService
-): Logging {
-
-
+) : Logging {
 
 
     @Scheduled(fixedDelay = 10, timeUnit = TimeUnit.SECONDS)
-    fun readFromQueue(){
+    fun readFromQueue() {
         logger().info("Reading messages from queue")
         var count = 0
         var hasMore = true
         val asyncOps = mutableListOf<Deferred<Unit>>()
-        while(hasMore){
+        while (hasMore) {
             val result = localQueueService.withQueueItemAtPositionAsync<Message>("message_tag_queue", count) {
                 messageTaggingService.tagMessage(this)
                 true
             }
-            if(result == null){
+            if (result == null) {
                 hasMore = false
-            } else{
+            } else {
                 asyncOps.add(result)
             }
             count++

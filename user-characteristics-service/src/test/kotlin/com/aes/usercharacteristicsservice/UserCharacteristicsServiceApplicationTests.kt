@@ -1,17 +1,13 @@
 package com.aes.usercharacteristicsservice
 
-import com.aes.common.Enums.Crop
-import com.aes.common.Enums.Topic
 import com.aes.usercharacteristicsservice.Evaluators.Age.AgeEvaluator
 import com.aes.usercharacteristicsservice.Evaluators.Gender.GenderEvaluator
 import com.aes.usercharacteristicsservice.Evaluators.Knowledge.KnowledgeEvaluator
 import com.aes.usercharacteristicsservice.Evaluators.Literacy.LiteracyEvaluator
-import com.aes.usercharacteristicsservice.Python.KnowledgeClassifiers
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.test.context.ActiveProfiles
 import java.util.concurrent.ScheduledExecutorService
 
@@ -33,10 +29,10 @@ class UserCharacteristicsServiceApplicationTests {
     lateinit var knowledgeEvaluator: KnowledgeEvaluator
 
     @MockBean
-    lateinit var scheduledExecutorService : ScheduledExecutorService
+    lateinit var scheduledExecutorService: ScheduledExecutorService
 
     @Test
-    fun pythonInterop(){
+    fun pythonInterop() {
         //val result = AttributeEstimator().estimateGender(listOf("Hello"))
         //assert(result == Gender.MALE)
         //val result2 = AttributeEstimator().estimateAge(listOf("Hello"))
@@ -48,27 +44,27 @@ class UserCharacteristicsServiceApplicationTests {
     }
 
     @Test
-    fun runAgeEvaluator(){
+    fun runAgeEvaluator() {
         ageEvaluator.getAgeEstimate()
     }
 
     @Test
-    fun runGenderEvaluator(){
+    fun runGenderEvaluator() {
         genderEvaluator.getGenderEstimate()
     }
 
     @Test
-    fun runLiteracyEvaluator(){
+    fun runLiteracyEvaluator() {
         literacyEvaluator.calculateLiteracyLevel()
     }
 
     @Test
-    fun runKnowledgeEvaluator(){
+    fun runKnowledgeEvaluator() {
         knowledgeEvaluator.calculateUserExpertiseOfTopicAndCrop()
     }
 
     @Test
-    fun evaluateEverything(){
+    fun evaluateEverything() {
         runKnowledgeEvaluator()
         runLiteracyEvaluator()
         runGenderEvaluator()

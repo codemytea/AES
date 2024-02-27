@@ -4,7 +4,6 @@ import com.aes.common.Entities.UserKnowledge
 import com.aes.common.Enums.Crop
 import com.aes.common.Enums.Topic
 import com.aes.common.Repositories.MessageRepository
-import com.aes.common.Repositories.MessageTopicsRepository
 import com.aes.common.Repositories.UserKnowledgeRepository
 import com.aes.common.Repositories.UserRepository
 import com.aes.common.logging.Logging
@@ -16,7 +15,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 @Configuration
@@ -55,9 +53,9 @@ class KnowledgeEvaluator(
             }?.onEach {
                 val scaledKnowledge = Utils.scaleProbability(it.second.toDouble(), messages.size.toDouble(), true)
                 logger().info("User ${user.id} estimated knowledge on crop ${it.first} is $scaledKnowledge")
-                if(!user.knowledgeAreas.any { ka->
+                if (!user.knowledgeAreas.any { ka ->
                         ka.topic == it.first.topic && ka.crop == it.first.cropName
-                    }){
+                    }) {
                     val ka = userKnowledgeRepository.save(
                         UserKnowledge(
                             user.id,

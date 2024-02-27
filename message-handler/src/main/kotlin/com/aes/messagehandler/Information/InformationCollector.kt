@@ -9,8 +9,8 @@ import com.aes.common.logging.logger
 import com.aes.messagehandler.Mappers.toCrop
 import com.aes.messagehandler.Mappers.toUserDetails
 import com.aes.messagehandler.Python.InformationCollection
-import org.springframework.stereotype.Service
 import jakarta.transaction.Transactional
+import org.springframework.stereotype.Service
 import java.util.*
 
 
@@ -89,7 +89,8 @@ class InformationCollector(
             val newInfo = informationCollection.secondLine(message.content, it)
 
             val user = userRepository.findUserById(message.userID)
-            val userSmallholding = user?.userSmallholdingInfo?.get(0) //TODO check which smallholding the user is talking about and select the right one
+            val userSmallholding =
+                user?.userSmallholdingInfo?.get(0) //TODO check which smallholding the user is talking about and select the right one
 
             //save info
             newInfo.forEach { (userDetail, info) ->
@@ -112,7 +113,7 @@ class InformationCollector(
             }
 
             newInfo["stopCollecting"]?.let {
-                if (it.toBoolean()){
+                if (it.toBoolean()) {
                     user?.stopCollectingInformation = true
                     stop = true
                 }
@@ -140,12 +141,12 @@ class InformationCollector(
      * @return Pair("call to action collection message", "leftover original message")
      * */
     @Transactional
-    fun askFormoreInfo(message: MessageDTO) : Pair<String?, String?> {
+    fun askFormoreInfo(message: MessageDTO): Pair<String?, String?> {
         val newInfoAndRemainderMessage = getNewInfo(message)
         val userChoice = userRepository.findUserById(message.userID)?.stopCollectingInformation
         var callToAction: String? = null
         getDetailsToDetermine(message.userID, newInfoAndRemainderMessage?.first)?.let {
-            if (!stop && userChoice != true){
+            if (!stop && userChoice != true) {
                 callToAction = informationCollection.collect(it)
             }
 

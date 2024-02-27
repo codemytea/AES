@@ -1,7 +1,6 @@
 package com.aes.common.Enums
 
 import net.suuft.libretranslate.Language
-import java.util.*
 
 enum class LanguageCode(val language: Language) {
     EN(Language.ENGLISH),
@@ -20,8 +19,8 @@ enum class LanguageCode(val language: Language) {
     ES(Language.SPANISH),
     NONE(Language.NONE);
 
-    companion object{
-        fun fromLanguage(language: Language) : LanguageCode? {
+    companion object {
+        fun fromLanguage(language: Language): LanguageCode? {
             return values().find {
                 it.language == language
             }

@@ -7,12 +7,12 @@ import com.aes.kotlinpythoninterop.PythonFunction
 import org.springframework.stereotype.Service
 
 @Service
-class AttributeEstimator: PythonClass() {
+class AttributeEstimator : PythonClass() {
 
 
     @PythonFunction("getAgeForMessages", "attributeEstimator.py")
     fun estimateAge(messages: List<String>): Age {
-       return execute(::estimateAge, messages.toTypedArray())
+        return execute(::estimateAge, messages.toTypedArray())
     }
 
     @PythonFunction("getGenderForMessages", "attributeEstimator.py")

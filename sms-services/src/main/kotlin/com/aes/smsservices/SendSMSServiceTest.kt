@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 class SendSMSServiceTest(
     val sendSMSService: SendSmsService,
     val userRepository: UserRepository
-): ApplicationRunner{
+) : ApplicationRunner {
 
     override fun run(args: ApplicationArguments?) {
 

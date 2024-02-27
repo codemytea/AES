@@ -1,6 +1,6 @@
 package com.aes.common.Enums
 
-enum class UserDetails(val question : String) {
+enum class UserDetails(val question: String) {
     LOCATION_CITY("what city your smallholding is in"),
     LOCATION_COUNTRY("what country your smallholding is in"),
     IS_COMMERCIAL("whether your smallholding is a commercial operation"),

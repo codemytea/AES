@@ -26,7 +26,7 @@ class RecieveSmsService(
     @Transactional
     fun tagIncomingMessage(sms: Message) {
         //TODO change so only tags extracted agricultural question
-        if (sms.messageTopics.isEmpty()){
+        if (sms.messageTopics.isEmpty()) {
             localQueueService.writeItemToQueue("message_tag_queue", sms)
         }
     }

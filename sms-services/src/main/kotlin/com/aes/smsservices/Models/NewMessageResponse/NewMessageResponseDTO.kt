@@ -10,8 +10,8 @@ class NewMessageResponseDTO(
 
     val details: NewMessageDetailsDTO,
 
-){
-    fun toMessageDTOs(contents: String, userID: UUID): MessageDTO?{
+    ) {
+    fun toMessageDTOs(contents: String, userID: UUID): MessageDTO? {
         return details.toMessageDTOs(contents, userID)
     }
 }

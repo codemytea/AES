@@ -9,8 +9,8 @@ class NewAPIMessageDTO(
     val id: Long,
     val recipients: List<NewMessageRecipientDTO>
 
-){
-    fun toMessageDTOs(contents: String, userID : UUID): MessageDTO?{
+) {
+    fun toMessageDTOs(contents: String, userID: UUID): MessageDTO? {
         return recipients.firstOrNull()?.toMessageDTO(id, userID, contents)
     }
 }

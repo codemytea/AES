@@ -8,12 +8,12 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-interface MessageRepository: CrudRepository<Message, Long>{
+interface MessageRepository : CrudRepository<Message, Long> {
     fun getMessageByUserAndTypeOrderByCreatedAt(user: User, type: MessageType = MessageType.INCOMING): List<Message>?
 
-    fun getMessageByUserOrderByCreatedAt(user : User): List<Message>?
+    fun getMessageByUserOrderByCreatedAt(user: User): List<Message>?
 
-    fun isLatestMessageIncomingCollection(user : User) : Boolean{
+    fun isLatestMessageIncomingCollection(user: User): Boolean {
         val lastIncoming = getMessageByUserAndTypeOrderByCreatedAt(user)?.firstOrNull()?.createdAt.also {
             if (it == null) return false
         }

@@ -1,5 +1,5 @@
-from openai import OpenAI
 import json
+from openai import OpenAI
 
 
 class UserDetails(str, Enum):
@@ -10,7 +10,8 @@ class UserDetails(str, Enum):
     MAIN_CROP = "MAIN_CROP"
 
 
-def extractInformation(locationCity, locationCountry, name, smallholdingSize, mainCrop, stopCollecting, messageWithoutInformation):
+def extractInformation(locationCity, locationCountry, name, smallholdingSize, mainCrop, stopCollecting,
+                       messageWithoutInformation):
     """extracts all new given information from message"""
     return {
         "locationCity": locationCity,
@@ -122,6 +123,7 @@ def secondLine(userMessage, userDetails):
             )
 
             return function_response
+
 
 kotlinInterop.registerFunction('secondLine', userMessage, userDetails)
 kotlinInterop.execute()

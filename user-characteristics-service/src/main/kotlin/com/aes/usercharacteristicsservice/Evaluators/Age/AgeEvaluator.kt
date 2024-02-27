@@ -1,6 +1,5 @@
 package com.aes.usercharacteristicsservice.Evaluators.Age
 
-import com.aes.common.Enums.Age
 import com.aes.common.Repositories.MessageRepository
 import com.aes.common.Repositories.UserRepository
 import com.aes.common.logging.Logging
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 @Configuration

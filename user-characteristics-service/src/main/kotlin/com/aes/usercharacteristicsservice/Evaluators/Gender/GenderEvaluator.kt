@@ -1,6 +1,5 @@
 package com.aes.usercharacteristicsservice.Evaluators.Gender
 
-import com.aes.common.Enums.Gender
 import com.aes.common.Repositories.MessageRepository
 import com.aes.common.Repositories.UserRepository
 import com.aes.common.logging.Logging
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 @Configuration
@@ -24,11 +22,11 @@ class GenderEvaluator(
 
     @Scheduled(cron = "0 0 1 * * ?")
     @Transactional
-    fun getGenderEstimate(){
+    fun getGenderEstimate() {
 
         userRepository.findAll().forEach { user ->
             val messages = messageRepository.getMessageByUserIdAndType(user.id).also {
-                    if (it.isNullOrEmpty()) return@forEach
+                if (it.isNullOrEmpty()) return@forEach
             }
             val gender = messages?.let { attributeEstimator.estimateGender(it.map { it.message }) }
 

@@ -8,8 +8,8 @@ import java.util.*
 @JsonIgnoreProperties(ignoreUnknown = true)
 class NewMessageDetailsDTO(
     val messages: List<NewAPIMessageDTO>
-){
-    fun toMessageDTOs(contents: String, userID: UUID): MessageDTO?{
+) {
+    fun toMessageDTOs(contents: String, userID: UUID): MessageDTO? {
         return messages.firstOrNull()?.toMessageDTOs(contents, userID)
     }
 }

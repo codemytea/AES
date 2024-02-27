@@ -1,6 +1,6 @@
 package com.aes.smsservices.Models
 
-class TranslateMessageDTO (
+class TranslateMessageDTO(
     /**
      * The id of the message being translated, set by GatewayAPI
      * */

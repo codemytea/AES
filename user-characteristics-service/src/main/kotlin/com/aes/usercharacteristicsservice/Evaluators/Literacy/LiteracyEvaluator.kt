@@ -7,14 +7,12 @@ import com.aes.common.logging.logger
 import com.aes.usercharacteristicsservice.Utilities.Utils.scaleProbability
 import jakarta.transaction.Transactional
 import org.languagetool.JLanguageTool
-import org.languagetool.Language
 import org.languagetool.Languages
 import org.languagetool.rules.RuleMatch
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
-import java.util.*
 
 
 @Service
@@ -28,7 +26,7 @@ class LiteracyEvaluator(
     @Scheduled(cron = "0 0 1 * * ?")
     //@Scheduled(cron = "0/10 * * ? * *")
     @Transactional
-    fun calculateLiteracyLevel(){
+    fun calculateLiteracyLevel() {
 
         userRepository.findAll().forEach { user ->
             val messages = messageRepository.getMessageByUserIdAndType(user.id).also {
@@ -38,19 +36,22 @@ class LiteracyEvaluator(
             }
 
             // Calculate average word count per message
-            val averageWordCount = calculateWordCountScore(messages?.map { it.message.length }.average())
+            val averageWordCount = messages?.map { it.message.length }?.let { calculateWordCountScore(it.average()) }
 
             // Calculate average number of errors per message - weighted
-            val averageErrorsPerMessage = messages?.map { errorsInMessage(it.message) }.average() * 6
+            val averageErrorsPerMessage = (messages?.map { errorsInMessage(it.message) }?.average() ?:) * 6
 
             // Calculate average message readability - weighted
-            val averageReadability = messages?.map { messageReadability(it.message) }.average() * 2
+            val averageReadability = (messages?.map { messageReadability(it.message) }?.average() ?:) * 2
 
             // Calculate average vocabulary complexity (Type-Token Ratio)
-            val averageVocabularyComplexity = messages?.map { calculateTypeTokenRatio(it.message) }.average()
+            val averageVocabularyComplexity = messages?.map { calculateTypeTokenRatio(it.message) }?.average()
 
             // Combine individual metrics to calculate overall user literacy level
-            val literacy =  ((averageWordCount + averageErrorsPerMessage + averageReadability + averageVocabularyComplexity) / 10.0).toFloat()
+            val literacy = ((averageWordCount ?: 0.0) +
+                        (averageErrorsPerMessage ?: 0.0) +
+                        (averageReadability ?: 0.0) +
+                        (averageVocabularyComplexity ?: 0.0) / 10.0).toFloat()
 
             user.literacy = literacy
             userRepository.save(user)

@@ -5,7 +5,7 @@ import com.aes.kotlinpythoninterop.PythonFunction
 import org.springframework.stereotype.Service
 
 @Service
-class AgriculturalQuestionExtraction: PythonClass() {
+class AgriculturalQuestionExtraction : PythonClass() {
 
     @PythonFunction("firstLine", "AgriculturalQuestionExtraction.py")
     fun firstLine(userMessage: String): Pair<List<String>?, String>? {

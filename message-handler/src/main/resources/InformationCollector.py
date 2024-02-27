@@ -1,4 +1,6 @@
 from openai import OpenAI
+
+
 class UserDetails(str, Enum):
     LOCATION_CITY = "LOCATION_CITY"
     LOCATION_COUNTRY = "LOCATION_COUNTRY"
@@ -6,7 +8,9 @@ class UserDetails(str, Enum):
     NAME = "NAME"
     MAIN_CROP = "MAIN_CROP"
 
+
 client = OpenAI()
+
 
 def collect(userDetails):
     toAppend = ""
@@ -31,5 +35,7 @@ def collect(userDetails):
 
     return response.choices[0].message.content
 
-kotlinInterop.registerFunction('collect' userDetails)
+
+kotlinInterop.registerFunction('collect'
+userDetails)
 kotlinInterop.execute()

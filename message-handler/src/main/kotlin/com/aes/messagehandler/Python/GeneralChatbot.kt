@@ -5,7 +5,7 @@ import com.aes.kotlinpythoninterop.PythonFunction
 import org.springframework.stereotype.Service
 
 @Service
-class GeneralChatbot: PythonClass() {
+class GeneralChatbot : PythonClass() {
 
     @PythonFunction("generalChatbot", "GeneralChatbot.py")
     fun generalChatbot(userMessage: String): String? {

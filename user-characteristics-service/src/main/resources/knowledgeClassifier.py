@@ -1,8 +1,7 @@
 from enum import Enum
-import kotlinInterop
 from transformers import pipeline
 
-
+import kotlinInterop
 
 
 class Crop(str, Enum):
@@ -11,6 +10,7 @@ class Crop(str, Enum):
     SOY_BEANS = "SOY_BEANS",
     RICE = "RICE",
     BARLEY = "BARLEY"
+
 
 class Topic(str, Enum):
     PESTS = "PESTS",
@@ -21,6 +21,7 @@ class Topic(str, Enum):
     STORING = "STORING",
     GROWING = "GROWING",
     BUYING_SEEDS = "BUYING_SEEDS"
+
 
 def cropResultToEnum(label):
     match label:
@@ -34,6 +35,7 @@ def cropResultToEnum(label):
             return Crop.RICE
         case _:
             return Crop.BARLEY
+
 
 def topicResultToEnum(label):
     match label:
@@ -55,8 +57,6 @@ def topicResultToEnum(label):
             return Topic.BUYING_SEEDS
 
 
-
-
 def getTopicOfMessage(message):
     pipe = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
     classifiers = list(map(str, [e.value for e in Topic]))
@@ -73,7 +73,6 @@ def getCropOfMessage(message):
     if result['scores'][0] < 0.4:
         return None
     return cropResultToEnum(result['labels'][0])
-
 
 
 kotlinInterop.registerFunction('getTopicOfMessage', getTopicOfMessage)

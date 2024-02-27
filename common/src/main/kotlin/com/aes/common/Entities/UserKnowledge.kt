@@ -4,7 +4,7 @@ import com.aes.common.Enums.Crop
 import com.aes.common.Enums.Topic
 import jakarta.persistence.*
 import java.io.Serializable
-import java.util.UUID
+import java.util.*
 
 @Entity
 @IdClass(UserKnowledgeId::class)
@@ -24,10 +24,10 @@ class UserKnowledge(
     @Enumerated(value = EnumType.STRING)
     val crop: Crop = Crop.RICE
 
-    )
+)
 
 data class UserKnowledgeId(
     val userId: UUID? = UUID.randomUUID(),
     val topic: Topic = Topic.GROWING,
     val crop: Crop = Crop.RICE,
-): Serializable
+) : Serializable

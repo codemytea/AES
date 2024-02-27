@@ -9,7 +9,7 @@ import java.io.Serializable
 
 @Entity
 @IdClass(NotificationTopicsId::class)
-class NotificationTopics (
+class NotificationTopics(
     @Id
     @ManyToOne
     val notification: Notification,
@@ -22,4 +22,4 @@ class NotificationTopics (
 data class NotificationTopicsId(
     val notification: Notification? = null,
     val knowledgeArea: KnowledgeArea? = null
-): Serializable
+) : Serializable

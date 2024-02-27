@@ -32,7 +32,7 @@ class NewMessageDTO(
      * */
     val extra_details: String = "recipients_usage",
 
-    ){
+    ) {
 
     /**
      * The recipients of the message

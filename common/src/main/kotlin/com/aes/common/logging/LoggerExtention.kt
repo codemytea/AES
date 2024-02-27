@@ -1,6 +1,5 @@
 package com.aes.common.logging
 
-import com.aes.common.logging.Logging
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory.getLogger
 

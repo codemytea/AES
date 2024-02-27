@@ -12,12 +12,12 @@ class KnowledgeArea(
 
     @Id
     @Enumerated(EnumType.STRING)
-    val topic : Topic = Topic.PESTS,
+    val topic: Topic = Topic.PESTS,
 
     @Id
     @Enumerated(EnumType.STRING)
-    val cropName : Crop = Crop.RICE,
-){
+    val cropName: Crop = Crop.RICE,
+) {
 
 
     override fun equals(other: Any?): Boolean {
@@ -31,6 +31,6 @@ class KnowledgeArea(
 }
 
 data class KnowledgeAreaId(
-    val topic : Topic? = null,
+    val topic: Topic? = null,
     val cropName: Crop? = null,
 ) : Serializable

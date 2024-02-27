@@ -24,4 +24,4 @@ class Notification(
     @OneToOne
     val timedNotifications: TimedNotifications
 
-): Serializable
+) : Serializable

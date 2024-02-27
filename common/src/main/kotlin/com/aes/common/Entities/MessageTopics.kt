@@ -1,6 +1,9 @@
 package com.aes.common.Entities
 
-import jakarta.persistence.*
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.IdClass
+import jakarta.persistence.ManyToOne
 import java.io.Serializable
 
 @Entity
@@ -18,4 +21,4 @@ class MessageTopics(
 data class MessageTopicsId(
     val sms: Message = Message(),
     val knowledgeArea: KnowledgeArea = KnowledgeArea()
-): Serializable
+) : Serializable

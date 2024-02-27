@@ -59,13 +59,13 @@ class User(
      * Whether or not the user has asked to stop having information collected about them
      * */
     @Column
-    var stopCollectingInformation : Boolean = false,
+    var stopCollectingInformation: Boolean = false,
 
     @OneToMany
-    @JoinColumn(name="userId", referencedColumnName = "id")
+    @JoinColumn(name = "userId", referencedColumnName = "id")
     val knowledgeAreas: MutableList<UserKnowledge> = mutableListOf(),
 
     @OneToMany
-    @JoinColumn(name="userId", referencedColumnName = "id")
+    @JoinColumn(name = "userId", referencedColumnName = "id")
     val userSmallholdingInfo: MutableList<UserSmallholding> = mutableListOf()
 )
