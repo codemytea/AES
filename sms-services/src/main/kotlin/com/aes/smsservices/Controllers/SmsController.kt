@@ -33,6 +33,9 @@ class SmsController(
         logger().info("tagging message with id ${sms.id}")
         recieveSmsService.tagIncomingMessage(sms)
 
+        logger().info("sending to formulate response with id ${sms.id}")
+        recieveSmsService.sendToMessageHandler(sms.toDTO())
+
         //TODO put on queue to go through message pipeline - when returned + compiled call send message service
 
         return sms.toDTO()

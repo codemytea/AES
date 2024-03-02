@@ -4,6 +4,7 @@ import com.aes.common.Entities.Message
 import com.aes.common.Entities.User
 import com.aes.common.Enums.LanguageCode
 import com.aes.common.Enums.MessageType
+import com.aes.common.Models.MessageDTO
 import com.aes.common.Queue.LocalQueueService
 import com.aes.common.Repositories.MessageRepository
 import com.aes.common.Repositories.UserRepository
@@ -24,12 +25,18 @@ class RecieveSmsService(
     val localQueueService: LocalQueueService
 ) : Logging {
 
-    @Transactional
     fun tagIncomingMessage(sms: Message) {
         //TODO change so only tags extracted agricultural question
         if (sms.messageTopics.isEmpty()) {
             localQueueService.writeItemToQueue("message_tag_queue", sms)
         }
+    }
+
+    fun sendToMessageHandler(sms: MessageDTO) {
+        //TODO change so only tags extracted agricultural question
+
+        localQueueService.writeItemToQueue("message_handler_queue", sms)
+
     }
 
     /**

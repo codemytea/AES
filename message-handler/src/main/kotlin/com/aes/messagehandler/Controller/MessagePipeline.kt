@@ -2,6 +2,7 @@ package com.aes.messagehandler.Controller
 
 import com.aes.common.Models.MessageDTO
 import com.aes.common.logging.Logging
+import com.aes.messagecompiler.Controller.CompilerPipeline
 import com.aes.messagehandler.AgriculturalQuestionAnswerer.ExpertSystem.ExpertSystem
 import com.aes.messagehandler.Information.InformationCollector
 import com.aes.messagehandler.Python.AgriculturalQuestionExtraction
@@ -16,6 +17,7 @@ class MessagePipeline(
     private val expertSystem: ExpertSystem,
     private val informationCollector: InformationCollector,
     private val generalChatbot: GeneralChatbot,
+    private val compilerPipeline: CompilerPipeline,
 ) : Logging {
 
     /**
@@ -23,8 +25,8 @@ class MessagePipeline(
      * Note: As there may be more than one agricultural question, each one is tagged agriculturalQuestionAnswer0, agriculturalQuestionAnswer1 etc
      *
      * */
-    fun messagePipeline(message: MessageDTO): Map<String, List<String?>> {
-        val responses = mutableMapOf<String, List<String?>>()
+    fun messagePipeline(message: MessageDTO): Map<String, List<String>> {
+        val responses = mutableMapOf<String, List<String>>()
 
         //try extracting the agricultural question and rest of message from user input
         getAgriculturalQuestion(message)?.let {
@@ -65,7 +67,9 @@ class MessagePipeline(
             }
         }
 
-        return responses
+        return responses.also {
+            compilerPipeline.compileMessage(it, message.phoneNumber)
+        }
     }
 
 

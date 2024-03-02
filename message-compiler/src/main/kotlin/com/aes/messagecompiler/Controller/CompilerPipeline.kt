@@ -3,6 +3,7 @@ package com.aes.messagecompiler.Controller
 import com.aes.common.Enums.Age
 import com.aes.common.Enums.Gender
 import com.aes.common.Models.NewMessageDTO
+import com.aes.common.Queue.LocalQueueService
 import com.aes.common.Repositories.UserRepository
 import com.aes.messagecompiler.Mappers.toNewMessageDTO
 import com.aes.messagecompiler.Python.Compiler
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service
 class CompilerPipeline(
     val compiler: Compiler,
     val userRepository: UserRepository,
+    val localQueueService: LocalQueueService
 ) {
 
     /**
@@ -22,8 +24,9 @@ class CompilerPipeline(
         val user = userRepository.findByPhoneNumberContaining(phoneNumber)
         val improved = improveSuggestability(userMessage, user?.literacy ?: 50f, user?.age ?: Age.ADULT, user?.gender ?: Gender.MALE) //if not known, assume standard
 
-        //TODO send to new message queue
-        return finalSplit(improved).toNewMessageDTO(phoneNumber)
+        return finalSplit(improved).toNewMessageDTO(phoneNumber).also {
+            localQueueService.writeItemToQueue("send_message_queue", it)
+        }
     }
 
 

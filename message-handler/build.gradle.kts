@@ -23,11 +23,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(project(mapOf("path" to ":common")))
+    implementation(project(mapOf("path" to ":message-compiler")))
     implementation(project(mapOf("path" to ":kotlin-python-interop")))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
 }
 

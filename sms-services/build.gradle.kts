@@ -39,6 +39,7 @@ dependencies {
     implementation(project(mapOf("path" to ":kotlin-python-interop")))
     runtimeOnly("com.mysql:mysql-connector-j")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
 
 }
