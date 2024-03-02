@@ -23,25 +23,23 @@ class MessagePipeline(
      * Note: As there may be more than one agricultural question, each one is tagged agriculturalQuestionAnswer0, agriculturalQuestionAnswer1 etc
      *
      * */
-    fun messagePipeline(message: MessageDTO): Map<String, String>? {
-        val responses = mutableMapOf<String, String>()
-
-        var count = 0
+    fun messagePipeline(message: MessageDTO): Map<String, List<String?>> {
+        val responses = mutableMapOf<String, List<String?>>()
 
         //try extracting the agricultural question and rest of message from user input
         getAgriculturalQuestion(message)?.let {
 
-            //if the question exists
+            //if a question exists
             it.first?.let { questions ->
+                val answers = mutableListOf<String>()
                 questions.forEach { question ->
                     message.content = question
                     getAgriculturalAnswer(message)?.let { answer ->
-                        responses["agriculturalQuestionAnswer${count}"] = answer
+                        answers.add(answer)
                     }
-                    count++
                 }
                 //try to get an answer for it, and add it to the responses array
-
+                responses.put("agricultural_information", answers)
             }
 
             //with the rest of the message see if there's any useful information
@@ -52,7 +50,7 @@ class MessagePipeline(
 
                 //if there's anything left to collect ask for it
                 it.first?.let { askForMoreInfo ->
-                    responses.put("informationCollection", askForMoreInfo)
+                    responses.put("information_collection", listOf(askForMoreInfo))
 
                 }
 
@@ -62,12 +60,12 @@ class MessagePipeline(
 
                 //pass rest of user input to general chatbot
                 getGeneralAnswer(message)?.let { general ->
-                    responses.put("chat", general)
+                    responses.put("chat", listOf(general))
                 }
             }
         }
 
-        return if (responses.isEmpty()) null else responses
+        return responses
     }
 
 
@@ -81,7 +79,7 @@ class MessagePipeline(
 
 
     private fun getAgriculturalAnswer(message: MessageDTO): String? {
-        return expertSystem.getAgriculturalAnswer()
+        return expertSystem.getAgriculturalAnswer(message)
     }
 
     private fun collectRemainingInfo(message: MessageDTO): Pair<String?, String?>? {
