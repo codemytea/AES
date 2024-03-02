@@ -12,9 +12,9 @@ import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
 import com.aes.smsservices.Exceptions.MessageRequestException
 import com.aes.smsservices.Mappers.getLanguageCodeForCountry
-import com.aes.smsservices.Models.NewMessageDTO
+import com.aes.common.Models.NewMessageDTO
 import com.aes.smsservices.Models.NewMessageResponse.NewMessageResponseDTO
-import com.aes.smsservices.Models.RecipientDTO
+import com.aes.common.Models.RecipientDTO
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service

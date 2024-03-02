@@ -1,4 +1,4 @@
-package com.aes.messagehandler.Hub
+package com.aes.messagehandler.Controller
 
 import com.aes.common.Models.MessageDTO
 import com.aes.common.logging.Logging

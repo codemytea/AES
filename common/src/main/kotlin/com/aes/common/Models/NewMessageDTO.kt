@@ -1,4 +1,4 @@
-package com.aes.smsservices.Models
+package com.aes.common.Models
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDateTime

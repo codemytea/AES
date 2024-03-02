@@ -1,7 +1,7 @@
 package com.aes.smsservices
 
-import com.aes.smsservices.Models.NewMessageDTO
-import com.aes.smsservices.Models.RecipientDTO
+import com.aes.common.Models.NewMessageDTO
+import com.aes.common.Models.RecipientDTO
 import com.aes.smsservices.Services.SendSmsService
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
