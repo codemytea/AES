@@ -17,6 +17,10 @@ java {
 
 repositories {
     mavenCentral()
+    maven {
+        name = "clojars.org"
+        url = uri("https://repo.clojars.org")
+    }
 }
 
 dependencies {
@@ -26,6 +30,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(project(mapOf("path" to ":common")))
     implementation(project(mapOf("path" to ":kotlin-python-interop")))
+    implementation("net.clojars.suuft:libretranslate-java:1.0.5")
+    implementation("org.languagetool:language-en:6.3")
+    implementation ("org.jetbrains.kotlinx:kotlin-deeplearning-onnx:0.5.2")
     runtimeOnly("com.mysql:mysql-connector-j")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
