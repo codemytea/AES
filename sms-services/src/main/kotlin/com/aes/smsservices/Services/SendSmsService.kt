@@ -15,6 +15,7 @@ import com.aes.smsservices.Mappers.getLanguageCodeForCountry
 import com.aes.common.Models.NewMessageDTO
 import com.aes.smsservices.Models.NewMessageResponse.NewMessageResponseDTO
 import com.aes.common.Models.RecipientDTO
+import com.aes.smsservices.Mappers.toStandardLanguage
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -135,7 +136,7 @@ class SendSmsService(
 
         val regionCode = pnu.getRegionCodeForCountryCode(pnu.parse("+$phoneNumber", "UK").countryCode)
 
-        return LanguageCode.fromLanguage(getLanguageCodeForCountry(regionCode)) ?: LanguageCode.EN
+        return LanguageCode.fromLanguage(getLanguageCodeForCountry(regionCode).toStandardLanguage()) ?: LanguageCode.EN
     }
 }
 

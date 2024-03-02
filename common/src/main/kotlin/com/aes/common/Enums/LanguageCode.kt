@@ -1,7 +1,5 @@
 package com.aes.common.Enums
 
-import net.suuft.libretranslate.Language
-
 enum class LanguageCode(val language: Language) {
     EN(Language.ENGLISH),
     FR(Language.FRENCH),
@@ -28,4 +26,22 @@ enum class LanguageCode(val language: Language) {
     }
 
 
+}
+
+enum class Language(val code: String) {
+    RUSSIAN("ru"),
+    ENGLISH("en"),
+    AZERBAIJANI("az"),
+    CHINESE("zh"),
+    CZECH("cs"),
+    DANISH("da"),
+    DUTCH("nl"),
+    FINNISH("fi"),
+    FRENCH("fr"),
+    GERMAN("de"),
+    GREEK("el"),
+    IRISH("ga"),
+    ITALIAN("it"),
+    SPANISH("es"),
+    NONE("none")
 }

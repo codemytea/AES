@@ -9,6 +9,7 @@ import com.aes.common.Repositories.MessageRepository
 import com.aes.common.Repositories.UserRepository
 import com.aes.common.logging.Logging
 import com.aes.smsservices.Mappers.getLanguageCodeForCountry
+import com.aes.smsservices.Mappers.toStandardLanguage
 import com.aes.smsservices.Models.RecievedMessageDTO
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -46,7 +47,7 @@ class RecieveSmsService(
                 User(
                     UUID.randomUUID(),
                     listOf(resource.phoneNumber),
-                    LanguageCode.fromLanguage(getLanguageCodeForCountry(resource.country)) ?: LanguageCode.EN,
+                    LanguageCode.fromLanguage(getLanguageCodeForCountry(resource.country).toStandardLanguage()) ?: LanguageCode.EN,
                 )
             )
         }

@@ -15,10 +15,6 @@ java {
 }
 
 repositories {
-    maven {
-        name = "clojars.org"
-        url = uri("https://repo.clojars.org")
-    }
     mavenCentral()
 }
 
@@ -37,7 +33,6 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.json:json:20231013")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("net.clojars.suuft:libretranslate-java:1.0.5")
     runtimeOnly("com.mysql:mysql-connector-j")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
