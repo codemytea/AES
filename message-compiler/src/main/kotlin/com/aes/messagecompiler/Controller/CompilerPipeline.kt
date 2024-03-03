@@ -11,12 +11,16 @@ import com.aes.messagecompiler.Mappers.toNewMessageDTO
 import com.aes.messagecompiler.Python.Compiler
 import org.springframework.stereotype.Service
 
+
 @Service
 class CompilerPipeline(
     val compiler: Compiler,
     val userRepository: UserRepository,
     val localQueueService: LocalQueueService
 ) : Logging {
+
+
+    class ListCarrier(val list: List<NewMessageDTO>)
 
     /**
      * Compiles a message by tweaking it to the users characteristics and then chunking/amalgamating them to one message long chunks.
@@ -29,7 +33,7 @@ class CompilerPipeline(
 
         return finalSplit(improved).toNewMessageDTO(phoneNumber).also {
             logger().info("Putting message for user with phone number $phoneNumber on queue to be sent")
-            localQueueService.writeItemToQueue("send_message_queue", it)
+            localQueueService.writeItemToQueue("send_message_queue", ListCarrier(it)) //TODO consider putting this on queue one message at a time for safety
         }
     }
 
