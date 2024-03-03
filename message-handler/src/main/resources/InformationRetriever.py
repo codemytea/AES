@@ -1,5 +1,6 @@
 import json
 from openai import OpenAI
+from enum import Enum
 
 import kotlinInterop
 

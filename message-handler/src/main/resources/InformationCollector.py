@@ -1,4 +1,5 @@
 from openai import OpenAI
+from enum import Enum
 
 import kotlinInterop
 
@@ -17,7 +18,6 @@ client = OpenAI()
 def collect(userDetails):
     toAppend = ""
     if UserDetails.MAIN_CROP in userDetails:
-        print("here")
         toAppend = "Possible main crops are wheat, corn, barley, rice and soy beans."
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",

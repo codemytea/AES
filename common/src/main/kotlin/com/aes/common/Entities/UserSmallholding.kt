@@ -27,9 +27,6 @@ class UserSmallholding(
     @Column
     var smallholdingSize: Float? = null,
 
-    @Column
-    var isCommercial: Boolean? = null,
-
     @Enumerated(value = EnumType.STRING)
     @Column
     var cashCrop: Crop? = null,

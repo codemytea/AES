@@ -89,15 +89,21 @@ class MessagePipeline(
                 message.content.replace(it, "")
             }
         }
+
+        logger().info("Extracted the following agricultural questions for message with id ${message.id}: $rawExtraction")
+        logger().info("After extracting agricultural questions for message with id ${message.id} the left over message is: ${message.content}")
+
         return Pair(rawExtraction, message)
     }
 
 
     private fun getAgriculturalAnswer(message: MessageDTO): String? {
+        logger().info("Getting agricultural answer for question ${message.content} for user with id ${message.userID}")
         return expertSystem.getAgriculturalAnswer(message)
     }
 
     private fun collectRemainingInfo(message: MessageDTO): Pair<String?, String?>? {
+        logger().info("Collecting information for user with id ${message.userID}")
         return informationCollector.askFormoreInfo(message)
     }
 

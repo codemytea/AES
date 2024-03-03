@@ -8,7 +8,6 @@ fun String.toUserDetails(): UserDetails? {
     if (this == "locationCity") return UserDetails.LOCATION_CITY
     if (this == "locationCountry") return UserDetails.LOCATION_COUNTRY
     if (this == "mainCrop") return UserDetails.MAIN_CROP
-    if (this == "isCommercial") return UserDetails.IS_COMMERCIAL
     if (this == "smallholdingSize") return UserDetails.SMALLHOLDING_SIZE
     if (this == "name") return UserDetails.NAME
     return null

@@ -1,6 +1,7 @@
 import geonamescache
 import re
 import spacy
+from enum import Enum
 
 import kotlinInterop
 

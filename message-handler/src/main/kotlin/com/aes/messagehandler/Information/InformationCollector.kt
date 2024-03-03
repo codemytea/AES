@@ -10,6 +10,7 @@ import com.aes.messagehandler.Mappers.toCrop
 import com.aes.messagehandler.Mappers.toUserDetails
 import com.aes.messagehandler.Python.InformationCollection
 import jakarta.transaction.Transactional
+import org.apache.catalina.User
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Service
@@ -31,13 +32,13 @@ class InformationCollector(
      * @return details that need to be collected
      * */
     @OptIn(ExperimentalStdlibApi::class)
-    private fun getDetailsToDetermine(userID: UUID, newInfo: List<UserDetails>? = null): List<UserDetails>? {
+    private fun getDetailsToDetermine(userID: UUID): List<UserDetails>? {
+
+        logger().info("")
 
         val knownSet = setOf<UserDetails>()
-        if (newInfo != null) {
-            knownSet.plus(newInfo)
-        }
-        val fullSet = setOf(UserDetails.entries)
+
+        val fullSet = setOf(*UserDetails.entries.toTypedArray())
 
         val user = userRepository.findUserById(userID)
 
@@ -49,7 +50,7 @@ class InformationCollector(
         }
 
         //TODO check which smallholding the user is talking about and select the right one
-        user?.userSmallholdingInfo?.get(0)?.let {
+        user?.userSmallholdingInfo?.getOrNull(0)?.let {
             it.location_city?.let {
                 knownSet.plus(UserDetails.LOCATION_CITY)
             }
@@ -65,16 +66,12 @@ class InformationCollector(
             it.smallholdingSize?.let {
                 knownSet.plus(UserDetails.SMALLHOLDING_SIZE)
             }
-
-            it.isCommercial?.let {
-                knownSet.plus(UserDetails.IS_COMMERCIAL)
-            }
         }
 
         val returnList = mutableListOf<UserDetails>()
 
         fullSet.minus(knownSet).forEach {
-            returnList.add(it as UserDetails)
+            returnList.add(it)
         }
 
         return if (returnList.isEmpty()) null else returnList
@@ -87,36 +84,40 @@ class InformationCollector(
      * And return a list of the new user details that the user now has
      * */
     @Transactional
-    fun getNewInfo(message: MessageDTO): Pair<List<UserDetails>?, String?>? {
-        getDetailsToDetermine(message.userID)?.let {
+    fun getNewInfo(message: MessageDTO, detailsToDetermine : List<UserDetails>?): Pair<List<UserDetails>?, String?>? {
+        detailsToDetermine?.let { it ->
             val newInfo = informationCollection.secondLine(message.content, it)
+            val newInfoCollected = mutableListOf<UserDetails>()
 
             val user = userRepository.findUserById(message.userID)
             val userSmallholding =
-                user?.userSmallholdingInfo?.get(0) //TODO check which smallholding the user is talking about and select the right one
+                user?.userSmallholdingInfo?.getOrNull(0) //TODO check which smallholding the user is talking about and select the right one
 
             //save info
             newInfo.forEach { (userDetail, info) ->
-                var ud = userDetail.toUserDetails()
-                if (info != null) {
+                val ud = userDetail.toUserDetails()
+                if (info != null && ud != null) {
                     if (ud == UserDetails.NAME) {
-                        user?.name = info
+                        newInfoCollected.add(UserDetails.NAME)
+                        user?.name = info as String
                     } else if (ud == UserDetails.MAIN_CROP) {
-                        userSmallholding?.cashCrop = info.toCrop()
+                        newInfoCollected.add(UserDetails.MAIN_CROP)
+                        userSmallholding?.cashCrop = (info as String).toCrop()
                     } else if (ud == UserDetails.LOCATION_CITY) {
-                        userSmallholding?.location_city = info
+                        newInfoCollected.add(UserDetails.LOCATION_CITY)
+                        userSmallholding?.location_city = info as String
                     } else if (ud == UserDetails.LOCATION_COUNTRY) {
-                        userSmallholding?.location_country = info
+                        newInfoCollected.add(UserDetails.LOCATION_COUNTRY)
+                        userSmallholding?.location_country = info as String
                     } else if (ud == UserDetails.SMALLHOLDING_SIZE) {
-                        userSmallholding?.smallholdingSize = info.toFloat()
-                    } else if (ud == UserDetails.IS_COMMERCIAL) {
-                        userSmallholding?.isCommercial = info.toBoolean()
+                        newInfoCollected.add(UserDetails.SMALLHOLDING_SIZE)
+                        userSmallholding?.smallholdingSize = (info as String).toFloat()
                     }
                 }
             }
 
-            newInfo["stopCollecting"]?.let {
-                if (it.toBoolean()) {
+            newInfo["stopCollecting"]?.let { sc ->
+                if (sc as Boolean) {
                     user?.stopCollectingInformation = true
                     stop = true
                 }
@@ -130,7 +131,7 @@ class InformationCollector(
             }
 
             //new details collected
-            return Pair(newInfo.map { it.key.toUserDetails()!! }, newInfo["messageWithoutInformation"])
+            return Pair(newInfoCollected, newInfo["messageWithoutInformation"] as String)
         }
 
         return null
@@ -145,15 +146,21 @@ class InformationCollector(
      * */
     @Transactional
     fun askFormoreInfo(message: MessageDTO): Pair<String?, String?> {
-        val newInfoAndRemainderMessage = getNewInfo(message)
+        val detailsToDetermine = getDetailsToDetermine(message.userID)
+        val newInfoAndRemainderMessage = getNewInfo(message, detailsToDetermine)
+        logger().info("User details of user with id ${message.userID} has this new informtion ${newInfoAndRemainderMessage.toString()}")
         val userChoice = userRepository.findUserById(message.userID)?.stopCollectingInformation
-        var callToAction: String? = null
-        getDetailsToDetermine(message.userID, newInfoAndRemainderMessage?.first)?.let {
-            if (!stop && userChoice != true) {
-                callToAction = informationCollection.collect(it)
-            }
 
+        var callToAction: String? = null
+        detailsToDetermine?.minus(newInfoAndRemainderMessage?.first)?.let {
+            if (!stop && userChoice != true) {
+                logger().info("Asking user with id ${message.userID} for following new information: $it")
+                callToAction = informationCollection.collect(it as List<UserDetails>)
+            } else {
+                logger().info("User with id ${message.userID} has asked for stop in info collection")
+            }
         }
+
         return Pair(callToAction, newInfoAndRemainderMessage?.second)
     }
 

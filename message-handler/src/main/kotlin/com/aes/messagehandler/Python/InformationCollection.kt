@@ -13,7 +13,7 @@ class InformationCollection : PythonClass() {
 //    }
 
     @PythonFunction("secondLine", "InformationRetriever.py")
-    fun secondLine(userMessage: String, userDetails: List<UserDetails>): Map<String, String?> {
+    fun secondLine(userMessage: String, userDetails: List<UserDetails>): Map<String, Any?> {
         return execute(::secondLine, userMessage, userDetails)
     }
 
