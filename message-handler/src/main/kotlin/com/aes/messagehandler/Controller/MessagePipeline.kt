@@ -2,6 +2,7 @@ package com.aes.messagehandler.Controller
 
 import com.aes.common.Models.MessageDTO
 import com.aes.common.logging.Logging
+import com.aes.common.logging.logger
 import com.aes.messagecompiler.Controller.CompilerPipeline
 import com.aes.messagehandler.AgriculturalQuestionAnswerer.ExpertSystem.ExpertSystem
 import com.aes.messagehandler.Information.InformationCollector
@@ -26,22 +27,28 @@ class MessagePipeline(
      *
      * */
     fun messagePipeline(message: MessageDTO): Map<String, List<String>> {
+        logger().info("Message handler has picked up message with id ${message.id}")
         val responses = mutableMapOf<String, List<String>>()
 
         //try extracting the agricultural question and rest of message from user input
-        getAgriculturalQuestion(message)?.let {
+        getAgriculturalQuestion(message).let {
 
             //if a question exists
-            it.first?.let { questions ->
+            it.first.let { questions ->
                 val answers = mutableListOf<String>()
                 questions.forEach { question ->
-                    message.content = question
-                    getAgriculturalAnswer(message)?.let { answer ->
-                        answers.add(answer)
+                    if (question != null) {
+                        message.content = question
+                        getAgriculturalAnswer(message)?.let { answer ->
+                            answers.add(answer)
+                        }
                     }
                 }
                 //try to get an answer for it, and add it to the responses array
-                responses.put("agricultural_information", answers)
+                if (answers.isNotEmpty()){
+                    responses.put("agricultural_information", answers)
+                }
+
             }
 
             //with the rest of the message see if there's any useful information
@@ -73,12 +80,16 @@ class MessagePipeline(
     }
 
 
-    private fun getAgriculturalQuestion(message: MessageDTO): Pair<List<String>?, MessageDTO> {
+    private fun getAgriculturalQuestion(message: MessageDTO): Pair<List<String?>, MessageDTO> {
+        logger().info("Attempting to extract agricultural question from message with id ${message.id}")
         val rawExtraction = agriculturalQuestionExtraction.firstLine(message.content)
-        if (rawExtraction != null) {
-            message.content = rawExtraction.second
+
+        rawExtraction.forEach {
+            if (it != null) {
+                message.content.replace(it, "")
+            }
         }
-        return Pair(rawExtraction?.first, message)
+        return Pair(rawExtraction, message)
     }
 
 

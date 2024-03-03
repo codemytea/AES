@@ -1,14 +1,11 @@
+import kotlinInterop
+
 import json
 from openai import OpenAI
 
-import kotlinInterop
-
-client = OpenAI()
-
-
-def extractQuestion(question, messageWithoutQuestion):
+def extractQuestion(questions):
     """passes question(s) on to agricultural question answerer"""
-    return json.dumps({"question": question, "messageWithoutQuestion": messageWithoutQuestion, })
+    return (questions)
 
 
 client = OpenAI()
@@ -22,8 +19,11 @@ def firstLine(userMessage):
                 "role": "system",
                 "content": """
                            You want to check if user input contains an agricultural question. There could be more than one.
-                           If it does extract the question(s) and pass it to extractQuestion with the left over message as well. 
-                           Else pass None with the full message
+                           If it does, extract the question(s) WITH surrounding context and pass them to extractQuestion as the questions parameter. Else, just pass an empty list.
+                           
+                           
+                           Examples:
+                           1. "Hello. I would like know how to sell corn please, thank you. also, when do I plant beets? Furthermore, it's been raining lot's recently, is it still the best time to sow jerusalem artichokes?" -> ["I would like to know how to sell corn?", "When do I plant beets?", "It's been raining lot's recently, is it still the best time to sow jerusalem artichokes?"]
                            """
             },
             {
@@ -36,21 +36,20 @@ def firstLine(userMessage):
                 "type": "function",
                 "function": {
                     "name": "extractQuestion",
-                    "description": "Use this function if the user has asked agricultural question(s)",
+                    "description": "Use this function to extract agricultural questions from the user input and sort it into the two parameters",
 
                     "parameters": {
                         "type": "object",
                         "properties": {
-                            "question": {
-                                "type": "string",
-                                "description": "the agricultural question(s) the user asked. If they have not asked an agricultural question, pass in None"
+                            "questions": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "the agricultural question(s) the user asked. If they have not asked an agricultural question, pass an empty array. If the user has asked one question. Pass an array with one value - that question."
                             },
-                            "messageWithoutQuestion": {
-                                "type": "string",
-                                "description": "the original user message with the question removed. If there was no question, pass in the original user message"
-                            }
                         },
-                        "required": ["userMessage"]
+                        "required": ["questions"]
                     }
                 }
             }
@@ -59,7 +58,7 @@ def firstLine(userMessage):
             "type": "function",
             "function": {"name": "extractQuestion"},
         },
-        temperature=0.1
+        temperature=0
     )
 
     tool_calls = response.choices[0].message.tool_calls
@@ -73,11 +72,11 @@ def firstLine(userMessage):
             function_args = json.loads(tool_call.function.arguments)
 
             function_response = function_to_call(
-                question=function_args.get("question"),
-                messageWithoutQuestion=function_args.get("messageWithoutQuestion"),
+                questions=function_args.get("questions"),
             )
 
             return function_response
+
 
 
 kotlinInterop.registerFunction('firstLine', firstLine)

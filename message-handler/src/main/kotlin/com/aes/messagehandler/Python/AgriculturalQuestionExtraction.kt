@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 class AgriculturalQuestionExtraction : PythonClass() {
 
     @PythonFunction("firstLine", "AgriculturalQuestionExtraction.py")
-    fun firstLine(userMessage: String): Pair<List<String>?, String>? {
+    fun firstLine(userMessage: String):List<String?> {
         return execute(::firstLine, userMessage)
     }
 

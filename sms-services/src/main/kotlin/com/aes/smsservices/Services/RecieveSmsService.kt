@@ -52,9 +52,10 @@ class RecieveSmsService(
         val user = userRepository.findByPhoneNumberContaining(resource.phoneNumber) ?: let {
             userRepository.save(
                 User(
-                    UUID.randomUUID(),
-                    listOf(resource.phoneNumber),
-                    LanguageCode.fromLanguage(getLanguageCodeForCountry(resource.country).toStandardLanguage()) ?: LanguageCode.EN,
+                    id = UUID.randomUUID(),
+                    phoneNumber = listOf(resource.phoneNumber),
+                    preferredLanguage = LanguageCode.fromLanguage(getLanguageCodeForCountry(resource.country).toStandardLanguage()) ?: LanguageCode.EN,
+                    stopCollectingInformation = false
                 )
             )
         }
