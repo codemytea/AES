@@ -1,6 +1,7 @@
 package com.aes.common.Models
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.time.LocalDateTime
 import java.time.ZoneId
 
@@ -11,7 +12,7 @@ class NewMessageDTO(
     var message: String,
 
     /**
-     * When to send the message - default is now
+     * When to send the message - default is now + 5 seconds
      * */
     var sendtime: Int = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond().toInt() + 5,
 
@@ -19,7 +20,7 @@ class NewMessageDTO(
      * List of who will receive message
      * */
     @JsonIgnore
-    var recipient: RecipientDTO,
+    var recipient: RecipientDTO? = null,
 
     /**
      * UK Shortcode all messages are sent from
@@ -37,5 +38,5 @@ class NewMessageDTO(
     /**
      * The recipients of the message
      * */
-    val recipients = listOf(recipient)
+    val recipients = listOfNotNull(recipient)
 }

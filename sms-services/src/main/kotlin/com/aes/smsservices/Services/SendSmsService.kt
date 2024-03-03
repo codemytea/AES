@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import java.net.URI
 import java.time.LocalDateTime
+import java.time.ZoneId
 
 @Service
 class SendSmsService(
@@ -59,6 +60,7 @@ class SendSmsService(
         logger().info("Sending message at ${resource.sendtime}")
 
         val internalMessage = resource.message
+        resource.sendtime = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond().toInt() + 5
 
         val messages = sendMessage(resource)
 

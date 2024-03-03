@@ -1,10 +1,9 @@
-package com.aes.usercharacteristicsservice.Tagging
+package com.aes.smsservices.Services
 
 import com.aes.common.Models.NewMessageDTO
 import com.aes.common.Queue.LocalQueueService
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
-import com.aes.smsservices.Services.SendSmsService
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
 
 @Service
-class MessageTaggingQueueReadService(
+class SendMessageQueueReadService(
     val localQueueService: LocalQueueService,
     val sendSmsService: SendSmsService
 ) : Logging {
@@ -30,7 +29,7 @@ class MessageTaggingQueueReadService(
         while (hasMore) {
             val result = localQueueService.withQueueItemAtPositionAsync<ListCarrier>("send_message_queue", count) {
                 this.list.forEach {
-                    sendSmsService.sendMessage(it)
+                    sendSmsService.sendSMS(it)
                 }
                 true
             }
