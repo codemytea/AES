@@ -5,6 +5,8 @@ import com.aes.common.Enums.Gender
 import com.aes.common.Models.NewMessageDTO
 import com.aes.common.Queue.LocalQueueService
 import com.aes.common.Repositories.UserRepository
+import com.aes.common.logging.Logging
+import com.aes.common.logging.logger
 import com.aes.messagecompiler.Mappers.toNewMessageDTO
 import com.aes.messagecompiler.Python.Compiler
 import org.springframework.stereotype.Service
@@ -14,17 +16,19 @@ class CompilerPipeline(
     val compiler: Compiler,
     val userRepository: UserRepository,
     val localQueueService: LocalQueueService
-) {
+) : Logging {
 
     /**
      * Compiles a message by tweaking it to the users characteristics and then chunking/amalgamating them to one message long chunks.
      * @return list of NewMessageDTOs ready to be sent
      * */
     fun compileMessage(userMessage : Map<String, List<String>>, phoneNumber : Long) : List<NewMessageDTO>? {
+        logger().info("Compiling message for user with phone number $phoneNumber")
         val user = userRepository.findByPhoneNumberContaining(phoneNumber)
         val improved = improveSuggestability(userMessage, user?.literacy ?: 50f, user?.age ?: Age.ADULT, user?.gender ?: Gender.MALE) //if not known, assume standard
 
         return finalSplit(improved).toNewMessageDTO(phoneNumber).also {
+            logger().info("Putting message for user with phone number $phoneNumber on queue to be sent")
             localQueueService.writeItemToQueue("send_message_queue", it)
         }
     }
@@ -34,10 +38,13 @@ class CompilerPipeline(
      * First step in the message compiling pipeline - change messages to match user characteristics to improve chances the message suggestions will be implemented.
      * */
     fun improveSuggestability(userMessage: Map<String, List<String>>, literacyLevel : Float, age : Age, gender: Gender) : Map<String, List<String?>>{
+        logger().info("Improving suggestibility of message")
         return userMessage.mapValues{
             it.value.joinToString(" ").let {
                 listOf(compiler.userCharacteristicCompiling(it, literacyLevel, gender, age))
             }
+        }.also {
+            logger().info("Message with better suggestibility is $it")
         }
     }
 
@@ -59,6 +66,7 @@ class CompilerPipeline(
      * This to send messages are @return as a 1D list of messages
      * */
     fun finalSplit(userMessage: Map<String, List<String?>>) : List<String>{
+        logger().info("Amalgamating message")
         val mappedTopics =  userMessage.map {topic ->
             topic.value.joinToString(" ").let {
                 if(it.split(" ").size > 25){
@@ -103,6 +111,8 @@ class CompilerPipeline(
                 }
             }
         }
+
+        logger().info("Amalgamated message is $toReturn")
 
         return toReturn
     }
