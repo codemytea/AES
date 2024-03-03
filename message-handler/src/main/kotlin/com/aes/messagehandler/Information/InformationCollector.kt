@@ -156,6 +156,7 @@ class InformationCollector(
             if (!stop && userChoice != true) {
                 logger().info("Asking user with id ${message.userID} for following new information: $it")
                 callToAction = informationCollection.collect(it as List<UserDetails>)
+                logger().info("Asking user with id ${message.userID} for following new information: $it with call to action: $callToAction")
             } else {
                 logger().info("User with id ${message.userID} has asked for stop in info collection")
             }

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service
 @Service
 class Compiler : PythonClass() {
 
-    @PythonFunction("compile", "UserCharacteristicsApplied.py")
-    fun compile(userMessage: String, literacyLevel: Float, gender: Gender, age : Age): String? {
-        return execute(::compile, userMessage, literacyLevel, gender.toString(), age.toString())
+    @PythonFunction("userCharacteristicCompiling", "UserCharacteristicsApplied.py")
+    fun userCharacteristicCompiling(userMessage: String, literacyLevel: Float, gender: Gender, age : Age): String? {
+        return execute(::userCharacteristicCompiling, userMessage, literacyLevel, gender.toString(), age.toString())
     }
 
 }

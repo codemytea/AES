@@ -36,7 +36,7 @@ class CompilerPipeline(
     fun improveSuggestability(userMessage: Map<String, List<String>>, literacyLevel : Float, age : Age, gender: Gender) : Map<String, List<String?>>{
         return userMessage.mapValues{
             it.value.joinToString(" ").let {
-                listOf(compiler.compile(it, literacyLevel, gender, age))
+                listOf(compiler.userCharacteristicCompiling(it, literacyLevel, gender, age))
             }
         }
     }
