@@ -39,11 +39,14 @@ class CompilerPipeline(
      * */
     fun improveSuggestability(userMessage: Map<String, List<String>>, literacyLevel : Float, age : Age, gender: Gender) : Map<String, List<String?>>{
         logger().info("Improving suggestibility of message")
-        return userMessage.mapValues{
+
+        return userMessage.filterValues {
+            it.isNotEmpty() && !(it.size == 1 && it[0] == "")
+        }.mapValues{
             it.value.joinToString(" ").let {
                 listOf(compiler.userCharacteristicCompiling(it, literacyLevel, gender, age))
             }
-        }.also {
+        }.toSortedMap().also {
             logger().info("Message with better suggestibility is $it")
         }
     }
@@ -65,6 +68,7 @@ class CompilerPipeline(
      *
      * This to send messages are @return as a 1D list of messages
      * */
+    //TODO introduces commas bc takes punctuation from the fact it's a map eg {k1=["abc."], k2=["def"]} -> "abc., def". Need to fix.
     fun finalSplit(userMessage: Map<String, List<String?>>) : List<String>{
         logger().info("Amalgamating message")
         val mappedTopics =  userMessage.map {topic ->

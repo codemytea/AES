@@ -28,6 +28,8 @@ def collect(userDetails):
                             You want to ask the user to provide the following information {userDetails}. 
                             Explain that this is to allow the system to provide more tailored responses to their agricultural questions.
                             
+                            Put a full stop at the end of every sentence please.
+                            
                             {toAppend}
                             """
             },

@@ -13,6 +13,8 @@ prompt = """
     User Literacy: {}
     User Gender: {}
     User Age: {}
+    
+    DO NOT add any new text. Your job is to only rewrite messages. DO NOT OFFER ASSISTANCE. Keep ALL punctuation as is.
     """
 
 def userCharacteristicCompiling(userMessage, literacyLevel, gender, age):

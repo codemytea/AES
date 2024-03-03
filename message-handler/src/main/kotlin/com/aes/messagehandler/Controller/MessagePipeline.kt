@@ -46,7 +46,7 @@ class MessagePipeline(
                 }
                 //try to get an answer for it, and add it to the responses array
                 if (answers.isNotEmpty()){
-                    responses.put("agricultural_information", answers)
+                    responses.put("2-agricultural_information", answers)
                 }
 
             }
@@ -59,7 +59,7 @@ class MessagePipeline(
 
                 //if there's anything left to collect ask for it
                 it.first?.let { askForMoreInfo ->
-                    responses.put("information_collection", listOf(askForMoreInfo))
+                    responses.put("3-information_collection", listOf(askForMoreInfo))
 
                 }
 
@@ -69,7 +69,7 @@ class MessagePipeline(
 
                 //pass rest of user input to general chatbot
                 getGeneralAnswer(message)?.let { general ->
-                    responses.put("chat", listOf(general))
+                    responses.put("1-chat", listOf(general))
                 }
             }
         }
@@ -108,7 +108,9 @@ class MessagePipeline(
     }
 
     private fun getGeneralAnswer(message: MessageDTO): String? {
-        return generalChatbot.generalChatbot(message.content)
+        return generalChatbot.generalChatbot(message.content).also{
+            logger().info("General chat for user with id ${message.userID} is $it")
+        }
     }
 
 }

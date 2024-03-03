@@ -19,6 +19,7 @@ def generalChatbot(userMessage):
                             2. DO NOT ASK THE USER ANY QUESTIONS.
                             3. DO NOT use exclamation marks
                             4. DO answer any questions that are about yourself, but DO NOT answer any other questions
+                            5. Put at full stop at the end of every sentence.
                             
                             """
             },
