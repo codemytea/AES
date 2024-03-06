@@ -1,7 +1,9 @@
 package com.aes.common.Models
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.time.LocalDateTime
 import java.time.ZoneId
 
@@ -20,6 +22,7 @@ class NewMessageDTO(
      * List of who will receive message
      * */
     @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     var recipient: RecipientDTO? = null,
 
     /**

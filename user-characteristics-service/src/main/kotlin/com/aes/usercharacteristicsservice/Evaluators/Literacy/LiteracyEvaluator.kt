@@ -55,6 +55,7 @@ class LiteracyEvaluator(
 
             user.literacy = literacy
             userRepository.save(user)
+            //TODO is going over 100
 
             logger().info("User ${user.id} estimated literacy level is $literacy")
         }

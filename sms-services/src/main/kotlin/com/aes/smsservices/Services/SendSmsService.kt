@@ -38,20 +38,6 @@ class SendSmsService(
         RestTemplate()
     }
 
-    @Transactional
-    fun collect(unknownInformation: List<UserDetails>, userPhoneNumber: Long): List<MessageDTO> {
-
-        return sendSMS(
-            NewMessageDTO(
-                message = "To be able to give you a more tailored answer in the future, " +
-                        "do you mind letting me know " +
-                        unknownInformation.map { it to it.question }.joinToString(", ", postfix = "?"),
-                recipient = RecipientDTO(userPhoneNumber),
-            ), MessageType.OUTGOING_COLLECTION
-        )
-
-    }
-
     /**
      * Method to send SMS to specified user
      * */
@@ -60,7 +46,6 @@ class SendSmsService(
         logger().info("Sending message at ${resource.sendtime}")
 
         val internalMessage = resource.message
-        resource.sendtime = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond().toInt() + 5
 
         val messages = sendMessage(resource)
 
@@ -99,6 +84,7 @@ class SendSmsService(
                     user.preferredLanguage = it
                 }
             )
+            newMessageDTO.sendtime = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond().toInt() + 10
             makeRequest(newMessageDTO)?.toMessageDTOs(newMessageDTO.message, user.id)?.let {
                 Pair(it, user)
             }

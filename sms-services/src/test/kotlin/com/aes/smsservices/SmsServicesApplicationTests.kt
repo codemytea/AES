@@ -1,5 +1,6 @@
 package com.aes.smsservices
 
+import com.aes.common.Enums.MessageType
 import com.aes.common.Models.NewMessageDTO
 import com.aes.common.Models.RecipientDTO
 import com.aes.smsservices.Services.SendSmsService
@@ -18,9 +19,10 @@ class SmsServicesApplicationTests {
             NewMessageDTO(
                 message = "this is a test!",
                 recipient = RecipientDTO(
-                    447565533834
+                    447396722482
                 )
-            )
+            ),
+            MessageType.OUTGOING
         )
     }
 

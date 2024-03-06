@@ -33,10 +33,7 @@ class RecieveSmsService(
     }
 
     fun sendToMessageHandler(sms: MessageDTO) {
-        //TODO change so only tags extracted agricultural question
-
         localQueueService.writeItemToQueue("message_handler_queue", sms)
-
     }
 
     /**

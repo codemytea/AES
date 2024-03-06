@@ -22,3 +22,5 @@ class InformationCollection : PythonClass() {
         return execute(::collect, userDetails)
     }
 }
+
+

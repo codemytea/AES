@@ -21,5 +21,9 @@ class MessageStatusDTO(
     /**
      * The status of the message
      * */
-    val status: MessageStatus
+    val status: MessageStatus,
+
+    val error : String?,
+
+    val code : String?,
 )

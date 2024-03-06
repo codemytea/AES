@@ -36,8 +36,6 @@ class SmsController(
         logger().info("sending to formulate response with id ${sms.id}")
         recieveSmsService.sendToMessageHandler(sms.toDTO())
 
-        //TODO put on queue to go through message pipeline - when returned + compiled call send message service
-
         return sms.toDTO()
     }
 
@@ -48,7 +46,7 @@ class SmsController(
     fun smsStatusChange(@RequestBody resource: MessageStatusDTO): MessageDTO {
         logger().info(
             "Received Message Status update for message with id " +
-                    "${resource.id} and new status ${resource.status.name}"
+                    "${resource.id} and new status ${resource.status.name}, ${resource.code}, ${resource.error}"
         )
         return updateSmsService.update(resource).toDTO()
     }
