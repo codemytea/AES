@@ -19,7 +19,7 @@ class SmsServicesApplicationTests {
             NewMessageDTO(
                 message = "this is a test!",
                 recipient = RecipientDTO(
-                    447396722482
+                    447565533834
                 )
             ),
             MessageType.OUTGOING
