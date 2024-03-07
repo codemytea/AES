@@ -1,6 +1,7 @@
 package com.aes.common.Entities
 
 import com.aes.common.Enums.Age
+import com.aes.common.Enums.Crop
 import com.aes.common.Enums.Gender
 import com.aes.common.Enums.LanguageCode
 import jakarta.persistence.*
@@ -68,4 +69,9 @@ class User(
     @OneToMany
     @JoinColumn(name = "userId", referencedColumnName = "id")
     val userSmallholdingInfo: MutableList<UserSmallholding> = mutableListOf()
-)
+){
+
+    fun crops(): List<Crop>{
+        return userSmallholdingInfo.mapNotNull { it.cashCrop }
+    }
+}
