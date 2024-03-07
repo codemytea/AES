@@ -2,7 +2,6 @@ package com.aes.common
 
 import com.aes.common.Weather.geocoding.GeocodingService
 import com.aes.common.Weather.provider.WeatherService
-import com.fasterxml.jackson.core.PrettyPrinter
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Test
@@ -14,7 +13,7 @@ class WeatherAPITests {
 
     @Test
     fun weatherFetchesCorrectly(){
-        val result = weatherService.getWeatherForDateAtLocation("London", LocalDateTime.now())
+        val result = weatherService.getWeatherForDateAtLocation("London", "United States", LocalDateTime.now())
         println(jacksonObjectMapper().apply{
             registerModule(JavaTimeModule())
         }.writerWithDefaultPrettyPrinter().writeValueAsString(result))

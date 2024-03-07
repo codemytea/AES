@@ -78,8 +78,8 @@ class WeatherService(
 
     }
 
-    fun getWeatherForDateAtLocation(locationName: String, date: LocalDateTime): WeatherInfo{
-        val location = geocodingService.getLatLngForName(locationName)
+    fun getWeatherForDateAtLocation(cityName: String, countryName: String, date: LocalDateTime): WeatherInfo{
+        val location = geocodingService.getLatLngForName(cityName, countryName)
         return getWeatherForDate(location.latitude, location.longitude, date).first {
             it.time.toEpochSecond(ZoneOffset.UTC) == date.withMinute(0).withSecond(0).toEpochSecond(ZoneOffset.UTC)
         }
