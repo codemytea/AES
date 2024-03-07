@@ -1,4 +1,4 @@
-package com.aes.notificationservice
+package com.aes.notificationservice.services
 
 import com.aes.common.Queue.LocalQueueService
 import com.aes.common.Notification.entities.ScheduledNotification
