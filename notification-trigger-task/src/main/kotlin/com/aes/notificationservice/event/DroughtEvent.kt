@@ -28,8 +28,8 @@ class DroughtEvent(
             weatherService.getWeatherForDateAtLocation(location.cityName, location.countryName, time.minusYears(1).plusDays(it.toLong()))
         }
 
-        val sumRailfallToday = todayWeathers.sumOf { (it.precipitation?:0f).toDouble() }
-        val sumRailfallLastYear = lastYearWeathers.sumOf { (it.precipitation?:0f).toDouble() }
-        return sumRailfallToday < sumRailfallLastYear*droughtThreshold
+        val sumRainfallToday = todayWeathers.sumOf { (it.precipitation?:0f).toDouble() }
+        val sumRainfallLastYear = lastYearWeathers.sumOf { (it.precipitation?:0f).toDouble() }
+        return sumRainfallToday < sumRainfallLastYear*droughtThreshold
     }
 }

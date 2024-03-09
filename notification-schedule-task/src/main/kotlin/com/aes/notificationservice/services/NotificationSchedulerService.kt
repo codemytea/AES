@@ -5,7 +5,7 @@ import com.aes.common.Enums.Crop
 import com.aes.common.Enums.Topic
 import com.aes.common.Repositories.UserRepository
 import com.aes.common.Notification.entities.ScheduledNotification
-import com.aes.common.Notification.repositories.NotificationRepository
+import com.aes.common.Notification.repositories.ScheduledNotificationRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
@@ -13,7 +13,7 @@ import java.util.*
 
 @Service
 class NotificationSchedulerService(
-    val notificationRepository: NotificationRepository,
+    val scheduledNotificationRepository: ScheduledNotificationRepository,
     val userRepository: UserRepository
 ) {
 
@@ -38,7 +38,7 @@ class NotificationSchedulerService(
 
 
     fun scheduleNotification(user: User, time: LocalDateTime, crop: Crop, topic: Topic){
-        notificationRepository.findFirstByCropAndTopicAndAssociatedMessageIsNull(crop, topic)?.let {
+        scheduledNotificationRepository.findFirstByCropAndTopicAndAssociatedMessageIsNull(crop, topic)?.let {
             return
         }
         val notification = ScheduledNotification(
@@ -49,7 +49,7 @@ class NotificationSchedulerService(
             user,
             "Tell me more about ${topic.name.lowercase()} for ${crop.name.lowercase()}"
         )
-        notificationRepository.save(notification)
+        scheduledNotificationRepository.save(notification)
     }
 
 
