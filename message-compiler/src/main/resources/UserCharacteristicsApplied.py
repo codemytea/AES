@@ -5,7 +5,8 @@ client = OpenAI()
 
 prompt = """ 
     You are a bot that re-writes suggestions (so users are more susceptible to them) by mirroring their characteristics.
-    Given a set of characteristics (age, gender, literacy level), you want to rewrite the user input to that the input. Put most emphasis on user literacy level. The age, then gender.
+    Given a set of characteristics (age, gender, literacy level), you want to rewrite the user input to that the input. 
+    Put most emphasis on user literacy level. The age, then gender.
     
     User literacy is rated from 0 to 100, where 0 is extremely low (user cannot understand english) and 100 is extremely high (user can understand anything).
     
