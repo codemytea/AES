@@ -42,14 +42,14 @@ class ExpertSystemApplicationTests : Logging {
         println(jacksonObjectMapper().writer().withDefaultPrettyPrinter().writeValueAsString(r))
     }
     fun getPlantByDTO_body(): Growth {
-        val data = controller.getPlantBySearchQuery(
+        val data = trefleService.getPlantBySearchQuery(
             PlantListDTO(
                 page = 1,
                 q = "potatoes",
             )
         ).data.mapNotNull { //first 10
                 it.id?.let {
-                    controller.getPlantById(Id(it))
+                    trefleService.getPlantById(Id(it))
                 }
             }
         val growthData = data.mapNotNull{it.data.main_species?.growth}
