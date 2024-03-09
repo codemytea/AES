@@ -1,0 +1,82 @@
+Packing and storing instructions for 25 crop groups.
+    Root and Tuber Veg:
+        Quick storing solution: Trim off greens and store roots in a container filled with water in the refrigerator for short-term storage. Pack trimmed roots in perforated plastic bags or mesh bags.
+        Dry storing solution: Allow some root crops like potatoes and onions to air dry thoroughly in a cool, dark place before storing them in a well-ventilated container for long-term storage. Pack in breathable containers like wooden crates or cardboard boxes.
+
+    Leaves of Root and Tuber Veg. (Human Food or Animal Feed):
+        Quick storing solution: Submerge the leaves in cold water and store in the refrigerator for a few days. Pack in plastic bags or containers with ventilation holes.
+        Dry storing solution: Dehydrate leaves in a food dehydrator or oven at low temperatures until crisp, then store in airtight containers in a cool, dark place for long-term storage. Pack in sealed bags or airtight containers.
+
+    Bulb Veg:
+        Store in a cool, dry place with good ventilation. Pack in crates or boxes lined with newspaper to prevent bruising.
+
+    Leafy Veg:
+        Store in the refrigerator crisper drawer or in a plastic bag with a paper towel to absorb excess moisture. Pack in plastic bags or containers with ventilation holes to maintain crispness.
+
+    Brassica Head and Stem Veg:
+        Store in the refrigerator crisper drawer. Pack in perforated plastic bags or wrap in damp paper towels to maintain freshness.
+
+    Legume Veg. Group:
+        Quick storing solution: Blanch and freeze fresh legumes like peas and beans for longer preservation. Pack blanched legumes in freezer bags.
+        Dry storing solution: Allow mature legume pods to dry on the plant, then harvest and shell the beans. Spread the shelled beans in a single layer on a tray in a dry, well-ventilated area until completely dry, then transfer to airtight containers for long-term storage. Pack in airtight containers or bags.
+
+    Forage and Hay of Legume Veg.:
+        Store in a dry, well-ventilated area. Pack in bales or stacks and cover with a tarp to protect from the elements.
+
+    Fruiting Veg.:
+        Quick storing solution: Store ripe fruits like tomatoes and peppers in the refrigerator to extend shelf life. Pack in sturdy containers or crates to prevent crushing.
+        Dry storing solution: Dehydrate fruits like tomatoes and peppers to make sun-dried tomatoes or chili flakes for long-term storage. Pack in airtight containers.
+
+    Cucurbit Veg.:
+        Store in a cool, dry place with good air circulation. Pack in crates or baskets lined with paper or cloth to prevent bruising.
+
+    Citrus:
+        Store at room temperature or in the refrigerator, depending on preference. Pack in sturdy boxes or crates to prevent damage to the delicate peel.
+
+    Pome Fruit:
+        Store in the refrigerator. Pack in individual compartments or foam dividers to prevent bruising.
+
+    Stone Fruit:
+        Store at room temperature until ripe, then transfer to the refrigerator. Pack in cushioned containers to prevent bruising.
+
+    Berry and Small Fruit:
+        Store in the refrigerator. Pack in shallow containers or punnets to prevent crushing.
+
+    Tree Nut:
+        Quick storing solution: Freeze nuts in an airtight container to extend shelf life. Pack in airtight containers.
+        Dry storing solution: Allow freshly harvested nuts to air dry in their shells in a warm, well-ventilated area for several weeks, then crack and store the kernels in airtight containers in a cool, dark place for long-term storage.
+
+    Cereal Grain Group:
+        Store in a cool, dry place in airtight containers. Pack in sturdy bags or bins to prevent moisture absorption.
+
+    Forage, Hay, Stover, and Straw of Cereal Grain Group:
+        Store in a dry, well-ventilated area. Pack in bales or stacks and cover with a tarp to protect from moisture.
+
+    Grass Forage, Fodder and Hay:
+        Store in a dry, well-ventilated area. Pack in bales or stacks and cover with a tarp to protect from moisture.
+
+    Nongrass Animal Feeds (Forage, Fodder, Straw and Hay):
+        Store in a dry, well-ventilated area. Pack in bales or stacks and cover with a tarp to protect from moisture.
+
+    Oil seed:
+        Quick storing solution: Freeze seeds in an airtight container to prevent rancidity. Pack in airtight containers.
+        Dry storing solution: Air dry seeds thoroughly, then store in airtight containers in a cool, dark place for long-term storage. Pack in sealed bags or containers.
+
+    Edible Fungi:
+        Quick storing solution: Slice fresh mushrooms and freeze them in a single layer on a tray before transferring to freezer bags. Pack in freezer bags.
+        Dry storing solution: Dehydrate mushrooms in a food dehydrator or oven at low temperatures until crisp, then store in airtight containers in a cool, dark place for long-term storage. Pack in sealed bags or containers.
+
+    Stalk, Stem, and Leaf Petiole Veg.:
+        Store in the refrigerator. Pack in perforated plastic bags or containers with damp paper towels to maintain freshness.
+
+    Tropical and Subtropical Fruit, Edible Peel:
+        Store at room temperature until ripe, then transfer to the refrigerator. Pack in cushioned containers to prevent bruising.
+
+    Tropical and Subtropical Fruit, Inedible Peel:
+        Store at room temperature until ripe, then transfer to the refrigerator. Pack in cushioned containers to prevent bruising.
+
+    Herb Crop Group:
+        Store in the refrigerator. Pack in plastic bags or containers with damp paper towels to maintain freshness.
+
+    Spices Crop Group:
+        Store in a cool, dry place away from direct sunlight. Pack in airtight containers to preserve flavor and aroma.
