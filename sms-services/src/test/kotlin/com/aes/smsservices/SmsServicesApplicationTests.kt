@@ -1,5 +1,6 @@
 package com.aes.smsservices
 
+import com.aes.common.Buying.services.SeedDataSavingService
 import com.aes.common.Enums.MessageType
 import com.aes.common.Models.NewMessageDTO
 import com.aes.common.Models.RecipientDTO
@@ -25,6 +26,9 @@ class SmsServicesApplicationTests {
 
     @Autowired
     lateinit var cropSellingService: CropSellingService
+
+    @Autowired
+    lateinit var seedDataSavingService: SeedDataSavingService
 
     @Test
     fun sendMessage() {
@@ -55,6 +59,11 @@ class SmsServicesApplicationTests {
             )
             println(date.format(DateTimeFormatter.ISO_DATE) + "," + estimate.toString())
         }
+    }
+
+    @Test
+    fun saveSeedData(){
+        seedDataSavingService.writeAllToDB()
     }
 
 }

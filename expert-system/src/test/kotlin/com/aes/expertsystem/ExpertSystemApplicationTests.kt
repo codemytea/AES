@@ -2,8 +2,8 @@ package com.aes.expertsystem
 
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
-import com.aes.expertsystem.Trefle.Models.PlantListDTO
-import com.aes.expertsystem.Trefle.Controller
+import com.aes.common.Trefle.Models.PlantListDTO
+import com.aes.common.Trefle.TrefleService
 import com.aes.expertsystem.Trefle.Models.FilterNotDTO
 import com.aes.expertsystem.Trefle.Models.Id
 import org.junit.jupiter.api.Test
@@ -16,11 +16,11 @@ import org.springframework.test.context.ActiveProfiles
 class ExpertSystemApplicationTests : Logging {
 
     @Autowired
-    lateinit var controller: Controller
+    lateinit var trefleService: TrefleService
 
     @Test
     fun getPlantByDTO() {
-        controller.getPlantBySearchQuery(
+        trefleService.getPlantBySearchQuery(
             PlantListDTO(
                 page = 1,
                 q = "maize",
@@ -29,13 +29,13 @@ class ExpertSystemApplicationTests : Logging {
                 )
             )
         ).let {
-            logger().info("${it.data[0].id?.let { it2 -> controller.getPlantById(Id(it2))}?.data?.main_species?.growth}")
+            logger().info("${it.data[0].id?.let { it2 -> trefleService.getPlantById(Id(it2))}?.data?.main_species?.growth}")
         }
     }
 
     @Test
     fun getPlantList() {
-        controller.allPlants(
+        trefleService.allPlants(
             PlantListDTO(
                 page = 1,
                 filterNot = FilterNotDTO(
@@ -47,7 +47,7 @@ class ExpertSystemApplicationTests : Logging {
 
     @Test
     fun getPlantById() {
-        controller.getPlantById(Id(1))
+        trefleService.getPlantById(Id(1))
     }
 
 }
