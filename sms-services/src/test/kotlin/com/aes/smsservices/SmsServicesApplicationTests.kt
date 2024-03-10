@@ -1,6 +1,8 @@
 package com.aes.smsservices
 
+import com.aes.common.Buying.services.PPPService
 import com.aes.common.Buying.services.SeedDataSavingService
+import com.aes.common.Buying.services.SeedPriceService
 import com.aes.common.CropGroup.services.CropGroupFetchService
 import com.aes.common.CropGroup.services.CropGroupParseService
 import com.aes.common.Ecocrop.full.EcocropDataSaveService
@@ -41,6 +43,9 @@ class SmsServicesApplicationTests {
 
     @Autowired
     lateinit var cropGroupFetchService: CropGroupFetchService
+
+    @Autowired
+    lateinit var seedPriceService: SeedPriceService
 
     @Test
     fun sendMessage() {
@@ -94,6 +99,12 @@ class SmsServicesApplicationTests {
         println(mainGroup.groupNumber.toString() + " " + mainGroup.name)
         val subGroup = cropGroupFetchService.getAllSubGroupsByName("sugar beet").minBy { it.groupNumber }
         println(subGroup.groupNumber.toString() + subGroup.subgroupLetter + " " + subGroup.name)
+    }
+
+    @Test
+    fun gettingSeedPriceForCountryWorks(){
+        val price = seedPriceService.getSeedPriceForCropInCountryOnDate("Wheat", "United Kingdom", LocalDate.now())
+        println("Price is ${price.first} per ${price.second.name}")
     }
 
 }

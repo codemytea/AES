@@ -1,13 +1,15 @@
 package com.aes.common.Buying.services
 
-import com.aes.common.Enums.Crop
+import com.aes.common.Selling.services.CropSellingService
 import kotlinx.coroutines.*
 import org.springframework.stereotype.Service
 import java.io.File
+import java.time.LocalDate
 
 @Service
 class SeedPriceService(
-    val pppService: PPPService
+    val pppService: PPPService,
+    val cropSellingService: CropSellingService
 ) {
     inner class SeedData(
         val prices: Map<Pair<PriceUnit, Float>, Float>,
@@ -128,11 +130,11 @@ class SeedPriceService(
 
     }
 
-    fun getSeedPriceForCropInCountryInYear(crop: String, country: String, year: Int): Pair<Float, PriceUnit>{
-        val pppUK = pppService.getPPPForCountryAtYear("United Kingdom", year)
-        val pppCountry = pppService.getPPPForCountryAtYear(country, year)
+    fun getSeedPriceForCropInCountryOnDate(crop: String, country: String, date: LocalDate): Pair<Float, PriceUnit>{
+        val pppUK = pppService.getPPPForCountryAtYear("United Kingdom", date.year)
+        val pppCountry = pppService.getPPPForCountryAtYear(country, date.year)
         val pppProp = (pppCountry/pppUK)
-        val (cropPrice, priceUnit) = getSeedPriceForCrop(crop)?.maxBulk() ?: (0f to PriceUnit.KG)
+        val (cropPrice, priceUnit) = getSeedPriceForCrop(crop)?.maxBulk() ?: (cropSellingService.getExpectedPriceForDateInCountry(crop, date, country)/1000f to PriceUnit.KG)
 
         val standardBulkDecrease = 0.8f
 

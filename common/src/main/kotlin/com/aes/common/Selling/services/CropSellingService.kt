@@ -73,7 +73,7 @@ class CropSellingService(
     }
 
     fun getExpectedPriceForDateInCountry(crop: String, date: LocalDate, country: String): Float{
-        val allData = cropPriceRepository.findAllByCropNameAndCountry(crop, country).sortedByDescending { it.fromDate }
+        val allData = cropPriceRepository.findAllByCropNameAndCountryLike(crop, "$country%").sortedByDescending { it.fromDate }
         if(allData.isEmpty()) return 0f
         if(allData.size == 1) return allData.first().priceLCU
         return if(allData.first().toDate > date && allData.last().fromDate < date){
