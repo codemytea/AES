@@ -76,7 +76,7 @@ class WeatherService(
             ).body!!.toWeatherInfo(lat, lng)
         }
         if(to.isAfter(LocalDate.now().plusWeeks(2))){
-            result += getHistoricalWeatherBetweenDates(lat, lng, LocalDate.now().plusWeeks(2), to)
+            result += getHistoricalWeatherBetweenDates(lat, lng, LocalDate.now().plusWeeks(2).minusYears(1), to.minusYears(1))
         }
         return result
 
