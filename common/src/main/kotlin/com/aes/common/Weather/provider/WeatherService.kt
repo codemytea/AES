@@ -67,15 +67,26 @@ class WeatherService(
         ).body!!.toWeatherInfo(lat, lng)
     }
 
-    private fun getWeatherForDate(lat: Float, lng: Float, date: LocalDateTime): List<WeatherInfo> {
-        return runBlocking {
-            if(date.isBefore(LocalDateTime.now().minusDays(5))){
-                getHistoricalWeatherForDate(lat, lng, date)
-            } else{
-                getForecastWeatherForDate(lat, lng, date)
-            }
-        }
+    private fun getForecastWeatherBetweenDates(lat: Float, lng: Float, from: LocalDate, to:LocalDate): List<WeatherInfo>{
+        return restTemplate().getForEntity(
+            forecastUrl(lat, lng, from, to, variables),
+            WeatherData::class.java
+        ).body!!.toWeatherInfo(lat, lng)
+    }
 
+    private fun getHistoricalWeatherBetweenDates(lat: Float, lng: Float, from: LocalDate, to:LocalDate): List<WeatherInfo>{
+        return restTemplate().getForEntity(
+            historicalUrl(lat, lng, from, to, variables),
+            WeatherData::class.java
+        ).body!!.toWeatherInfo(lat, lng)
+    }
+
+    private fun getWeatherForDate(lat: Float, lng: Float, date: LocalDateTime): List<WeatherInfo> {
+        return if(date.isBefore(LocalDateTime.now().minusDays(5))){
+            getHistoricalWeatherForDate(lat, lng, date)
+        } else{
+            getForecastWeatherForDate(lat, lng, date)
+        }
     }
 
     fun getWeatherForDateAtLocation(cityName: String, countryName: String, date: LocalDateTime): WeatherInfo{
@@ -83,6 +94,26 @@ class WeatherService(
         return getWeatherForDate(location.latitude, location.longitude, date).first {
             it.time.toEpochSecond(ZoneOffset.UTC) == date.withMinute(0).withSecond(0).toEpochSecond(ZoneOffset.UTC)
         }
+    }
+
+    fun getWeatherBetweenDatesAtLocation(cityName: String, countryName: String, from: LocalDate, to: LocalDate): List<WeatherInfo>{
+        val location = geocodingService.getLatLngForName(cityName, countryName)
+
+        val result = mutableListOf<WeatherInfo>()
+
+        if(from.isBefore(LocalDate.now().minusDays(5))){
+            result += getHistoricalWeatherBetweenDates(location.latitude, location.longitude, from, minOf(LocalDate.now().minusDays(5), to))
+            if(to.isAfter(LocalDate.now().minusDays(5))){
+                result += getForecastWeatherBetweenDates(location.latitude, location.longitude, LocalDate.now().minusDays(5), to)
+            }
+        } else{
+            result += getForecastWeatherBetweenDates(location.latitude, location.longitude, from, to)
+        }
+        return result
+    }
+
+    fun allFutureDatesMatchCondition(from: LocalDate, to: LocalDate, cityName: String, countryName: String, condition: (WeatherInfo)->Boolean): Boolean{
+        return getWeatherBetweenDatesAtLocation(cityName, countryName, from, to).all(condition)
     }
 
 
