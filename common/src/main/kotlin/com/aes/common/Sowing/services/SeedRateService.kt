@@ -30,7 +30,7 @@ open class SeedRateService(
         val temperature = weatherService.getWeatherForDateAtLocation(userSmallholding.location_city!!, userSmallholding.location_country!!, sowingDate).temperature!!
         val germinationRate = plantInfo?.germination?.minByOrNull {g-> g.temperature?.toTemp()?.let { temperature-it }?: Float.MAX_VALUE }?.temperature?.toTemp()?.let {closestTemp->
             val availableGerminations = plantInfo.germination.filter { it.temperature?.toTemp() == closestTemp }
-            availableGerminations.sumOf { it.temperature!!.toDouble() }/availableGerminations.size
+            availableGerminations.sumOf { it.temperature!!.toDouble() }/(availableGerminations.size*100)
         } ?: 1.0
 
         return crop.cropGroup.plantingType.seedRate(
