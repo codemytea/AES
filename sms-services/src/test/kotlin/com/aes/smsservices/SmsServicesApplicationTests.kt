@@ -1,6 +1,8 @@
 package com.aes.smsservices
 
 import com.aes.common.Buying.services.SeedDataSavingService
+import com.aes.common.CropGroup.services.CropGroupFetchService
+import com.aes.common.CropGroup.services.CropGroupParseService
 import com.aes.common.Ecocrop.full.EcocropDataSaveService
 import com.aes.common.Enums.MessageType
 import com.aes.common.Models.NewMessageDTO
@@ -33,6 +35,12 @@ class SmsServicesApplicationTests {
 
     @Autowired
     lateinit var ecocropDataSaveService: EcocropDataSaveService
+
+    @Autowired
+    lateinit var cropGroupParseService: CropGroupParseService
+
+    @Autowired
+    lateinit var cropGroupFetchService: CropGroupFetchService
 
     @Test
     fun sendMessage() {
@@ -73,6 +81,19 @@ class SmsServicesApplicationTests {
     @Test
     fun saveEcocropData(){
         ecocropDataSaveService.writeAllToDB()
+    }
+
+    @Test
+    fun saveCropgroupData(){
+        cropGroupParseService.writeAllToDB()
+    }
+
+    @Test
+    fun getCropDataWorks(){
+        val mainGroup = cropGroupFetchService.getAllMainGroupsByName("sugar beet").minBy { it.groupNumber }
+        println(mainGroup.groupNumber.toString() + " " + mainGroup.name)
+        val subGroup = cropGroupFetchService.getAllSubGroupsByName("sugar beet").minBy { it.groupNumber }
+        println(subGroup.groupNumber.toString() + subGroup.subgroupLetter + " " + subGroup.name)
     }
 
 }
