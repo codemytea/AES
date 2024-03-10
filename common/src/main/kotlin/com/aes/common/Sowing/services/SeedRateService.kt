@@ -5,10 +5,11 @@ import com.aes.common.Entities.UserSmallholding
 import com.aes.common.Trefle.TrefleService
 import com.aes.common.Weather.provider.WeatherService
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
-class SeedRateService(
+open class SeedRateService(
     val trefleService: TrefleService,
     val sidSeedDataFullRepository: SIDSeedDataFullRepository,
     val weatherService: WeatherService
@@ -19,7 +20,9 @@ class SeedRateService(
         val firstNonDigit = indexOfFirst { !it.isDigit() }
         return substring(0, firstNonDigit).toFloat()
     }
-    fun seedRateForUserSmallholding(userSmallholding: UserSmallholding, requiredPopn: Int, sowingDate: LocalDateTime): Float{
+
+    @Transactional
+    open fun seedRateForUserSmallholding(userSmallholding: UserSmallholding, requiredPopn: Int, sowingDate: LocalDateTime): Float{
         val crop = userSmallholding.cashCrop ?: return 0f
         val cropInfo = trefleService.getPlantByCommonName(crop.name)
         val (genus, epithet) = cropInfo.data.first().scientific_name.split(" ")
