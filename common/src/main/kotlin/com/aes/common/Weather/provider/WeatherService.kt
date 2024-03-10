@@ -68,10 +68,18 @@ class WeatherService(
     }
 
     private fun getForecastWeatherBetweenDates(lat: Float, lng: Float, from: LocalDate, to:LocalDate): List<WeatherInfo>{
-        return restTemplate().getForEntity(
-            forecastUrl(lat, lng, from, to, variables),
-            WeatherData::class.java
-        ).body!!.toWeatherInfo(lat, lng)
+        val result = mutableListOf<WeatherInfo>()
+        if(from.isBefore(LocalDate.now().plusWeeks(2))){
+            result += restTemplate().getForEntity(
+                forecastUrl(lat, lng, from, minOf(to, LocalDate.now().plusWeeks(2)), variables),
+                WeatherData::class.java
+            ).body!!.toWeatherInfo(lat, lng)
+        }
+        if(to.isAfter(LocalDate.now().plusWeeks(2))){
+            result += getHistoricalWeatherBetweenDates(lat, lng, LocalDate.now().plusWeeks(2), to)
+        }
+        return result
+
     }
 
     private fun getHistoricalWeatherBetweenDates(lat: Float, lng: Float, from: LocalDate, to:LocalDate): List<WeatherInfo>{
