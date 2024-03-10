@@ -1,6 +1,7 @@
 package com.aes.smsservices
 
 import com.aes.common.Buying.services.SeedDataSavingService
+import com.aes.common.Ecocrop.full.EcocropDataSaveService
 import com.aes.common.Enums.MessageType
 import com.aes.common.Models.NewMessageDTO
 import com.aes.common.Models.RecipientDTO
@@ -29,6 +30,9 @@ class SmsServicesApplicationTests {
 
     @Autowired
     lateinit var seedDataSavingService: SeedDataSavingService
+
+    @Autowired
+    lateinit var ecocropDataSaveService: EcocropDataSaveService
 
     @Test
     fun sendMessage() {
@@ -64,6 +68,11 @@ class SmsServicesApplicationTests {
     @Test
     fun saveSeedData(){
         seedDataSavingService.writeAllToDB()
+    }
+
+    @Test
+    fun saveEcocropData(){
+        ecocropDataSaveService.writeAllToDB()
     }
 
 }
