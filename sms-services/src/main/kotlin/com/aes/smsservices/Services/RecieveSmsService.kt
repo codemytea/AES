@@ -4,7 +4,6 @@ import com.aes.common.Entities.Message
 import com.aes.common.Entities.User
 import com.aes.common.Enums.LanguageCode
 import com.aes.common.Enums.MessageType
-import com.aes.common.Models.MessageDTO
 import com.aes.common.Queue.LocalQueueService
 import com.aes.common.Repositories.MessageRepository
 import com.aes.common.Repositories.UserRepository
@@ -25,13 +24,6 @@ class RecieveSmsService(
     val localQueueService: LocalQueueService
 ) : Logging {
 
-    fun tagIncomingMessage(sms: Message) {
-        //TODO change so only tags extracted agricultural question
-        if (sms.messageTopics.isEmpty()) {
-            localQueueService.writeItemToQueue("message_tag_queue", sms)
-        }
-    }
-
     fun sendToMessageHandler(sms: Message) {
         localQueueService.writeItemToQueue("message_handler_queue", sms)
     }
@@ -39,8 +31,7 @@ class RecieveSmsService(
     /**
      * Saves incoming message to DB, in english
      *
-     * @param resource the received message
-     *
+     * @param resource - the received message
      * @return the message entity
      * */
     @Transactional
@@ -53,7 +44,8 @@ class RecieveSmsService(
                     id = UUID.randomUUID(),
                     phoneNumber = listOf(resource.phoneNumber),
                     //if it's a new user, figure out their language from their country code
-                    preferredLanguage = LanguageCode.fromLanguage(getLanguageCodeForCountry(resource.country).toStandardLanguage()) ?: LanguageCode.EN,
+                    preferredLanguage = LanguageCode.fromLanguage(getLanguageCodeForCountry(resource.country).toStandardLanguage())
+                        ?: LanguageCode.EN,
                     stopCollectingInformation = false
                 )
             )

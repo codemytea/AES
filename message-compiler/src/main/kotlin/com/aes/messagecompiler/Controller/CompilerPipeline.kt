@@ -24,7 +24,7 @@ class CompilerPipeline(
 
     /**
      * Compiles a message by tweaking it to the users characteristics and then chunking/amalgamating them to one
-     * message long chunks.
+     * message long chunks. After it
      *
      * @param initialResponse - an initial list of responses with what they correspond to
      * @param phoneNumber - the receiving users' phone number
@@ -37,7 +37,9 @@ class CompilerPipeline(
 
         return finalSplit(improved).toNewMessageDTO(phoneNumber).also {
             logger().info("Putting message for user with phone number $phoneNumber on queue to be sent")
-            localQueueService.writeItemToQueue("send_message_queue", ListCarrier(it)) //TODO consider putting this on queue one message at a time for safety
+            it.forEach {
+                localQueueService.writeItemToQueue("send_message_queue", it) //messages added to queue one at a time for safety
+            }
         }
     }
 

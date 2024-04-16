@@ -23,6 +23,9 @@ class SmsController(
 
     /**
      * Webhook for receiving incoming messages from users
+     *
+     * @param resource - the recieved message
+     * @return the saved message dto
      * */
     @PostMapping("/receive")
     fun receiveSMS(@RequestBody resource: RecievedMessageDTO): MessageDTO {
@@ -36,14 +39,14 @@ class SmsController(
         logger().info("Sending ${sms.id} to message handler.")
         recieveSmsService.sendToMessageHandler(sms)
 
-        logger().info("tagging message with id ${sms.id}")
-        recieveSmsService.tagIncomingMessage(sms)
-
         return sms.toDTO()
     }
 
     /**
-     * Changes status of sms eg from pending to delivered
+     * Receives SMS status changes
+     *
+     * @param resource - the incoming message status dto
+     * @return the resulting message dto
      * */
     @PostMapping("/status")
     fun smsStatusChange(@RequestBody resource: MessageStatusDTO): MessageDTO {

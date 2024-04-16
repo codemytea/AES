@@ -4,18 +4,16 @@ import com.aes.common.Entities.Message
 import com.aes.common.Entities.User
 import com.aes.common.Enums.LanguageCode
 import com.aes.common.Enums.MessageType
-import com.aes.common.Enums.UserDetails
 import com.aes.common.Models.MessageDTO
+import com.aes.common.Models.NewMessageDTO
 import com.aes.common.Repositories.MessageRepository
 import com.aes.common.Repositories.UserRepository
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
 import com.aes.smsservices.Exceptions.MessageRequestException
 import com.aes.smsservices.Mappers.getLanguageCodeForCountry
-import com.aes.common.Models.NewMessageDTO
-import com.aes.smsservices.Models.NewMessageResponse.NewMessageResponseDTO
-import com.aes.common.Models.RecipientDTO
 import com.aes.smsservices.Mappers.toStandardLanguage
+import com.aes.smsservices.Models.NewMessageResponse.NewMessageResponseDTO
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -40,6 +38,8 @@ class SendSmsService(
 
     /**
      * Method to send SMS to specified user
+     *
+     * @param resource - the message to send
      * */
     @Transactional
     fun sendSMS(resource: NewMessageDTO, messageType: MessageType = MessageType.OUTGOING): List<MessageDTO> {
@@ -58,7 +58,7 @@ class SendSmsService(
 
 
     /**
-     * Using the NewMessageDTO, iterate through all recipients and send the message to them individually.
+     * Using the NewMessageDTO, iterate through all recipients and send the message to them individually (may be multiple recipients - e.g. weather alert).
      * This is done as the language of each user might be different so messages may be different
      *
      * If the user doesn't have a preferred language yet, get it from their phone number using the country code,
@@ -92,7 +92,7 @@ class SendSmsService(
     }
 
     /**
-     * Saves the message to the db
+     * Saves the message to the DB
      * */
     fun saveMessage(messageDTO: MessageDTO, user: User, msgType: MessageType): Message {
         return messageRepository.save(
@@ -127,19 +127,3 @@ class SendSmsService(
         return LanguageCode.fromLanguage(getLanguageCodeForCountry(regionCode).toStandardLanguage()) ?: LanguageCode.EN
     }
 }
-
-
-/*
-    fun scheduleNotification(
-        number: String,
-        message: String,
-        firstSend: LocalDateTime,
-        interval: TimeIdentifiers,
-        repeatFor: Int = 0
-    ): Boolean {
-        for (i in 0 until repeatFor) {
-            //sendMessage()
-        }
-        return true
-    }
- */

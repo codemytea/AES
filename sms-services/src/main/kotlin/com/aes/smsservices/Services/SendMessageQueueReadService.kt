@@ -18,19 +18,20 @@ class SendMessageQueueReadService(
 ) : Logging {
 
 
-    class ListCarrier(val list: List<NewMessageDTO>)
 
-    @Scheduled(fixedDelay = 10, timeUnit = TimeUnit.SECONDS)
+    /**
+     * Checks the send-message-queue every second for messages to send. For each message received, sendSmsService is
+     * called which send the message to the appropriate user.
+     * */
+    @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.SECONDS)
     fun readFromQueue() {
         logger().info("Reading messages from queue")
         var count = 0
         var hasMore = true
         val asyncOps = mutableListOf<Deferred<Unit>>()
         while (hasMore) {
-            val result = localQueueService.withQueueItemAtPositionAsync<ListCarrier>("send_message_queue", count) {
-                this.list.forEach {
-                    sendSmsService.sendSMS(it)
-                }
+            val result = localQueueService.withQueueItemAtPositionAsync<NewMessageDTO>("send_message_queue", count) {
+                sendSmsService.sendSMS(this)
                 true
             }
             if (result == null) {

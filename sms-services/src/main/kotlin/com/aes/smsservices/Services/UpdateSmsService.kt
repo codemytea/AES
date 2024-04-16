@@ -14,6 +14,9 @@ class UpdateSmsService(
     val messageRepository: MessageRepository
 ) : Logging {
 
+    /**
+     * Updates the given status of a message.
+     * */
     @Transactional
     fun update(resource: MessageStatusDTO): Message {
         val toUpdate = messageRepository.findByIdOrNull(resource.id) ?: throw ResourceNotFoundException(resource.id)

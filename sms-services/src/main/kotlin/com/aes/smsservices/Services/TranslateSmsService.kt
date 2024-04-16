@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service
 @Service
 class TranslateSmsService : Logging {
 
-
+    /**
+     * Given a message, translate a message from a specific language, to a specific language.
+     * */
     fun translateMessage(
         contents: String,
         toLanguage: LanguageCode = LanguageCode.EN,
