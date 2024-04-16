@@ -6,22 +6,25 @@ functionMap = {
 
 }
 
-
+#register a function with the kotlin python interop
 def registerFunction(name, function):
     functionMap[name] = function
 
 
+#reads arguments as JSON from input file
 def readArgsFromFile(file):
     with open(file, 'r') as file:
         return json.load(file)
 
 
+#Write the result of python function execution as JSON to file
 def writeResultToFile(filename, result, errorMessage):
     string = json.dumps(result) + "\n" + json.dumps(errorMessage)
     with open(filename, 'w+') as file:
         file.write(string)
 
 
+#Run an execution of the kotlin python interop
 def execute():
     try:
         args = sys.argv
