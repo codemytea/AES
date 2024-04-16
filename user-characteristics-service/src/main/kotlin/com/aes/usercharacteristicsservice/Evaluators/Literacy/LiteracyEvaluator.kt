@@ -23,6 +23,13 @@ class LiteracyEvaluator(
     private val userRepository: UserRepository,
 ) : Logging {
 
+
+    /**
+     * Calculates a users literacy level based on the complexity of their messages (average word count and token tye ratio)
+     * as well as their messages readability and average number of errors.
+     *
+     * Produces a result between 0.0 (meaning very illiterate) and 100.0 (meaning very literate) and saves this to the DB
+     * */
     @Scheduled(cron = "0 0 1 * * ?")
     //@Scheduled(cron = "0/10 * * ? * *")
     @Transactional
@@ -49,25 +56,34 @@ class LiteracyEvaluator(
 
             // Combine individual metrics to calculate overall user literacy level
             val literacy = ((averageWordCount ?: 0.0) +
-                        (averageErrorsPerMessage) +
-                        (averageReadability) +
-                        (averageVocabularyComplexity ?: 0.0) / 10.0).toFloat()
+                    (averageErrorsPerMessage) +
+                    (averageReadability) +
+                    (averageVocabularyComplexity ?: 0.0) / 10.0).toFloat() / 4 //scale back to 0-100
 
             user.literacy = literacy
             userRepository.save(user)
-            //TODO is going over 100
 
             logger().info("User ${user.id} estimated literacy level is $literacy")
         }
     }
 
+    /**
+     * Taking the average number of words in the users all time messages, the number is scaled between 0.0 and 100.0
+     * where 100.0 is most verbose. The scaling uses 17.5 to provide an average score of 50.0 as the average number of
+     * words in a message is 17.5
+     *
+     * @param averageWordCount - the average number of words in all the users messages
+     * @return a double between 0 and 100 where 0 is least verbose and 100 is most
+     * */
     private fun calculateWordCountScore(averageWordCount: Double): Double {
         return scaleProbability(averageWordCount, 17.5) * 100.0
     }
 
     /**
-     * Number of errors in a message, suh as typos, syntactical errors etc.
-     * 100 represents no mistakes and 0 represents mistakes everywhere
+     * Calculates the number of errors in a message, such as typos, syntactical errors etc.
+     *
+     * @param message - a users message
+     * @return a double between 0 and 100 where 0 is the most mistakes and 100 is none
      * */
     private fun errorsInMessage(message: String): Double {
 
@@ -82,7 +98,10 @@ class LiteracyEvaluator(
     }
 
     /**
-     * Number of syllables in a word
+     * Calculates the number of syllables in a word
+     *
+     * @param word - the word to perform the calculation on
+     * @return the number of syllables in teh word
      * */
     private fun countSyllables(word: String): Int {
         var syllableCount = 0
@@ -106,7 +125,9 @@ class LiteracyEvaluator(
 
     /**
      * Calculates a messages' readability based on Flesch reading-ease score (FRES) test
-     * 100.0 is most easy to read, 0.0 is extremely difficult to read.
+     *
+     * @param message - teh users message to perform the calculation on
+     * @return a double between 0 and 100 where 0 is very difficult to read and 100 is very easy to read
      * */
     private fun messageReadability(message: String): Double {
         val words = message.split("\\s+".toRegex()).size
@@ -123,7 +144,8 @@ class LiteracyEvaluator(
      * that the greater number of unique words, the greater the messages
      * vocabulary complexity.
      *
-     * 100 represents the greatest vocabulary complexity and 0 represents the least
+     * @param message - the users message to perform the calculation on
+     * @return a double between 0 and 100 where 0 is very low vocabulary complexity and 100 is very high complexity.
      * */
     fun calculateTypeTokenRatio(message: String): Double {
         val words = message.split("\\s+".toRegex())

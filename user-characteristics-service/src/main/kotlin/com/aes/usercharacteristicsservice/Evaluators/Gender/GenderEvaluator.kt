@@ -20,6 +20,10 @@ class GenderEvaluator(
     private val attributeEstimator: AttributeEstimator
 ) : Logging {
 
+    /**
+     * Estimates the gender of the user given a list of all their messages, using a Gender Model from HuggingFace.
+     * This estimated gender is then saved to the DB
+     * */
     @Scheduled(cron = "0 0 1 * * ?")
     @Transactional
     fun getGenderEstimate() {

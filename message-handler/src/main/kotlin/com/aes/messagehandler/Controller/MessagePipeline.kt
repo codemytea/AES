@@ -162,6 +162,9 @@ class MessagePipeline(
         return informationCollector.askFormoreInfo(message)
     }
 
+    /**
+     * If there's anything left over, then pass to general chatbot.
+     * */
     private fun getGeneralAnswer(message: MessageDTO): String? {
         return generalChatbot.generalChatbot(message.content).also{
             logger().info("General chat for user with id ${message.userID} is $it")

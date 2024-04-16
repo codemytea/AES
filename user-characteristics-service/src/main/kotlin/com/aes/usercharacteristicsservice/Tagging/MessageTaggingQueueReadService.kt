@@ -18,7 +18,10 @@ class MessageTaggingQueueReadService(
 ) : Logging {
 
 
-    @Scheduled(fixedDelay = 10, timeUnit = TimeUnit.SECONDS)
+    /**
+     * Reads message-tag-queue every 1 second.
+     * */
+    @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.SECONDS)
     fun readFromQueue() {
         logger().info("Reading messages from queue")
         var count = 0

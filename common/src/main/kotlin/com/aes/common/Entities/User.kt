@@ -5,6 +5,7 @@ import com.aes.common.Enums.Crop
 import com.aes.common.Enums.Gender
 import com.aes.common.Enums.LanguageCode
 import jakarta.persistence.*
+import java.time.LocalDateTime
 import java.util.*
 
 @Entity
@@ -66,6 +67,15 @@ class User(
     @JoinColumn(name = "userId", referencedColumnName = "id")
     val knowledgeAreas: MutableList<UserKnowledge> = mutableListOf(),
 
+    @ElementCollection
+    @CollectionTable(
+        name = "user_knowledge_last_interaction",
+        joinColumns = [JoinColumn(name = "user_id")]
+    )
+    @MapKeyJoinColumn(name = "knowledge_area_id")
+    @Column(name = "last_interaction_time")
+    val lastInteractionTime: MutableMap<KnowledgeArea, LocalDateTime> = mutableMapOf(),
+
     @OneToMany
     @JoinColumn(name = "userId", referencedColumnName = "id")
     val userSmallholdingInfo: MutableList<UserSmallholding> = mutableListOf()
@@ -73,5 +83,9 @@ class User(
 
     fun crops(): List<Crop>{
         return userSmallholdingInfo.mapNotNull { it.cashCrop }
+    }
+
+    fun updateLastInteractionTime(knowledgeArea: KnowledgeArea, time: LocalDateTime) {
+        lastInteractionTime[knowledgeArea] = time
     }
 }

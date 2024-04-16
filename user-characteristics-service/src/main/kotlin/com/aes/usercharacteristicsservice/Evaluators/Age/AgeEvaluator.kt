@@ -20,6 +20,11 @@ class AgeEvaluator(
     private val attributeEstimator: AttributeEstimator
 ) : Logging {
 
+
+    /**
+     * Estimates the age of the user given a list of all their messages, using an Age Model from HuggingFace.
+     * This estimated age is then saved to the DB
+     * */
     @Scheduled(cron = "0 0 1 * * ?")
     //@Scheduled(cron = "0/10 * * ? * *")
     @Transactional

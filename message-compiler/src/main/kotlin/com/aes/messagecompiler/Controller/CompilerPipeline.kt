@@ -23,13 +23,17 @@ class CompilerPipeline(
     class ListCarrier(val list: List<NewMessageDTO>)
 
     /**
-     * Compiles a message by tweaking it to the users characteristics and then chunking/amalgamating them to one message long chunks.
+     * Compiles a message by tweaking it to the users characteristics and then chunking/amalgamating them to one
+     * message long chunks.
+     *
+     * @param initialResponse - an initial list of responses with what they correspond to
+     * @param phoneNumber - the receiving users' phone number
      * @return list of NewMessageDTOs ready to be sent
      * */
-    fun compileMessage(userMessage : Map<String, List<String>>, phoneNumber : Long) : List<NewMessageDTO>? {
+    fun compileMessage(initialResponse : Map<String, List<String>>, phoneNumber : Long) : List<NewMessageDTO>? {
         logger().info("Compiling message for user with phone number $phoneNumber")
         val user = userRepository.findByPhoneNumberContaining(phoneNumber)
-        val improved = improveSuggestability(userMessage, user?.literacy ?: 50f, user?.age ?: Age.ADULT, user?.gender ?: Gender.MALE) //if not known, assume standard
+        val improved = improveSuggestability(initialResponse, user?.literacy ?: 50f, user?.age ?: Age.ADULT, user?.gender ?: Gender.MALE) //if not known, assume standard
 
         return finalSplit(improved).toNewMessageDTO(phoneNumber).also {
             logger().info("Putting message for user with phone number $phoneNumber on queue to be sent")
@@ -39,12 +43,19 @@ class CompilerPipeline(
 
 
     /**
-     * First step in the message compiling pipeline - change messages to match user characteristics to improve chances the message suggestions will be implemented.
+     * First step in the message compiling pipeline - change messages to match user characteristics to improve chances
+     * the message suggestions will be implemented.
+     *
+     * @param initialResponse - an initial list of responses with what they correspond to
+     * @param literacyLevel - literacy level of user 0-100f
+     * @param age - age of user as part of Age enum
+     * @param gender - gender of user as part of Gender enum
+     * @return the responses tailored to user characteristics
      * */
-    fun improveSuggestability(userMessage: Map<String, List<String>>, literacyLevel : Float, age : Age, gender: Gender) : Map<String, List<String?>>{
+    fun improveSuggestability(initialResponse: Map<String, List<String>>, literacyLevel : Float, age : Age, gender: Gender) : Map<String, List<String?>>{
         logger().info("Improving suggestibility of message")
 
-        return userMessage.filterValues {
+        return initialResponse.filterValues {
             it.isNotEmpty() && !(it.size == 1 && it[0] == "")
         }.mapValues{
             it.value.joinToString(" ").let {
@@ -65,17 +76,19 @@ class CompilerPipeline(
      * If the message is more than 25 words, it is split at punctuation using positive lookahead assertion.
      * Each sentence is considered individually, if the sentence has more than 25 words, that is sent by itself as a message.
      * If the message is less, it's added to a 'wait' list.
-     * When the next sentence comes along if the wait list isn't empty, we try to add the two sentences together, and if those are less than 25 we continue,
-     * else we remove teh existing message in wait and send that as a message and if the new one is less than 25, we add that to wait, else we send that as well.
+     * When the next sentence comes along if the wait list isn't empty, we try to add the two sentences together, and if
+     * those are less than 25 we continue, else we remove the existing message in wait and send that as a message and if
+     * the new one is less than 25, we add that to wait, else we send that as well.
      *
      * This is repeated until all messages are amalgamated or split.
      *
-     * This to send messages are @return as a 1D list of messages
+     * @param tailoredResponses - the responses tailored to user characteristics
+     * @return a list of messages to be sent to the user, chunked and amalgamated as appropriate
      * */
     //TODO introduces commas bc takes punctuation from the fact it's a map eg {k1=["abc."], k2=["def"]} -> "abc., def". Need to fix.
-    fun finalSplit(userMessage: Map<String, List<String?>>) : List<String>{
+    fun finalSplit(tailoredResponses: Map<String, List<String?>>) : List<String>{
         logger().info("Amalgamating message")
-        val mappedTopics =  userMessage.map {topic ->
+        val mappedTopics =  tailoredResponses.map { topic ->
             topic.value.joinToString(" ").let {
                 if(it.split(" ").size > 25){
                     val result = mutableListOf<String>()

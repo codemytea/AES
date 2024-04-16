@@ -4,6 +4,7 @@ import com.aes.common.Enums.Crop
 import com.aes.common.Enums.Topic
 import jakarta.persistence.*
 import java.io.Serializable
+import java.time.LocalDateTime
 
 
 @Entity
@@ -17,6 +18,9 @@ class KnowledgeArea(
     @Id
     @Enumerated(EnumType.STRING)
     val cropName: Crop = Crop.RICE,
+
+    @Column
+    val createdAt: LocalDateTime = LocalDateTime.now()
 ) {
 
 
