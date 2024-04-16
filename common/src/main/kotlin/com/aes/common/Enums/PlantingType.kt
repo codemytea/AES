@@ -5,9 +5,9 @@ enum class PlantingType {
     BROADCAST;
 
 
-    fun seedRate(landArea: Float, requiredPlantPopn: Int, seedWeight: Float, purity: Float, germinationRate: Float): Float{
+    fun seedRate(requiredPlantPopn: Int, seedWeight: Float, purity: Float, germinationRate: Float): Float{
         val fieldFactor = 4
-        val methodFactor = 1
-        return ((requiredPlantPopn/landArea) * seedWeight * methodFactor)/(purity*germinationRate*fieldFactor)
+        val methodFactor = 3
+        return ((requiredPlantPopn) * seedWeight * methodFactor)/(purity*germinationRate*fieldFactor)
     }
 }

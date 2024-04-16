@@ -26,15 +26,18 @@ class SmsController(
      * */
     @PostMapping("/receive")
     fun receiveSMS(@RequestBody resource: RecievedMessageDTO): MessageDTO {
-        logger().info("Received Message with id ${resource.id} and message ${resource.message}")
+        logger().info("Received Message with id ${resource.id} and message ${resource.message}.")
 
+        //Translate the message into English if necessary and save to the DB to the associated user.
+        //If no associated user, create a new one and determine preferred language
         val sms = recieveSmsService.save(resource)
+
+        //
+        logger().info("Sending ${sms.id} to message handler.")
+        recieveSmsService.sendToMessageHandler(sms)
 
         logger().info("tagging message with id ${sms.id}")
         recieveSmsService.tagIncomingMessage(sms)
-
-        logger().info("sending to formulate response with id ${sms.id}")
-        recieveSmsService.sendToMessageHandler(sms.toDTO())
 
         return sms.toDTO()
     }

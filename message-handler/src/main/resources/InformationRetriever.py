@@ -30,7 +30,7 @@ def extractInformation(locationCity, locationCountry, name, smallholdingSize, ma
 client = OpenAI()
 
 
-def secondLine(userMessage, userDetails):
+def getNewInformation(userMessage, userDetails):
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
@@ -128,5 +128,5 @@ def secondLine(userMessage, userDetails):
             return function_response
 
 
-kotlinInterop.registerFunction('secondLine', secondLine)
+kotlinInterop.registerFunction('getNewInformation', getNewInformation)
 kotlinInterop.execute()

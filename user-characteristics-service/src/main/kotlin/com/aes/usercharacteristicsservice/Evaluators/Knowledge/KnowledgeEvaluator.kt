@@ -51,7 +51,11 @@ class KnowledgeEvaluator(
             }?.sortedByDescending {
                 it.second
             }?.onEach {
-                val scaledKnowledge = Utils.scaleProbability(it.second.toDouble(), messages.size.toDouble(), true)
+                val scaledKnowledge = Utils.scaleProbability(
+                    it.second.toDouble(),
+                    messages.size.toDouble(),
+                    true
+                )
                 logger().info("User ${user.id} estimated knowledge on crop ${it.first} is $scaledKnowledge")
                 if (!user.knowledgeAreas.any { ka ->
                         ka.topic == it.first.topic && ka.crop == it.first.cropName
@@ -67,9 +71,7 @@ class KnowledgeEvaluator(
                     )
                     user.knowledgeAreas.add(ka)
                 }
-
             }
         }
-
     }
 }

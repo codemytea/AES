@@ -11,7 +11,7 @@ def extractQuestion(questions):
 client = OpenAI()
 
 
-def firstLine(userMessage):
+def getQuestions(userMessage):
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
@@ -79,5 +79,5 @@ def firstLine(userMessage):
 
 
 
-kotlinInterop.registerFunction('firstLine', firstLine)
+kotlinInterop.registerFunction('firstLine', getQuestions)
 kotlinInterop.execute()

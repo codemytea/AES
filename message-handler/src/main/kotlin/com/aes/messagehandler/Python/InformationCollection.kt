@@ -12,9 +12,12 @@ class InformationCollection : PythonClass() {
 //        return execute(::collect, userDetails, message)
 //    }
 
-    @PythonFunction("secondLine", "InformationRetriever.py")
-    fun secondLine(userMessage: String, userDetails: List<UserDetails>): Map<String, Any?> {
-        return execute(::secondLine, userMessage, userDetails)
+    /**
+     * Use NER to collect information about a user
+     * */
+    @PythonFunction("getNewInformation", "InformationCollectionNER.py")
+    fun getNewInformation(userMessage: String, userDetails: List<UserDetails>): Map<String, Any?> {
+        return execute(::getNewInformation, userMessage, userDetails)
     }
 
     @PythonFunction("collect", "InformationCollector.py")

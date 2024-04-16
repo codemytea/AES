@@ -45,7 +45,7 @@ class ExpertSystemApplicationTests : Logging {
         val data = trefleService.getPlantBySearchQuery(
             PlantListDTO(
                 page = 1,
-                q = "potatoes",
+                q = "wheat",
             )
         ).data.mapNotNull { //first 10
                 it.id?.let {

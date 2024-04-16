@@ -1,5 +1,6 @@
 package com.aes.usercharacteristicsservice.Tagging
 
+import com.aes.common.Entities.Message
 import com.aes.common.Models.MessageDTO
 import com.aes.common.Queue.LocalQueueService
 import com.aes.common.logging.Logging
@@ -19,14 +20,19 @@ class MessageTaggingQueueReadService(
 ) : Logging {
 
 
-    @Scheduled(fixedDelay = 10, timeUnit = TimeUnit.SECONDS)
+    /**
+     * Reads message-handler-queue every 1 second. May take longer to execute entire message handling pipeline for all
+     * messages currently in the queue, in which case, it only reads the queue again after the current messages on the
+     * queue have finished processing.
+     * */
+    @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.SECONDS)
     fun readFromQueue() {
-        logger().info("Reading messages from queue")
+        logger().info("Reading messages from message-handler-queue")
         var count = 0
         var hasMore = true
         val asyncOps = mutableListOf<Deferred<Unit>>()
         while (hasMore) {
-            val result = localQueueService.withQueueItemAtPositionAsync<MessageDTO>("message_handler_queue", count) {
+            val result = localQueueService.withQueueItemAtPositionAsync<Message>("message_handler_queue", count) {
                 messagePipeline.messagePipeline(this)
                 true
             }

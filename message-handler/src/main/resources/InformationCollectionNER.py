@@ -1,5 +1,3 @@
-import geonamescache
-import re
 import spacy
 from enum import Enum
 
@@ -14,31 +12,8 @@ class UserDetails(str, Enum):
     MAIN_CROP = "MAIN_CROP"
 
 
-# Get countries and cities
-gc = geonamescache.GeonamesCache()
-countries = gc.get_countries()
-cities = gc.get_cities()
-
-# Load the English NLP model
-nlp = spacy.load('en_core_web_sm')
-
-
-def gen_dict_extract(var, key):
-    if isinstance(var, dict):
-        for k, v in var.items():
-            if k == key:
-                yield v
-            if isinstance(v, (dict, list)):
-                yield from gen_dict_extract(v, key)
-    elif isinstance(var, list):
-        for d in var:
-            yield from gen_dict_extract(d, key)
-
-
-cities = [x.lower() for x in [*gen_dict_extract(cities, 'name')]]
-cities.remove('of')
-countries = [x.lower() for x in [*gen_dict_extract(countries, 'name'), 'England', 'Wales', 'Scotland']]
-
+# Load the trained spaCy NER model
+nlp = spacy.load('Data/model-best')
 
 def processText(text):
     return nlp(text).ents
@@ -46,63 +21,53 @@ def processText(text):
 
 def getSmallHoldingSizeInfo(text):
     t = processText(text)
-    size = [entity.text for entity in t if entity.label_ == "QUANTITY"]
+    size = [entity.text for entity in t if entity.label_ == "SMALLHOLDING_SIZE"]
     return size[0] if size else None
 
 
 def getUserName(text):
     t = processText(text)
-    name = [entity.text for entity in t if entity.label_ == "PERSON"]
+    name = [entity.text for entity in t if entity.label_ == "NAME"]
     return name[0] if name else None
 
 
 def getMainCrop(text):
     t = processText(text)
-    crop = [entity.text for entity in t if entity.label_ == "PRODUCT" or entity.label_ == "ORG"]
+    crop = [entity.text for entity in t if entity.label_ == "MAIN_CROP"]
     return crop[0] if crop else None
 
 
 def getSmallholdingCity(text):
     t = processText(text)
-    city = [entity.text for entity in t if entity.label_ == "GPE"]
-    if city:
-        return city[0]
+    city = [entity.text for entity in t if entity.label_ == "LOCATION_CITY"]
+    return city[0] if city else None
 
-    if len(text) != 0:
-        for word in re.findall(r'\w+', text.lower()):
-            if word in cities:
-                return word
 
 
 def getSmallholdingCountry(text):
     t = processText(text)
-    country = [entity.text for entity in t if entity.label_ == "GPE"]
-    if country:
-        return country[0]
-
-    if len(text) != 0:
-        for word in re.findall(r'\w+', text.lower()):
-            if word in countries:
-                return word
+    country = [entity.text for entity in t if entity.label_ == "LOCATION_COUNTRY"]
+    return country[0] if country else None
 
 
-def collect(items, text):
-    x = {item: "" for item in items}  # maybe item.value?
+
+def getNewInformation(items, text):
+    listOfDetails = {item: "" for item in items}
     for item in items:
         match item:
             case UserDetails.LOCATION_COUNTRY:
-                x[UserDetails.LOCATION_COUNTRY] = getSmallholdingCountry(text)
+                listOfDetails[UserDetails.LOCATION_COUNTRY] = getSmallholdingCountry(text)
             case UserDetails.LOCATION_CITY:
-                x[UserDetails.LOCATION_CITY] = getSmallholdingCity(text)
+                listOfDetails[UserDetails.LOCATION_CITY] = getSmallholdingCity(text)
             case UserDetails.SMALLHOLDING_SIZE:
-                x[UserDetails.SMALLHOLDING_SIZE] = getSmallHoldingSizeInfo(text)
+                listOfDetails[UserDetails.SMALLHOLDING_SIZE] = getSmallHoldingSizeInfo(text)
             case UserDetails.NAME:
-                x[UserDetails.NAME] = getUserName(text)
+                listOfDetails[UserDetails.NAME] = getUserName(text)
             case UserDetails.MAIN_CROP:
-                x[UserDetails.MAIN_CROP] = getMainCrop(text)
+                listOfDetails[UserDetails.MAIN_CROP] = getMainCrop(text)
 
-    return x
+    return listOfDetails
 
 
-kotlinInterop.registerFunction('collect', collect)
+kotlinInterop.registerFunction('getNewInformation', getNewInformation)
 kotlinInterop.execute()

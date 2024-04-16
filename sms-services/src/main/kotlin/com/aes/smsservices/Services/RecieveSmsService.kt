@@ -32,12 +32,12 @@ class RecieveSmsService(
         }
     }
 
-    fun sendToMessageHandler(sms: MessageDTO) {
+    fun sendToMessageHandler(sms: Message) {
         localQueueService.writeItemToQueue("message_handler_queue", sms)
     }
 
     /**
-     * Saves incoming message to db, in english
+     * Saves incoming message to DB, in english
      *
      * @param resource the received message
      *
@@ -46,11 +46,13 @@ class RecieveSmsService(
     @Transactional
     fun save(resource: RecievedMessageDTO): Message {
 
+        //find user to associate message with or create a new user
         val user = userRepository.findByPhoneNumberContaining(resource.phoneNumber) ?: let {
             userRepository.save(
                 User(
                     id = UUID.randomUUID(),
                     phoneNumber = listOf(resource.phoneNumber),
+                    //if it's a new user, figure out their language from their country code
                     preferredLanguage = LanguageCode.fromLanguage(getLanguageCodeForCountry(resource.country).toStandardLanguage()) ?: LanguageCode.EN,
                     stopCollectingInformation = false
                 )
@@ -59,10 +61,12 @@ class RecieveSmsService(
 
         val lang = user.preferredLanguage ?: LanguageCode.EN
 
+        //if the incoming message isn't in english, translate it into english
         if (lang != LanguageCode.EN) {
             resource.message = translateSmsService.translateMessage(resource.message, fromLanguage = lang)
         }
 
+        //return the new message entity and save it to the DB
         return Message(
             resource.id,
             resource.phoneNumber,

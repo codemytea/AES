@@ -28,8 +28,9 @@ class InformationCollector(
     private var stop = false
 
     /**
-     * Checks if there are any more details to determine about the user before responding
-     * @return details that need to be collected
+     * Checks if there are any more details left to determine about the user
+     * @param userID - the ID of the user the system is checking
+     * @return details that still need to be collected
      * */
     @OptIn(ExperimentalStdlibApi::class)
     private fun getDetailsToDetermine(userID: UUID): List<UserDetails>? {
@@ -79,14 +80,20 @@ class InformationCollector(
 
 
     /**
-     * Using the user's message, and what info there is left to determine
-     * Try see if this message contains any new info
-     * And return a list of the new user details that the user now has
+     * Using the user's message, and what information there is left to determine about the user
+     * Check if the message contains any new information and return a list of any new user information obtained
+     * as well as processing the message and removing parts that give that new information, and checking whether or not
+     * the user has asked for information collection to stop.
+     *
+     * @param message - the message sent by the user
+     * @param detailsToDetermine - information the system doesn't know about the user
+     * @return a pair of new information collected about the user, and the message without the bits that give that new information
      * */
     @Transactional
     fun getNewInfo(message: MessageDTO, detailsToDetermine : List<UserDetails>?): Pair<List<UserDetails>?, String?>? {
         detailsToDetermine?.let { it ->
-            val newInfo = informationCollection.secondLine(message.content, it)
+            //use NER to scrape any NEW information given by the received message
+            val newInfo = informationCollection.getNewInformation(message.content, it)
             val newInfoCollected = mutableListOf<UserDetails>()
 
             val user = userRepository.findUserById(message.userID)
@@ -116,6 +123,7 @@ class InformationCollector(
                 }
             }
 
+            //TODO Integrate with NER?!
             newInfo["stopCollecting"]?.let { sc ->
                 if (sc as Boolean) {
                     user?.stopCollectingInformation = true
@@ -130,6 +138,7 @@ class InformationCollector(
                 userSmallholdingRepository.save(it)
             }
 
+            // TODO integrate with NER
             //new details collected
             return Pair(newInfoCollected, newInfo["messageWithoutInformation"] as String)
         }
@@ -139,19 +148,23 @@ class InformationCollector(
 
 
     /**
-     * 1. get info from message and return what new info garnered
-     * 2. leftToFind =  all info - (pre-existing info + new info)
-     * 3. ask user for left to find
-     * @return Pair("call to action collection message", "leftover original message")
+     * Get any new information provided in user message, save to DB, and, if user hasn't asked to stop information
+     * collection, compile message asking for any remaining information.
+     *
+     * @param message - the message without agricultural questions in it
+     * @return Pair("call to action collection message asking for more information", "leftover original message")
      * */
     @Transactional
     fun askFormoreInfo(message: MessageDTO): Pair<String?, String?> {
         val detailsToDetermine = getDetailsToDetermine(message.userID)
         val newInfoAndRemainderMessage = getNewInfo(message, detailsToDetermine)
         logger().info("User details of user with id ${message.userID} has this new informtion ${newInfoAndRemainderMessage.toString()}")
+
         val userChoice = userRepository.findUserById(message.userID)?.stopCollectingInformation
 
         var callToAction: String? = null
+
+        //get remaining details to determine
         detailsToDetermine?.minus(newInfoAndRemainderMessage?.first)?.let {
             if (!stop && userChoice != true) {
                 logger().info("Asking user with id ${message.userID} for following new information: $it")
@@ -164,7 +177,4 @@ class InformationCollector(
 
         return Pair(callToAction, newInfoAndRemainderMessage?.second)
     }
-
-
-    //extract message without info
 }
