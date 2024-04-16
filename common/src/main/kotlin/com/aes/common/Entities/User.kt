@@ -63,10 +63,17 @@ class User(
     @Column
     var stopCollectingInformation: Boolean = false,
 
+
+    /**
+     * A users knowledge areas
+     * */
     @OneToMany
     @JoinColumn(name = "userId", referencedColumnName = "id")
     val knowledgeAreas: MutableList<UserKnowledge> = mutableListOf(),
 
+    /**
+     * the last time a user has interacted with a certain knowledge area
+     * */
     @ElementCollection
     @CollectionTable(
         name = "user_knowledge_last_interaction",

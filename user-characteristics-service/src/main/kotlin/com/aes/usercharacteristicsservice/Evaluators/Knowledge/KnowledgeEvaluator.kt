@@ -64,7 +64,7 @@ class KnowledgeEvaluator(
                 it.second
             }?.onEach {
 
-                val lastInteractionTime = user.lastInteractionTime[it.first] ?: it.first.createdAt
+                val lastInteractionTime = user.lastInteractionTime[it.first] ?: it.first.modifiedAt
 
                 val decayFactor = calculateDecayFactor(user, lastInteractionTime, LocalDateTime.now())
                 val scaledKnowledge = Utils.scaleProbability(
