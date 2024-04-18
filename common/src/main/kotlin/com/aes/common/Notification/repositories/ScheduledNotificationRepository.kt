@@ -7,6 +7,9 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 
+/**
+ * Queries to get information from the DB
+ * */
 @Repository
 interface ScheduledNotificationRepository: CrudRepository<ScheduledNotification, String> {
     fun findAllByTimeBeforeAndAssociatedMessageIsNull(time: LocalDateTime): List<ScheduledNotification>

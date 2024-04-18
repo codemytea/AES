@@ -1,5 +1,9 @@
 package com.aes.common.Enums
 
+/**
+ * Used for language translation. Provides a small subset of languages from libreTranslate.
+ * More can easily be added.
+ * */
 enum class LanguageCode(val language: Language) {
     EN(Language.ENGLISH),
     FR(Language.FRENCH),
@@ -24,8 +28,6 @@ enum class LanguageCode(val language: Language) {
             }
         }
     }
-
-
 }
 
 enum class Language(val code: String) {

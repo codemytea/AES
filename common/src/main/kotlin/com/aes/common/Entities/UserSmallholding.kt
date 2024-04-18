@@ -15,22 +15,40 @@ data class UserSmallholdingPoint(
 @Entity
 class UserSmallholding(
 
+    /**
+     * The user
+     * */
     @Id
     val userId: UUID = UUID.randomUUID(),
 
+    /**
+     * The city the smallholding is in
+     * */
     @Column
     var location_city: String? = null,
 
+    /**
+     * The country the smallholding is in
+     * */
     @Column
     var location_country: String? = null,
 
+    /**
+     * The size of the smallholding
+     * */
     @Column
     var smallholdingSize: Float? = null,
 
+    /**
+     * The main crop of the smallholding
+     * */
     @Enumerated(value = EnumType.STRING)
     @Column
     var cashCrop: Crop? = null,
 
+    /**
+     * The soil type of the smallholding
+     * */
     @Enumerated(value = EnumType.STRING)
     @Column
     val soilType: SoilType? = null,

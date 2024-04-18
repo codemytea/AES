@@ -10,7 +10,6 @@ class MessageDTO(
      * */
     val id: Long,
 
-
     /**
      * The users ID
      * */

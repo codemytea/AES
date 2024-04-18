@@ -5,6 +5,9 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import java.util.*
 
+/**
+ * Query to get information from the DB
+ * */
 @Repository
 interface UserSmallholdingRepository : CrudRepository<UserSmallholding, UUID> {
     fun findUserSmallholdingByUserId(id : UUID): UserSmallholding?

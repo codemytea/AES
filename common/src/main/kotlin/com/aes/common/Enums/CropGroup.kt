@@ -1,5 +1,8 @@
 package com.aes.common.Enums
 
+/**
+ * Main crop groups. Needed to determine various blanket policies such as storage.
+ * */
 enum class CropGroup(val plantingType: PlantingType, val dbName: String) {
     ROOT_AND_TUBER(PlantingType.DIBBLE, "root and tuber vegetables"),
     LEAVES_OF_ROOT_AND_TUBER(PlantingType.DIBBLE, "leaves of root and tuber vegetables (human food or animal feed)"),

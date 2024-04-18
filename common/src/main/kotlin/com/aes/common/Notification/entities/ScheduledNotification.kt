@@ -12,21 +12,43 @@ import java.util.*
 
 @Entity
 class ScheduledNotification(
+    /**
+     * The ID of the notification to be sent
+     * */
     @Id
-    val id: String,
-    val time: LocalDateTime,
+    val id: UUID = UUID.randomUUID(),
 
-    @Enumerated(EnumType.STRING)
-    val crop: Crop,
+    /**
+     * When teh notification should be sent
+     * */
+    val time: LocalDateTime = LocalDateTime.now(),
 
-    @Enumerated(EnumType.STRING)
-    val topic: Topic,
-
+    /**
+     * The user the message is being sent to
+     * */
     @ManyToOne
-    val user: User,
+    val user: User = User(),
 
-    val messagePrompt: String,
+    /**
+     * What crop it has to do with
+     * */
+    @Enumerated(EnumType.STRING)
+    val crop: Crop = Crop.RICE,
 
+    /**
+     * What topic it has to do with
+     * */
+    @Enumerated(EnumType.STRING)
+    val topic: Topic = Topic.GROWING,
+
+    /**
+     * What the notification is actually about
+     * */
+    val messagePrompt: String = "",
+
+    /**
+     * The message that ends up being sent
+     * */
     @OneToOne
     val associatedMessage: Message? = null
 ){

@@ -1,5 +1,8 @@
 package com.aes.common.Enums
 
+/**
+ * Key information needed about each user to provide tailoring
+ * */
 enum class UserDetails(val question: String) {
     LOCATION_CITY("what city your smallholding is in"),
     LOCATION_COUNTRY("what country your smallholding is in"),

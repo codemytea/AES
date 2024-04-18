@@ -6,6 +6,9 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import java.util.*
 
+/**
+ * Query to get information from the DB
+ * */
 @Repository
 interface MessageRepository : CrudRepository<Message, Long> {
     fun getMessageByUserIdAndType(userUUID: UUID, type: MessageType = MessageType.INCOMING): List<Message>?

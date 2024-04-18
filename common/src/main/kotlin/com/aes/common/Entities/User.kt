@@ -83,6 +83,9 @@ class User(
     @Column(name = "last_interaction_time")
     val lastInteractionTime: MutableMap<KnowledgeArea, LocalDateTime> = mutableMapOf(),
 
+    /**
+     * The user may have multiple smallholdings they want to ask questions about
+     * */
     @OneToMany
     @JoinColumn(name = "userId", referencedColumnName = "id")
     val userSmallholdingInfo: MutableList<UserSmallholding> = mutableListOf()

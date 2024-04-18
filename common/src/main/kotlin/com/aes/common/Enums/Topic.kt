@@ -1,5 +1,8 @@
 package com.aes.common.Enums
 
+/**
+ * The main crop cycle topics
+ * */
 enum class Topic(val notificationFrequency: Int /*days*/) {
     PESTS(1),
     DISEASES(2),
