@@ -4,18 +4,18 @@ An SMS-based Agricultural Extension Service tailored for smallholders in LICs.
 This repository contains the code for CS310 and it's associated project
 
 ## Main Modules (Overview)
- - sms-services: Controls the sending and receiving of messages using Gateway API
- - notification-service: Controls sending event-driven notifications (notification-trigger task) and temporal notifications (notification-service-task)
- - message-handler: Deals with incoming messages (through generating correct and relevant responses)
- - message-compiler: Deals with outgoing messages (tailoring, compiling, chunking e.t.c.)
- - expert-system: Answers agricultural queries using RAG
- - user-characteristic-service: Calculates and provides user characteristics for qualitative tailoring
- - common: A collection of functionality/entities/models e.t.c. used by multiple modules - reduces code duplication
- - kotlin-python-interop: Allows for Python functions (found in the 'resources' folder in 'main' of each module where applicable) to be called and run by Kotlin code in the 'kotlin' folder.
+ - `sms-services`: Controls the sending and receiving of messages using Gateway API
+ - `notification-service`: Controls sending event-driven notifications (`notification-trigger-task`) and temporal notifications (`notification-service-task`)
+ - `message-handler`: Deals with incoming messages (through generating correct and relevant responses)
+ - `message-compiler`: Deals with outgoing messages (tailoring, compiling, chunking e.t.c.)
+ - `expert-system`: Answers agricultural queries using RAG
+ - `user-characteristic-service`: Calculates and provides user characteristics for qualitative tailoring
+ - `common`: A collection of functionality/entities/models e.t.c. used by multiple modules - reduces code duplication
+ - `kotlin-python-interop`: Allows for Python functions (found in the 'resources' folder in 'main' of each module where applicable) to be called and run by Kotlin code in the `kotlin` folder.
 
 ## Exploring the Code
 
-If you'd like to have a look through the code, it is strongly recommended you start at sms-services/src/main/kotlin/com/aes/smsservices/Controllers/SmsController.kt, as this is the starting point of the entire application. Click through to each function to see the route an incoming message would take as this will provide the most holistic understanding of the system. 
+If you'd like to have a look through the code, it is strongly recommended you start at `sms-services/src/main/kotlin/com/aes/smsservices/Controllers/SmsController.kt`, as this is the starting point of the entire application. Click through to each function to see the route an incoming message would take as this will provide the most holistic understanding of the system. 
 
 ### Queues
 
@@ -67,31 +67,33 @@ To run sms-services, you will need a UK shortcode to receive messages from the s
 1) Navigate to https://gatewayapi.com/ and create an account. 
 2) Create an API Key (Paid)
 3) Get in contact with Customer Support and request a UK shortcode. When this project was set up, the charge for this was £10 set up fee and £10 per month their after.
-4) Using the shortcode and API key replace [UKSHORTCODE] and [GATEWAYAPIKEY] with your information. You will also need to create a URL to receive your requests at and add it to the webhook section of the GatewayAPI portal. 
+4) Using the shortcode and API key replace `[UKSHORTCODE]` and `[GATEWAYAPIKEY]` with your information. You will also need to create a URL to receive your requests at and add it to the webhook section of the GatewayAPI portal. 
 
 ### message-handler
 
-This service uses a custom trained NER for information extraction. The python code for the NER trainer has been provided in the message-handler module under 'resources'. Please open the NER trainer.txt and copy it into a python file in a new project on your machine. Also copy annotations.json and put it in a folder called 'Data'. Your project structure MUST look as follows:
+This service uses a custom trained NER for information extraction. The python code for the NER trainer has been provided in the `message-handler` module under `resources`. Please open the `NERtrainer.txt` and copy it into a python file in a new project on your machine. Also copy `annotations.json` and put it in a folder called `Data`. Your project structure MUST look as follows:
 
-- NERTrainerProject/
-- ----NERTrainer.py
-- ----Data/
-- --------annotations.json
+```
+NERTrainerProject/
+----NERTrainer.py
+----Data/
+--------annotations.json
+```
 
 To run the NER trainer, you will need to import the SpaCy library (https://spacy.io/usage) and sklearn.model_selection (https://scikit-learn.org/stable/install.html). Finally, follow the instructions here https://spacy.io/usage/training to use the script to train the model.
 
-Once the model has been trained, copy the folder 'model-best' from the output and put it in the 'data' folder under 'resources' under 'main' in the message-handler module.
+Once the model has been trained, copy the folder `model-best` from the output and put it in the `data` folder under `resources` under `main` in the `message-handler` module (`message-handler/src/main/resources/data`).
 
 
 ### user-characteristic-service
 
-This service uses the Hugging Face facebook/bart-large-mnli, Abderrahim2/bert-finetuned-Age and padmajabfrl/Gender-Classification models. To run these models, you will need to import transformers using the instructions provided here https://huggingface.co/docs/transformers/en/installation.
+This service uses the Hugging Face `facebook/bart-large-mnli`, `Abderrahim2/bert-finetuned-Age` and `padmajabfrl/Gender-Classification` models. To run these models, you will need to import `transformers` using the instructions provided here https://huggingface.co/docs/transformers/en/installation.
 
 ### expert-system
 
 1) Please follow the quick-start set up docs here https://docs.llamaindex.ai/en/stable/getting_started/installation/ to start.
 2) You will then need to set up the following APIs:
-    - TrefleAPI (put in your API key where it says [TREFLEAPIKEY]) - https://trefle.io/
+    - TrefleAPI (replace `[TREFLEAPIKEY]` with your key in the code) - https://trefle.io/
     - Weather
     - Soil
     - Terrain
