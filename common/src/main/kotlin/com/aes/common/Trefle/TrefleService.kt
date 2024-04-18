@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate
 
 
 @Service
-class TrefleService: Logging {
+class TrefleService : Logging {
 
     private val key = "MtG0fklvA_J60KpvmuCqhKuwKLXsjYqjS5vXuqKLXWA"
 
@@ -45,14 +45,10 @@ class TrefleService: Logging {
     }
 
     fun getPlantByCommonName(name: String): PlantListResponseDTO {
-        return getPlantBySearchQuery(PlantListDTO(
-            q=name
-        ))
+        return getPlantBySearchQuery(
+            PlantListDTO(
+                q = name
+            )
+        )
     }
-
-
 }
-
-
-
-

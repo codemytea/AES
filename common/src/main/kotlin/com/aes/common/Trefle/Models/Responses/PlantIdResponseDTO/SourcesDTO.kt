@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class SourcesDTO (
+class SourcesDTO(
 
-    val self : String?,
-    val genus : String?,
-    val species : String?
+    val self: String?,
+    val genus: String?,
+    val species: String?
 
-    )
+)

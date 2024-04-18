@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class SpeciesDTO (
+class SpeciesDTO(
     /**
      * An unique identifier
      */

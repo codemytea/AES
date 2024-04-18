@@ -17,7 +17,7 @@ class PlantListDTO(
 
     val range: RangeDTO? = null,
 
-    val q : String? = null
+    val q: String? = null
 ) {
 
     fun toQueryParams(): Map<String, Any> {

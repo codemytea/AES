@@ -2,7 +2,7 @@ package com.aes.common.Trefle.Models.Responses.PlantListResponse
 
 import com.aes.common.Trefle.Models.Responses.LinkDTO
 
-class PlantListResponseDataDTO (
+class PlantListResponseDataDTO(
     /**
      * An unique identifier
      */

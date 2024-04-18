@@ -111,10 +111,10 @@ class Growth {
      */
     var soil_humidity: Int? = null
 
-    fun mostAreNotNull() : Boolean{
+    fun mostAreNotNull(): Boolean {
         return this::class.memberProperties.count {
             it.getter.call(this) == null
-        }/this::class.memberProperties.size.toFloat() > 0.5
+        } / this::class.memberProperties.size.toFloat() > 0.5
 
     }
 }

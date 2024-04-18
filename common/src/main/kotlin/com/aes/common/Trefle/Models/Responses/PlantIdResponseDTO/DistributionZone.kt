@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class DistributionZone (
+class DistributionZone(
     /**
      * An unique identifier
      */
@@ -36,5 +36,5 @@ class DistributionZone (
      */
     var species_count: Int,
 
-    var links : LinkDTO
+    var links: LinkDTO
 )

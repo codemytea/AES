@@ -73,7 +73,7 @@ class EcocropData(
 
     @OneToMany(cascade = [CascadeType.ALL])
     val uses: MutableList<EcocropUse> = mutableListOf()
-){
+) {
     @Id
     val id: String = UUID.randomUUID().toString()
 }

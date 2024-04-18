@@ -4,7 +4,6 @@ import com.aes.common.Weather.geocoding.GeocodingService
 import com.aes.common.Weather.model.WeatherData
 import com.aes.common.Weather.model.WeatherDataPoints
 import com.aes.common.Weather.model.WeatherInfo
-import kotlinx.coroutines.runBlocking
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
@@ -12,23 +11,21 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.logging.Logger
 
 @Service
 class WeatherService(
     val geocodingService: GeocodingService
 ) {
 
-
     companion object {
         private val variables = WeatherDataPoints::class.java
             .declaredFields
             .map { it.name }
             .toMutableList()
-            .also{it.remove("time")}
+            .also { it.remove("time") }
     }
 
-    fun restTemplate(): RestTemplate{
+    fun restTemplate(): RestTemplate {
         return RestTemplateBuilder().build().apply {
             interceptors.add { request, body, execution ->
                 println(request.uri.toString())
@@ -37,52 +34,84 @@ class WeatherService(
         }
     }
 
-    private fun historicalUrl(lat: Float, lng: Float, startDate: LocalDate, endDate: LocalDate, variables: List<String>):String{
-        fun LocalDate.formatted(): String{
+    private fun historicalUrl(
+        lat: Float,
+        lng: Float,
+        startDate: LocalDate,
+        endDate: LocalDate,
+        variables: List<String>
+    ): String {
+        fun LocalDate.formatted(): String {
             return this.format(DateTimeFormatter.ISO_DATE)
         }
-        return "https://archive-api.open-meteo.com/v1/era5?latitude=$lat&longitude=$lng&start_date=${startDate.formatted()}&end_date=${endDate.formatted()}${variables.joinToString("") { "&hourly=$it" }}"
+        return "https://archive-api.open-meteo.com/v1/era5?latitude=$lat&longitude=$lng&start_date=${startDate.formatted()}&end_date=${endDate.formatted()}${
+            variables.joinToString(
+                ""
+            ) { "&hourly=$it" }
+        }"
     }
 
-    private fun forecastUrl(lat: Float, lng: Float, startDate: LocalDate, endDate: LocalDate, variables:List<String>): String{
-        fun LocalDate.formatted(): String{
+    private fun forecastUrl(
+        lat: Float,
+        lng: Float,
+        startDate: LocalDate,
+        endDate: LocalDate,
+        variables: List<String>
+    ): String {
+        fun LocalDate.formatted(): String {
             return this.format(DateTimeFormatter.ISO_DATE)
         }
-        return "https://api.open-meteo.com/v1/forecast?latitude=$lat&longitude=$lng&start_date=${startDate.formatted()}&end_date=${endDate.formatted()}${variables.joinToString("") { "&hourly=$it" }}"
-
+        return "https://api.open-meteo.com/v1/forecast?latitude=$lat&longitude=$lng&start_date=${startDate.formatted()}&end_date=${endDate.formatted()}${
+            variables.joinToString(
+                ""
+            ) { "&hourly=$it" }
+        }"
     }
 
-
-    private fun getHistoricalWeatherForDate(lat: Float, lng: Float, date: LocalDateTime): List<WeatherInfo>{
+    private fun getHistoricalWeatherForDate(lat: Float, lng: Float, date: LocalDateTime): List<WeatherInfo> {
         return restTemplate().getForEntity(
             historicalUrl(lat, lng, date.toLocalDate(), date.toLocalDate(), variables),
             WeatherData::class.java
         ).body!!.toWeatherInfo(lat, lng)
     }
 
-    private fun getForecastWeatherForDate(lat: Float, lng: Float, date: LocalDateTime): List<WeatherInfo>{
+    private fun getForecastWeatherForDate(lat: Float, lng: Float, date: LocalDateTime): List<WeatherInfo> {
         return restTemplate().getForEntity(
             forecastUrl(lat, lng, date.toLocalDate(), date.toLocalDate(), variables),
             WeatherData::class.java
         ).body!!.toWeatherInfo(lat, lng)
     }
 
-    private fun getForecastWeatherBetweenDates(lat: Float, lng: Float, from: LocalDate, to:LocalDate): List<WeatherInfo>{
+    private fun getForecastWeatherBetweenDates(
+        lat: Float,
+        lng: Float,
+        from: LocalDate,
+        to: LocalDate
+    ): List<WeatherInfo> {
         val result = mutableListOf<WeatherInfo>()
-        if(from.isBefore(LocalDate.now().plusWeeks(2))){
+        if (from.isBefore(LocalDate.now().plusWeeks(2))) {
             result += restTemplate().getForEntity(
                 forecastUrl(lat, lng, from, minOf(to, LocalDate.now().plusWeeks(2)), variables),
                 WeatherData::class.java
             ).body!!.toWeatherInfo(lat, lng)
         }
-        if(to.isAfter(LocalDate.now().plusWeeks(2))){
-            result += getHistoricalWeatherBetweenDates(lat, lng, LocalDate.now().plusWeeks(2).minusYears(1), to.minusYears(1))
+        if (to.isAfter(LocalDate.now().plusWeeks(2))) {
+            result += getHistoricalWeatherBetweenDates(
+                lat,
+                lng,
+                LocalDate.now().plusWeeks(2).minusYears(1),
+                to.minusYears(1)
+            )
         }
         return result
-
     }
 
-    private fun getHistoricalWeatherBetweenDates(lat: Float, lng: Float, from: LocalDate, to:LocalDate): List<WeatherInfo>{
+    private fun getHistoricalWeatherBetweenDates(
+        lat: Float,
+        lng: Float,
+        from: LocalDate,
+        to: LocalDate
+    ): List<WeatherInfo> {
         return restTemplate().getForEntity(
             historicalUrl(lat, lng, from, to, variables),
             WeatherData::class.java
@@ -90,40 +119,58 @@ class WeatherService(
     }
 
     private fun getWeatherForDate(lat: Float, lng: Float, date: LocalDateTime): List<WeatherInfo> {
-        return if(date.isBefore(LocalDateTime.now().minusDays(5))){
+        return if (date.isBefore(LocalDateTime.now().minusDays(5))) {
             getHistoricalWeatherForDate(lat, lng, date)
-        } else{
+        } else {
             getForecastWeatherForDate(lat, lng, date)
         }
     }
 
-    fun getWeatherForDateAtLocation(cityName: String, countryName: String, date: LocalDateTime): WeatherInfo{
+    fun getWeatherForDateAtLocation(cityName: String, countryName: String, date: LocalDateTime): WeatherInfo {
         val location = geocodingService.getLatLngForName(cityName, countryName)
         return getWeatherForDate(location.latitude, location.longitude, date).first {
             it.time.toEpochSecond(ZoneOffset.UTC) == date.withMinute(0).withSecond(0).toEpochSecond(ZoneOffset.UTC)
         }
     }
 
-    fun getWeatherBetweenDatesAtLocation(cityName: String, countryName: String, from: LocalDate, to: LocalDate): List<WeatherInfo>{
+    fun getWeatherBetweenDatesAtLocation(
+        cityName: String,
+        countryName: String,
+        from: LocalDate,
+        to: LocalDate
+    ): List<WeatherInfo> {
         val location = geocodingService.getLatLngForName(cityName, countryName)
 
         val result = mutableListOf<WeatherInfo>()
 
-        if(from.isBefore(LocalDate.now().minusDays(5))){
-            result += getHistoricalWeatherBetweenDates(location.latitude, location.longitude, from, minOf(LocalDate.now().minusDays(5), to))
-            if(to.isAfter(LocalDate.now().minusDays(5))){
-                result += getForecastWeatherBetweenDates(location.latitude, location.longitude, LocalDate.now().minusDays(5), to)
+        if (from.isBefore(LocalDate.now().minusDays(5))) {
+            result += getHistoricalWeatherBetweenDates(
+                location.latitude,
+                location.longitude,
+                from,
+                minOf(LocalDate.now().minusDays(5), to)
+            )
+            if (to.isAfter(LocalDate.now().minusDays(5))) {
+                result += getForecastWeatherBetweenDates(
+                    location.latitude,
+                    location.longitude,
+                    LocalDate.now().minusDays(5),
+                    to
+                )
             }
-        } else{
+        } else {
             result += getForecastWeatherBetweenDates(location.latitude, location.longitude, from, to)
         }
         return result
     }
 
-    fun allFutureDatesMatchCondition(from: LocalDate, to: LocalDate, cityName: String, countryName: String, condition: (WeatherInfo)->Boolean): Boolean{
+    fun allFutureDatesMatchCondition(
+        from: LocalDate,
+        to: LocalDate,
+        cityName: String,
+        countryName: String,
+        condition: (WeatherInfo) -> Boolean
+    ): Boolean {
         return getWeatherBetweenDatesAtLocation(cityName, countryName, from, to).all(condition)
     }
-
-
-
 }

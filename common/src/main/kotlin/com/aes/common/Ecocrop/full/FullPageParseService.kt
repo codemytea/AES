@@ -12,28 +12,25 @@ class FullPageParseService {
 
     private fun link(id: String) = "https://ecocrop.review.fao.org/ecocrop/srv/en/dataSheet?id=$id"
 
-
-
-    private fun getScientificName(content: Element): String{
+    private fun getScientificName(content: Element): String {
         return content.getElementsByTag("h2").first()!!.text()
     }
 
-    private fun String?.format(): String?{
-        return if (this.isNullOrBlank()){
+    private fun String?.format(): String? {
+        return if (this.isNullOrBlank()) {
             null
-        } else if(this.all { it == '-' }) null
+        } else if (this.all { it == '-' }) null
         else this
     }
 
-    private fun Element.findTableByTitle(title: String): Element{
+    private fun Element.findTableByTitle(title: String): Element {
         return getElementsByTag("table").first {
             it.getElementsByTag("th").any { it.text().lowercase() == title.lowercase() }
         }
     }
 
-    private fun parsePage(document: Document): EcocropData{
+    private fun parsePage(document: Document): EcocropData {
         val content = document.getElementById("content")!!
-
         val scientificName = getScientificName(content)
         val descriptionTableChildren = content.findTableByTitle("description")
             .getElementsByTag("tr")
@@ -92,7 +89,6 @@ class FullPageParseService {
         val absoluteMinLightIntensity = ecologyTableChildren[51].text()
         val absoluteMaxLightIntensity = ecologyTableChildren[52].text()
 
-
         val climateTable = content.findTableByTitle("climate zone")
             .getElementsByTag("tr")
             .flatMap {
@@ -105,7 +101,6 @@ class FullPageParseService {
         val abioticTolerance = climateTable[9].text()
         val abioticSusceptibility = climateTable[11].text()
         val introductionRisks = climateTable[13].text()
-
 
         val cultivationTableChildren = content.findTableByTitle("cultivation")
             .getElementsByTag("tr")
@@ -193,23 +188,21 @@ class FullPageParseService {
         )
     }
 
-    private fun getPage(id: String): Document{
-        return try{
+    private fun getPage(id: String): Document {
+        return try {
             Jsoup.connect(link(id)).execute().parse()
-        } catch(e: Throwable){
+        } catch (e: Throwable) {
             throw e
         }
     }
 
-    fun getData(id: String): EcocropData{
-        return try{
+    fun getData(id: String): EcocropData {
+        return try {
             val page = getPage(id)
             parsePage(page)
-        } catch(e: Throwable){
+        } catch (e: Throwable) {
             println("Failed on id $id")
             throw e
         }
-
     }
-
 }

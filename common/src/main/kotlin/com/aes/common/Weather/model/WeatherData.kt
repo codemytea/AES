@@ -13,7 +13,7 @@ class WeatherData(
     var weatherData: WeatherDataPoints
 ) {
 
-    fun toWeatherInfo(lat: Float, lng: Float): List<WeatherInfo>{
+    fun toWeatherInfo(lat: Float, lng: Float): List<WeatherInfo> {
         return weatherData.toWeatherInfo(lat, lng)
     }
 }

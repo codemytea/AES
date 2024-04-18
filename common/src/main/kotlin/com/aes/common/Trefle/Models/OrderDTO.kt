@@ -1,6 +1,6 @@
 package com.aes.common.Trefle.Models
 
-class OrderDTO (
+class OrderDTO(
     var atmospheric_humidity: String? = null,
     var author: String? = null,
     var average_height_cm: String? = null,

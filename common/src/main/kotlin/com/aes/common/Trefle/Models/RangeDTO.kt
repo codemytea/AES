@@ -1,6 +1,6 @@
 package com.aes.common.Trefle.Models
 
-class RangeDTO (
+class RangeDTO(
     var atmospheric_humidity: String? = null,
     var average_height_cm: String? = null,
     var days_to_harvest: String? = null,

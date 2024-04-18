@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Distributions (
+class Distributions(
     /**
      * Zones the species is native from
      */

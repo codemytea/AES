@@ -11,20 +11,24 @@ import java.io.File
 @Service
 open class CropPriceSavingService(
     val cropPriceRepository: CropPriceRepository
-): Logging {
+) : Logging {
 
     @Transactional
-    open fun writeAllToDB(){
-        writeDataToDatabase(File(this::class.java.classLoader.getResource("FAOSTATSellingDataCompressed.txt")!!.toURI()))
+    open fun writeAllToDB() {
+        writeDataToDatabase(
+            File(
+                this::class.java.classLoader.getResource("FAOSTATSellingDataCompressed.txt")!!.toURI()
+            )
+        )
     }
+
     fun writeDataToDatabase(inputFile: File) {
         var count = 1
         inputFile.forEachLine {
-            if(count++ % 50000 == 0){
+            if (count++ % 50000 == 0) {
                 logger().info("Processed $count")
             }
             cropPriceRepository.save(CropPrice.fromFileLine(it))
         }
     }
-
 }

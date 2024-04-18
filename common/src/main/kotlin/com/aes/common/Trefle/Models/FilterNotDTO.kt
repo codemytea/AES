@@ -1,6 +1,6 @@
 package com.aes.common.Trefle.Models
 
-class FilterNotDTO (
+class FilterNotDTO(
     var author: String? = null,
     var average_height_cm: String? = null,
     var bibliography: String? = null,

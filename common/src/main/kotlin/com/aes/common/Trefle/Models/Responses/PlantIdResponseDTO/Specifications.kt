@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Specifications (
+class Specifications(
     /**
      * The ligneous type of the woody plant
      */

@@ -1,7 +1,7 @@
 package com.aes.common.Trefle.Models
 
 
-class FilterDTO (
+class FilterDTO(
     var author: String? = null,
     var bloom_months: String? = null,
     var common_name: String? = null,
