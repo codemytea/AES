@@ -12,8 +12,8 @@ class CropGroupEntry(
 
     @ManyToOne
     val cropSubGroup: CropGroupEntity? = null
+) {
 
-){
     @Id
     val id: String = UUID.randomUUID().toString()
     override fun equals(other: Any?): Boolean {
@@ -23,6 +23,4 @@ class CropGroupEntry(
     override fun hashCode(): Int {
         return name.hashCode()
     }
-
-
 }

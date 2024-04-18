@@ -11,13 +11,13 @@ class CropGroupFetchService(
     val cropGroupRepository: CropGroupRepository
 ) {
 
-    fun getAllMainGroupsByName(name: String): List<CropGroupEntity>{
+    fun getAllMainGroupsByName(name: String): List<CropGroupEntity> {
         return cropGroupEntryRepository.findAllByNameLikeIgnoreCase("%$name%").mapNotNull {
             it.cropSubGroup
         }.filter { it.isMain() }.toSet().toList()
     }
 
-    fun getAllSubGroupsByName(name: String): List<CropGroupEntity>{
+    fun getAllSubGroupsByName(name: String): List<CropGroupEntity> {
         return cropGroupEntryRepository.findAllByNameLikeIgnoreCase("%$name%").mapNotNull {
             it.cropSubGroup
         }.filter { !it.isMain() }.toSet().toList()

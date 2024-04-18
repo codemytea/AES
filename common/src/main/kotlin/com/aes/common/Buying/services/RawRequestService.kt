@@ -51,20 +51,22 @@ object RawRequestService {
         val has_morphology: Boolean = false
     )
 
-
-
     fun setGETForFull(data: SIDSeedData): SIDSeedDataFull?{
         val obj = URL(URL + EPFull(data.id))
         val con = obj.openConnection() as HttpURLConnection
+
         con.setRequestMethod("GET")
         requestProps.forEach {
             con.setRequestProperty(it.key, it.value)
         }
+
         val responseCode = con.getResponseCode()
+
         return if (responseCode == HttpURLConnection.HTTP_OK) { // success
             val `in` = BufferedReader(InputStreamReader(con.inputStream))
             var inputLine: String?
             val response = StringBuffer()
+
             while (`in`.readLine().also { inputLine = it } != null) {
                 response.append(inputLine)
             }
@@ -72,27 +74,29 @@ object RawRequestService {
 
             val mapper = jacksonObjectMapper()
             val typeRef = mapper.typeFactory.constructCollectionType(List::class.java, SIDSeedDataFull::class.java)
-            // print result
             jacksonObjectMapper().readValue<List<SIDSeedDataFull>>(response.toString(), typeRef).firstOrNull()
         } else {
-            //println("GET request did not work.")
+            //GET request did not work.
             null
         }
     }
 
-
     fun sendGETForIds(startLetters: String): List<SIDSeedData>?{
         val obj = URL(URL + EPSummary(startLetters))
         val con = obj.openConnection() as HttpURLConnection
+
         con.setRequestMethod("GET")
         requestProps.forEach {
             con.setRequestProperty(it.key, it.value)
         }
+
         val responseCode = con.getResponseCode()
+
         return if (responseCode == HttpURLConnection.HTTP_OK) { // success
             val `in` = BufferedReader(InputStreamReader(con.inputStream))
             var inputLine: String?
             val response = StringBuffer()
+
             while (`in`.readLine().also { inputLine = it } != null) {
                 response.append(inputLine)
             }
@@ -100,10 +104,9 @@ object RawRequestService {
 
             val mapper = jacksonObjectMapper()
             val typeRef = mapper.typeFactory.constructCollectionType(List::class.java, SIDSeedData::class.java)
-            // print result
             jacksonObjectMapper().readValue(response.toString(), typeRef)
         } else {
-            //println("GET request did not work.")
+            //GET request did not work.
             null
         }
     }

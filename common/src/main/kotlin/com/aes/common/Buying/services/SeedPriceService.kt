@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service
 import java.io.File
 import java.time.LocalDate
 
+/**
+ * Extract prices of crops from UK crop price document and store in DB for ease of querying
+ * */
 @Service
 class SeedPriceService(
     val pppService: PPPService,
@@ -29,7 +32,6 @@ class SeedPriceService(
         G,
         KG;
 
-
         companion object{
             fun fromString(string: String): Pair<PriceUnit, Float>{
                 return if(string == "PKT") PKT to 1f
@@ -41,11 +43,9 @@ class SeedPriceService(
         }
     }
 
-
     val seedPrices: Map<String, List<SeedData>> by lazy {
         parseFile(File(this::class.java.classLoader.getResource("SeedPrices.txt")!!.toURI()))
     }
-
 
     fun parseHeaderRow(line: String): Pair<String, List<String>>{
         val parts = line.split(",").filter(String::isNotBlank)
@@ -76,14 +76,8 @@ class SeedPriceService(
         else RowType.CROP
     }
 
-
-
-
-
     fun parseFile(file: File): Map<String, List<SeedData>>{
-
         val cropList = mutableMapOf<String, MutableList<SeedData>>()
-
         var currentFamilyName = ""
         var currentUnits = listOf<Pair<PriceUnit, Float>>()
 
@@ -106,19 +100,16 @@ class SeedPriceService(
                         val seedData = parseCropRow(it, currentFamilyName to currentUnits)
                         if (!cropList.containsKey(currentFamilyName)) {
                             cropList[currentFamilyName] = mutableListOf(seedData)
-
                         } else {
                             cropList[currentFamilyName]?.add(seedData)
                         }
                     }
                 }
             } catch (e: Throwable){
-                println("Failed on line $it")
                 throw e
             }
         }
         return cropList
-
     }
 
     fun getSeedPriceForCrop(cropName: String): List<SeedData>?{
@@ -135,24 +126,20 @@ class SeedPriceService(
         val pppCountry = pppService.getPPPForCountryAtYear(country, date.year)
         val pppProp = (pppCountry/pppUK)
         val (cropPrice, priceUnit) = getSeedPriceForCrop(crop)?.maxBulk() ?: (cropSellingService.getExpectedPriceForDateInCountry(crop, date, country)/1000f to PriceUnit.KG)
-
         val standardBulkDecrease = 0.8f
-
         return cropPrice*standardBulkDecrease*pppProp to priceUnit
     }
-
 
     fun SeedData.convertPrices(): SeedData{
         val newPrices = this.prices.map {(unit, value)->
             if(unit.first == PriceUnit.G){
                 (PriceUnit.KG to unit.second/1000f) to value
-            } else{
+            } else {
                 unit to value
             }
         }.toMap()
         return SeedData(newPrices, this.variantName)
     }
-
 
     fun SeedData.maxBulk(): Pair<Pair<PriceUnit, Float>, Float>?{
         val newSeedData = this.convertPrices()
@@ -165,21 +152,17 @@ class SeedPriceService(
         }
         return maxValue.toPair()
     }
+
     fun List<SeedData>.maxBulk(): Pair<Float, PriceUnit>{
         val maxBulks = this.mapNotNull{it.maxBulk()}
         val bestUnit = maxBulks.maxBy {
             it.first.first.ordinal
         }.first.first
         val bestUnits = maxBulks.filter { it.first.first == bestUnit }
-
         val standardisedByUnit = bestUnits.map {
             it.second/it.first.second
         }
-
         val average = standardisedByUnit.sum()/standardisedByUnit.size
-
         return average to bestUnit
     }
-
-
 }

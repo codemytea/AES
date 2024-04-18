@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.io.File
 
+/**
+ * Writes data extracted from SID dataset to database for ease of querying
+ * */
 @Service
 open class SeedDataSavingService(
     val sidSeedDataFullRepository: SIDSeedDataFullRepository
@@ -21,7 +24,6 @@ open class SeedDataSavingService(
     fun writeDataToDatabase(inputFile: File) {
         val mapper = jacksonObjectMapper()
         val typeRef = mapper.typeFactory.constructCollectionType(List::class.java, SIDSeedDataFull::class.java)
-        // print result
         val data = jacksonObjectMapper().readValue<List<SIDSeedDataFull>>(inputFile, typeRef)
         var count = 1
         data.forEach {

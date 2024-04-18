@@ -6,4 +6,4 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface CropGroupRepository: CrudRepository<CropGroupEntity, CropGroupId>
+interface CropGroupRepository : CrudRepository<CropGroupEntity, CropGroupId>

@@ -15,30 +15,29 @@ open class CropGroupParseService(
     val cropGroupEntryRepository: CropGroupEntryRepository
 ) {
 
-
     @Transactional
-    open fun writeAllToDB(){
+    open fun writeAllToDB() {
         writeDataToDatabase(File(this::class.java.classLoader.getResource("crop_groups.tsv")!!.toURI()))
     }
 
-    private fun parseLineAsSubgroup(parts: List<String>, dotIndex: Int): Pair<Triple<String, Int, String>, String>{
+    private fun parseLineAsSubgroup(parts: List<String>, dotIndex: Int): Pair<Triple<String, Int, String>, String> {
         val name = parts.first()
-            .substring(dotIndex+1)
+            .substring(dotIndex + 1)
             .lowercase()
             .replace("subgroup", "")
             .replace("(cont)", "")
             .trim()
 
-        val letter = parts.first()[dotIndex-1].toString()
+        val letter = parts.first()[dotIndex - 1].toString()
         val groupNumberEndIndex = parts.first().indexOfFirst { !it.isDigit() }
         val groupNumber = parts.first().substring(0, groupNumberEndIndex).toInt()
 
         return Triple(name, groupNumber, letter) to parts[1]
     }
 
-    private fun parseLineAsGroup(parts: List<String>, dotIndex: Int): Pair<Triple<String, Int, String?>, String>{
+    private fun parseLineAsGroup(parts: List<String>, dotIndex: Int): Pair<Triple<String, Int, String?>, String> {
         val name = parts.first()
-            .substring(dotIndex+1)
+            .substring(dotIndex + 1)
             .lowercase()
             .replace("group", "")
             .replace("(cont)", "")
@@ -50,19 +49,19 @@ open class CropGroupParseService(
         return Triple(name, groupNumber, null) to parts[1]
     }
 
-    private fun parseLine(line: String): Pair<Triple<String, Int, String?>, String>{
+    private fun parseLine(line: String): Pair<Triple<String, Int, String?>, String> {
         val parts = line.split("\t").map {
             it.removePrefix("\"").removeSuffix("\"").trim()
         }
         val dotIndex = parts.first().indexOfLast { it == '.' }
-        return if(parts.first()[dotIndex - 1].isLetter()){
+        return if (parts.first()[dotIndex - 1].isLetter()) {
             parseLineAsSubgroup(parts, dotIndex)
-        } else{
+        } else {
             parseLineAsGroup(parts, dotIndex)
         }
     }
 
-    private fun saveToEntity(value: Pair<Triple<String, Int, String?>, String>): CropGroupEntity{
+    private fun saveToEntity(value: Pair<Triple<String, Int, String?>, String>): CropGroupEntity {
         val name = value.first.first
         val groupNumber = value.first.second
         val letter = value.first.third
@@ -71,7 +70,7 @@ open class CropGroupParseService(
             .replace(Regex("\\(.*\\)"), "")
             .split(";")
             .filter { !it.contains("cultivars") && !it.contains("varieties") && !it.contains("hybrids") }
-            .map{
+            .map {
                 cropGroupEntryRepository.save(CropGroupEntry(
                     it.lowercase()
                         .trim()
@@ -93,15 +92,11 @@ open class CropGroupParseService(
             val existingIndex = groups.indexOfFirst {
                 it.first == newGroup.first
             }
-            if(existingIndex == -1)groups.add(newGroup)
+            if (existingIndex == -1) groups.add(newGroup)
             else {
                 groups[existingIndex] = newGroup.first to groups[existingIndex].second + " " + newGroup.second
             }
         }
         groups.map(::saveToEntity)
     }
-
-
-
-
 }
