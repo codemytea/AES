@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
+/**
+ * Uses standard seed rate formula to calculate the required seedrate given a users smallholding and when they are planning
+ * to sow (temperature makes a difference to germination rates)
+ * */
 @Service
 open class SeedRateService(
     val trefleService: TrefleService,

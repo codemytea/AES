@@ -55,7 +55,6 @@ open class CropPriceParsingService {
         }
     }
 
-
     fun parseSingleLine(line: String): CropPrice? {
         val items = line.removePrefix("\"").split(",\"").map { it.substring(0, it.length - 1) }
         val unit = items[UNIT_INDEX]

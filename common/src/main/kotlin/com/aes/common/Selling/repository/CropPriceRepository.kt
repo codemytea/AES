@@ -7,7 +7,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface CropPriceRepository : CrudRepository<CropPrice, CropPriceId> {
-
     fun findAllByCropNameAndCountryLike(cropName: String, country: String): List<CropPrice>
-
 }
