@@ -110,3 +110,11 @@ server.port=8080
 To a port of your choosing.
 
 You can then send a message to your UK shortcode using a mobile device and view the responses. If you'd like to see Scheduled Tasks in action, you can change the `cron` to be more frequent.
+
+## License 
+
+Copyright (C) Dobreva-Skevington Ltd. - All Rights Reserved. 
+Unauthorized copying of any aspect of this codebase, for any use, via any medium is strictly prohibited. 
+This codebase has solely been shared for the marking of the CS310 Final Report Coursework (University of Warwick) and must not be used, or stored, for any other purpose.
+Proprietary and confidential.
+Written by Jacqueline Dobreva-Skevington <jacqueline.dobreva@gmail.com>, April 2024.
