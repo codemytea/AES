@@ -8,14 +8,21 @@ import java.util.*
 
 @Entity
 class CropGroupEntry(
+    /**
+     * The name of the Crop
+     * */
     val name: String = "",
 
+    /**
+     * The crops sub-group
+     * */
     @ManyToOne
     val cropSubGroup: CropGroupEntity? = null
 ) {
 
     @Id
-    val id: String = UUID.randomUUID().toString()
+    val id: UUID = UUID.randomUUID()
+
     override fun equals(other: Any?): Boolean {
         return (other as? CropGroupEntry)?.name == name
     }

@@ -13,20 +13,31 @@ data class CropGroupId(
 @IdClass(CropGroupId::class)
 class CropGroupEntity(
 
+    /**
+     * Sub-group crop letter as pert IR-4
+     * */
     @Id
     val subgroupLetter: String = "",
 
+    /**
+     * Group Crop letter as per IR-4
+     * */
     @Id
     val groupNumber: Int = 0,
 
+    /**
+     * The name of the crop group
+     * */
     val name: String = "",
 
+    /**
+     * A list of which crops are part of what crop group
+     * */
     @OneToMany
     @JoinColumns(
         JoinColumn(name = "crop_sub_group_group_number", referencedColumnName = "groupNumber"),
         JoinColumn(name = "crop_sub_group_subgroup_letter", referencedColumnName = "subgroupLetter")
     )
-
     val entries: MutableSet<CropGroupEntry> = mutableSetOf()
 ) {
 

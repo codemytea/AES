@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.io.File
 
-
+/**
+ * Service to extract crop group information from tsv (which was made from an IR-4 pdf) and save to DB
+ * */
 @Service
 open class CropGroupParseService(
     val cropGroupRepository: CropGroupRepository,

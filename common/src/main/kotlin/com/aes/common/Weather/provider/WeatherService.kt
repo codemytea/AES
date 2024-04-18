@@ -34,6 +34,9 @@ class WeatherService(
         }
     }
 
+    /**
+     * Creates the correct URL for querying historical data
+     * */
     private fun historicalUrl(
         lat: Float,
         lng: Float,
@@ -51,6 +54,9 @@ class WeatherService(
         }"
     }
 
+    /**
+     * Creates the correct URL for querying forcasts
+     * */
     private fun forecastUrl(
         lat: Float,
         lng: Float,
@@ -68,6 +74,9 @@ class WeatherService(
         }"
     }
 
+    /**
+     * Gets past weather for a specific location at a certain date
+     * */
     private fun getHistoricalWeatherForDate(lat: Float, lng: Float, date: LocalDateTime): List<WeatherInfo> {
         return restTemplate().getForEntity(
             historicalUrl(lat, lng, date.toLocalDate(), date.toLocalDate(), variables),
@@ -75,6 +84,9 @@ class WeatherService(
         ).body!!.toWeatherInfo(lat, lng)
     }
 
+    /**
+     * Gets the weather forecast for a certain date
+     * */
     private fun getForecastWeatherForDate(lat: Float, lng: Float, date: LocalDateTime): List<WeatherInfo> {
         return restTemplate().getForEntity(
             forecastUrl(lat, lng, date.toLocalDate(), date.toLocalDate(), variables),
@@ -82,6 +94,9 @@ class WeatherService(
         ).body!!.toWeatherInfo(lat, lng)
     }
 
+    /**
+     * Gets the weather forecast between two dates
+     * */
     private fun getForecastWeatherBetweenDates(
         lat: Float,
         lng: Float,
@@ -106,6 +121,9 @@ class WeatherService(
         return result
     }
 
+    /**
+     * Gets the past weather between two dates in the past
+     * */
     private fun getHistoricalWeatherBetweenDates(
         lat: Float,
         lng: Float,
@@ -164,6 +182,11 @@ class WeatherService(
         return result
     }
 
+    /**
+     * Used for planting calculations - check when all future dates match a condition eg
+     * If you want to plant corn, you need it at a point when there in no risk of frost
+     * so use this function to determine when that will be
+     * */
     fun allFutureDatesMatchCondition(
         from: LocalDate,
         to: LocalDate,

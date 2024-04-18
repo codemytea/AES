@@ -8,6 +8,9 @@ class GeocodingService {
     private fun url(name: String) =
         "https://geocoding-api.open-meteo.com/v1/search?name=$name&count=100&language=en&format=json"
 
+    /**
+     * Get the latitude and longitude for a country and city by their given names
+     * */
     fun getLatLngForName(cityName: String, countryName: String): LatLng {
         return RestTemplateBuilder().build()
             .getForEntity(url(cityName), GeocodingResults::class.java).body!!.results.first {

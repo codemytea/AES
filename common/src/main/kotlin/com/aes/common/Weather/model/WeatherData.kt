@@ -13,6 +13,9 @@ class WeatherData(
     var weatherData: WeatherDataPoints
 ) {
 
+    /**
+     * Get the weather information of a given latitude and longitude
+     * */
     fun toWeatherInfo(lat: Float, lng: Float): List<WeatherInfo> {
         return weatherData.toWeatherInfo(lat, lng)
     }
