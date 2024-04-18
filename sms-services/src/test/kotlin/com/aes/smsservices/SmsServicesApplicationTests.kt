@@ -1,11 +1,10 @@
 package com.aes.smsservices
 
-import com.aes.common.Buying.services.PPPService
 import com.aes.common.Buying.services.SeedDataSavingService
 import com.aes.common.Buying.services.SeedPriceService
 import com.aes.common.CropGroup.services.CropGroupFetchService
 import com.aes.common.CropGroup.services.CropGroupParseService
-import com.aes.common.Ecocrop.full.EcocropDataSaveService
+import com.aes.common.Ecocrop.Services.EcocropDataSaveService
 import com.aes.common.Entities.UserSmallholding
 import com.aes.common.Enums.Crop
 import com.aes.common.Enums.MessageType
@@ -21,7 +20,6 @@ import jakarta.transaction.Transactional
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
 import java.time.LocalDate
 import java.time.LocalDateTime

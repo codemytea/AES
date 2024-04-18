@@ -1,4 +1,4 @@
-package com.aes.common.Ecocrop.full
+package com.aes.common.Ecocrop.Services
 
 import com.aes.common.Ecocrop.entities.EcocropData
 import com.aes.common.Ecocrop.repository.EcocropDataRepository
@@ -9,6 +9,13 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.io.File
 
+/**
+ * Service to get Crop Data from ECOCROP (run by FAOSTAT)
+ * - no csv/api so iterate through webpages and use JSOUP
+ * Information stored in DB
+ *
+ * This service writes all collected data to the DB
+ * */
 @Service
 open class EcocropDataSaveService(
     val ecocropDataRepository: EcocropDataRepository

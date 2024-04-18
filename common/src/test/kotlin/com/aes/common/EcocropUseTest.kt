@@ -1,8 +1,7 @@
 package com.aes.common
 
-import com.aes.common.Buying.services.RawRequestService
-import com.aes.common.Ecocrop.full.FullPageParseService
-import com.aes.common.Ecocrop.summary.SummaryPageParseService
+import com.aes.common.Ecocrop.Services.FullPageParseService
+import com.aes.common.Ecocrop.Services.SummaryPageParseService
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async

@@ -1,4 +1,4 @@
-package com.aes.common.Ecocrop.full
+package com.aes.common.Ecocrop.Services
 
 import com.aes.common.Ecocrop.entities.EcocropData
 import com.aes.common.Ecocrop.entities.EcocropUse
@@ -7,6 +7,13 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.springframework.stereotype.Service
 
+/**
+ * Service to get Crop Data from ECOCROP (run by FAOSTAT)
+ * - no csv/api so iterate through webpages and use JSOUP
+ * Information stored in DB
+ *
+ * This service parses the ECOCROP full pages
+ * */
 @Service
 class FullPageParseService {
 
