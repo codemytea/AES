@@ -24,6 +24,9 @@ class TrefleService : Logging {
 
     private val uri = "https://trefle.io/api/v1/"
 
+    /**
+     * Get a list of all plants supported by Trefle API
+     * */
     fun allPlants(resource: PlantListDTO): PlantListResponseDTO {
         val params = resource.toQueryParams().toMutableMap().apply {
             put("token", key)
@@ -31,12 +34,19 @@ class TrefleService : Logging {
         return RestTemplateBuilder().build().getForEntity("${uri}plants", params)!!
     }
 
+    /**
+     * Get a plant by ID Trefle API
+     *
+     * @return a response that contains the growing specifications needed
+     * */
     fun getPlantById(resource: Id): PlantIdResponseDTO {
         return RestTemplateBuilder().build()
             .getForEntity("${uri}plants/${resource.id}", mapOf<String, Any>(Pair("token", key)))!!
     }
 
-
+    /**
+     * Get a plant by a search query Trefle API
+     * */
     fun getPlantBySearchQuery(resource: PlantListDTO): PlantListResponseDTO {
         val params = resource.toQueryParams().toMutableMap().apply {
             put("token", key)
@@ -44,6 +54,9 @@ class TrefleService : Logging {
         return RestTemplateBuilder().build().getForEntity("${uri}plants/search", params)!!
     }
 
+    /**
+     * Get a plant by it's common name eg corn instead of zea Trefle API
+     * */
     fun getPlantByCommonName(name: String): PlantListResponseDTO {
         return getPlantBySearchQuery(
             PlantListDTO(
