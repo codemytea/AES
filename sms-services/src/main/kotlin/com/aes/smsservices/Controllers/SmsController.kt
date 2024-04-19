@@ -51,7 +51,7 @@ class SmsController(
     }
 
     /**
-     * Receives SMS status changes
+     * Receives SMS status changes. Allows for retrying if status is failed or rejected.
      *
      * @param resource - the incoming message status dto
      * @return the resulting message dto
@@ -63,15 +63,14 @@ class SmsController(
                     "${resource.id} and new status ${resource.status.name}, ${resource.code}, ${resource.error}"
         )
 
-
         return updateSmsService.update(resource).toDTO().also {
             if (resource.status == MessageStatus.FAILED || resource.status == MessageStatus.REJECTED){
                 messageRepository.findByIdOrNull(resource.id)?.message?.let {
+                    logger().info("Message failed, resending")
                     sendSmsService.sendSMS(
                         resource.toNewMessageDTO(it)
                     )
                 }
-
             }
         }
     }
