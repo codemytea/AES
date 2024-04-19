@@ -1,6 +1,6 @@
 package com.aes.expertsystem
 
-import com.aes.expertsystem.Buying.entities.SIDSeedDataFull
+import com.aes.expertsystem.Data.Buying.entities.SIDSeedDataFull
 import com.aes.expertsystem.Buying.services.RawRequestService
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.*
@@ -49,7 +49,7 @@ class SeedWeightTests {
             println("START OF REQUESTS")
             skeletons.map { sk ->
                 async {
-                    var result: SIDSeedDataFull? = null
+                    var result: com.aes.expertsystem.Data.Buying.entities.SIDSeedDataFull? = null
                     for (i in 0..10) {
                         result = RawRequestService.setGETForFull(sk)
                         if (result != null) break

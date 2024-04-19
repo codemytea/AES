@@ -9,7 +9,7 @@ import com.aes.expertsystem.Buying.services.SeedDataSavingService
 import com.aes.expertsystem.Buying.services.SeedPriceService
 import com.aes.expertsystem.CropGroup.services.CropGroupFetchService
 import com.aes.expertsystem.CropGroup.services.CropGroupParseService
-import com.aes.expertsystem.Ecocrop.Services.EcocropDataSaveService
+import com.aes.expertsystem.Data.Ecocrop.Services.EcocropDataSaveService
 import com.aes.expertsystem.Selling.services.CropPriceSavingService
 import com.aes.expertsystem.Selling.services.CropSellingService
 import com.aes.expertsystem.Trefle.Models.FilterNotDTO
@@ -17,7 +17,7 @@ import com.aes.expertsystem.Trefle.Models.Id
 import com.aes.expertsystem.Trefle.Models.PlantListDTO
 import com.aes.expertsystem.Trefle.Models.Responses.PlantIdResponseDTO.Growth
 import com.aes.expertsystem.Trefle.TrefleService
-import com.aes.expertsystem.services.SeedRateService
+import com.aes.expertsystem.Data.services.SeedRateService
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -55,7 +55,7 @@ class ExpertSystemApplicationTests : Logging {
     lateinit var seedDataSavingService: SeedDataSavingService
 
     @Autowired
-    lateinit var ecocropDataSaveService: EcocropDataSaveService
+    lateinit var ecocropDataSaveService: com.aes.expertsystem.Data.Ecocrop.Services.EcocropDataSaveService
 
     @Autowired
     lateinit var cropGroupParseService: CropGroupParseService
