@@ -65,6 +65,9 @@ class Message(
     @OneToMany
     val messageTopics: MutableSet<MessageTopics> = mutableSetOf(),
 
+    @Column
+    var retried: Int = 0
+
 
     )
 

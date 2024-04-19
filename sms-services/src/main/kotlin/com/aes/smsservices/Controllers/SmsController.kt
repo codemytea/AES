@@ -65,11 +65,14 @@ class SmsController(
 
         return updateSmsService.update(resource).toDTO().also {
             if (resource.status == MessageStatus.FAILED || resource.status == MessageStatus.REJECTED){
-                messageRepository.findByIdOrNull(resource.id)?.message?.let {
-                    logger().info("Message failed, resending")
-                    sendSmsService.sendSMS(
-                        resource.toNewMessageDTO(it)
-                    )
+                messageRepository.findByIdOrNull(resource.id)?.let {
+                    it.retried += 1
+                    if (it.retried < 10){
+                        logger().info("Message failed, resending")
+                        sendSmsService.sendSMS(
+                            resource.toNewMessageDTO(it.message)
+                        )
+                    }
                 }
             }
         }
