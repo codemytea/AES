@@ -1,6 +1,6 @@
 package com.aes.expertsystem
 
-import com.aes.expertsystem.Selling.services.CropPriceParsingService
+import com.aes.expertsystem.Data.Selling.services.CropPriceParsingService
 import org.junit.jupiter.api.Test
 import java.io.File
 

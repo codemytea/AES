@@ -1,7 +1,6 @@
 package com.aes.expertsystem
 
-import com.aes.expertsystem.Data.Buying.entities.SIDSeedDataFull
-import com.aes.expertsystem.Buying.services.RawRequestService
+import com.aes.expertsystem.Data.Buying.services.RawRequestService
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.*
 import org.junit.jupiter.api.Test

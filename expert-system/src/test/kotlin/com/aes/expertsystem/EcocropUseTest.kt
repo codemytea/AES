@@ -1,7 +1,7 @@
 package com.aes.expertsystem
 
-import com.aes.expertsystem.Ecocrop.Services.FullPageParseService
-import com.aes.expertsystem.Ecocrop.Services.SummaryPageParseService
+import com.aes.expertsystem.Data.Ecocrop.Services.FullPageParseService
+import com.aes.expertsystem.Data.Ecocrop.Services.SummaryPageParseService
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
