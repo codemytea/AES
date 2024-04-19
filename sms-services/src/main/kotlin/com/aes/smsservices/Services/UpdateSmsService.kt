@@ -1,6 +1,7 @@
 package com.aes.smsservices.Services
 
 import com.aes.common.Entities.Message
+import com.aes.common.Enums.MessageStatus
 import com.aes.common.Repositories.MessageRepository
 import com.aes.common.logging.Logging
 import com.aes.smsservices.Exceptions.ResourceNotFoundException

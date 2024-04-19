@@ -53,11 +53,10 @@ class AgriculturalQuestionDetector(
      * @param userID
      * */
     private fun tagIncomingMessage(questions: List<String>, userID: UUID) {
-        //zips the questions together
-        val zippedQuestions = questions.joinToString(" ")
-
         //writes to the queue
-        localQueueService.writeItemToQueue("message_tag_queue", TaggingMessage(zippedQuestions, userID))
+        questions.forEach {
+            localQueueService.writeItemToQueue("message_tag_queue", TaggingMessage(it, userID))
+        }
     }
 
 }
