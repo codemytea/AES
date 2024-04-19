@@ -1,5 +1,6 @@
-package com.aes.messagehandler.Information
+package com.aes.messagehandler.Services
 
+import com.aes.common.Entities.Message
 import com.aes.common.Enums.UserDetails
 import com.aes.common.Models.MessageDTO
 import com.aes.common.Repositories.UserRepository
@@ -10,22 +11,15 @@ import com.aes.messagehandler.Mappers.toCrop
 import com.aes.messagehandler.Mappers.toUserDetails
 import com.aes.messagehandler.Python.InformationCollection
 import jakarta.transaction.Transactional
-import org.apache.catalina.User
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Service
 import java.util.*
 
-
 @Service
-@Configuration
-class InformationCollector(
+class NewInformationService(
     val userRepository: UserRepository,
     val userSmallholdingRepository: UserSmallholdingRepository,
     val informationCollection: InformationCollection,
 ) : Logging {
-
-    private var stop = false
 
     /**
      * Checks if there are any more details left to determine about the user
@@ -33,14 +27,9 @@ class InformationCollector(
      * @return details that still need to be collected
      * */
     @OptIn(ExperimentalStdlibApi::class)
-    private fun getDetailsToDetermine(userID: UUID): List<UserDetails>? {
-
-        logger().info("")
-
+    fun getDetailsToDetermine(userID: UUID): List<UserDetails>? {
         val knownSet = setOf<UserDetails>()
-
         val fullSet = setOf(*UserDetails.entries.toTypedArray())
-
         val user = userRepository.findUserById(userID)
 
         logger().info("Determining details of user with id $userID")
@@ -90,13 +79,13 @@ class InformationCollector(
      * @return a pair of new information collected about the user, and the message without the bits that give that new information
      * */
     @Transactional
-    fun getNewInfo(message: MessageDTO, detailsToDetermine : List<UserDetails>?): Pair<List<UserDetails>?, String?>? {
+    fun saveNewInformation(messages : List<String>, userID: UUID, detailsToDetermine : List<UserDetails>?) {
         detailsToDetermine?.let { it ->
             //use NER to scrape any NEW information given by the received message
-            val newInfo = informationCollection.getNewInformation(message.content, it)
+            val newInfo = informationCollection.getNewInformation(messages.joinToString(" "), it)
             val newInfoCollected = mutableListOf<UserDetails>()
 
-            val user = userRepository.findUserById(message.userID)
+            val user = userRepository.findUserById(userID)
             val userSmallholding =
                 user?.userSmallholdingInfo?.getOrNull(0) //TODO check which smallholding the user is talking about and select the right one
 
@@ -123,14 +112,6 @@ class InformationCollector(
                 }
             }
 
-            //TODO Integrate with NER?!
-            newInfo["stopCollecting"]?.let { sc ->
-                if (sc as Boolean) {
-                    user?.stopCollectingInformation = true
-                    stop = true
-                }
-            }
-
             user?.let {
                 userRepository.save(it)
             }
@@ -138,43 +119,6 @@ class InformationCollector(
                 userSmallholdingRepository.save(it)
             }
 
-            // TODO integrate with NER
-            //new details collected
-            return Pair(newInfoCollected, newInfo["messageWithoutInformation"] as String)
         }
-
-        return null
-    }
-
-
-    /**
-     * Get any new information provided in user message, save to DB, and, if user hasn't asked to stop information
-     * collection, compile message asking for any remaining information.
-     *
-     * @param message - the message without agricultural questions in it
-     * @return Pair("call to action collection message asking for more information", "leftover original message")
-     * */
-    @Transactional
-    fun askFormoreInfo(message: MessageDTO): Pair<String?, String?> {
-        val detailsToDetermine = getDetailsToDetermine(message.userID)
-        val newInfoAndRemainderMessage = getNewInfo(message, detailsToDetermine)
-        logger().info("User details of user with id ${message.userID} has this new informtion ${newInfoAndRemainderMessage.toString()}")
-
-        val userChoice = userRepository.findUserById(message.userID)?.stopCollectingInformation
-
-        var callToAction: String? = null
-
-        //get remaining details to determine
-        detailsToDetermine?.minus(newInfoAndRemainderMessage?.first)?.let {
-            if (!stop && userChoice != true) {
-                logger().info("Asking user with id ${message.userID} for following new information: $it")
-                callToAction = informationCollection.collect(it as List<UserDetails>)
-                logger().info("Asking user with id ${message.userID} for following new information: $it with call to action: $callToAction")
-            } else {
-                logger().info("User with id ${message.userID} has asked for stop in info collection")
-            }
-        }
-
-        return Pair(callToAction, newInfoAndRemainderMessage?.second)
     }
 }

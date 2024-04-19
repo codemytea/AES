@@ -6,6 +6,7 @@ import com.aes.common.Queue.LocalQueueService
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
 import com.aes.messagehandler.Controller.MessagePipeline
+import com.aes.messagehandler.Services.MessageHandlerService
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit
 @Service
 class MessageTaggingQueueReadService(
     val localQueueService: LocalQueueService,
-    val messagePipeline: MessagePipeline
+    val messageHandlerService: MessageHandlerService
 ) : Logging {
 
 
@@ -33,7 +34,7 @@ class MessageTaggingQueueReadService(
         val asyncOps = mutableListOf<Deferred<Unit>>()
         while (hasMore) {
             val result = localQueueService.withQueueItemAtPositionAsync<Message>("message_handler_queue", count) {
-                messagePipeline.messagePipeline(this)
+                messageHandlerService.handleRequest(this)
                 true
             }
             if (result == null) {

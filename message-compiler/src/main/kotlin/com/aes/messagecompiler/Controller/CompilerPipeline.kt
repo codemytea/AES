@@ -2,6 +2,7 @@ package com.aes.messagecompiler.Controller
 
 import com.aes.common.Enums.Age
 import com.aes.common.Enums.Gender
+import com.aes.common.Enums.HandlableMessageType
 import com.aes.common.Models.NewMessageDTO
 import com.aes.common.Queue.LocalQueueService
 import com.aes.common.Repositories.UserRepository
@@ -30,7 +31,7 @@ class CompilerPipeline(
      * @param phoneNumber - the receiving users' phone number
      * @return list of NewMessageDTOs ready to be sent
      * */
-    fun compileMessage(initialResponse : Map<String, List<String>>, phoneNumber : Long) : List<NewMessageDTO>? {
+    fun compileMessage(initialResponse : Map<HandlableMessageType, List<String>>, phoneNumber : Long) : List<NewMessageDTO>? {
         logger().info("Compiling message for user with phone number $phoneNumber")
         val user = userRepository.findByPhoneNumberContaining(phoneNumber)
         val improved = improveSuggestability(initialResponse, user?.literacy ?: 50f, user?.age ?: Age.ADULT, user?.gender ?: Gender.MALE) //if not known, assume standard
@@ -54,14 +55,12 @@ class CompilerPipeline(
      * @param gender - gender of user as part of Gender enum
      * @return the responses tailored to user characteristics
      * */
-    fun improveSuggestability(initialResponse: Map<String, List<String>>, literacyLevel : Float, age : Age, gender: Gender) : Map<String, List<String?>>{
+    fun improveSuggestability(initialResponse: Map<HandlableMessageType, List<String>>, literacyLevel : Float, age : Age, gender: Gender) : Map<HandlableMessageType, List<String>>{
         logger().info("Improving suggestibility of message")
 
-        return initialResponse.filterValues {
-            it.isNotEmpty() && !(it.size == 1 && it[0] == "")
-        }.mapValues{
+        return initialResponse.mapValues{
             it.value.joinToString(" ").let {
-                listOf(compiler.userCharacteristicCompiling(it, literacyLevel, gender, age))
+                listOfNotNull(compiler.userCharacteristicCompiling(it, literacyLevel, gender, age))
             }
         }.toSortedMap().also {
             logger().info("Message with better suggestibility is $it")
@@ -88,7 +87,7 @@ class CompilerPipeline(
      * @return a list of messages to be sent to the user, chunked and amalgamated as appropriate
      * */
     //TODO introduces commas bc takes punctuation from the fact it's a map eg {k1=["abc."], k2=["def"]} -> "abc., def". Need to fix.
-    fun finalSplit(tailoredResponses: Map<String, List<String?>>) : List<String>{
+    fun finalSplit(tailoredResponses: Map<HandlableMessageType, List<String>>) : List<String>{
         logger().info("Amalgamating message")
         val mappedTopics =  tailoredResponses.map { topic ->
             topic.value.joinToString(" ").let {

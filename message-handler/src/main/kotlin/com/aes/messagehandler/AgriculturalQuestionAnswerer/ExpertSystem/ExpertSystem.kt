@@ -6,14 +6,13 @@ import org.springframework.stereotype.Service
 @Service
 class ExpertSystem {
 
-    fun getAgriculturalAnswer(message : MessageDTO): String {
+    fun getAgriculturalAnswer(message : String): String {
         return ""
     }
 }
 //API KEY for perenual - plant info (base) + pests/disease
 //sk-PRTt65e740fc544e74470
 
-//https://home.openweathermap.org/ -> for weather
 
 //https://developer-test.openepi.io/data-catalog/ <- geocoding + soil types
 

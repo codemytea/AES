@@ -1,6 +1,7 @@
 package com.aes.usercharacteristicsservice.Tagging
 
 import com.aes.common.Entities.Message
+import com.aes.common.Models.TaggingMessage
 import com.aes.common.Queue.LocalQueueService
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
@@ -28,7 +29,7 @@ class MessageTaggingQueueReadService(
         var hasMore = true
         val asyncOps = mutableListOf<Deferred<Unit>>()
         while (hasMore) {
-            val result = localQueueService.withQueueItemAtPositionAsync<Message>("message_tag_queue", count) {
+            val result = localQueueService.withQueueItemAtPositionAsync<TaggingMessage>("message_tag_queue", count) {
                 messageTaggingService.tagMessage(this)
                 true
             }

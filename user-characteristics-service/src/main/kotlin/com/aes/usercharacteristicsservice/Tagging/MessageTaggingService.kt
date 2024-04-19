@@ -4,6 +4,7 @@ import com.aes.common.Entities.KnowledgeArea
 import com.aes.common.Entities.KnowledgeAreaId
 import com.aes.common.Entities.Message
 import com.aes.common.Entities.MessageTopics
+import com.aes.common.Models.TaggingMessage
 import com.aes.common.Repositories.KnowledgeAreaRepository
 import com.aes.common.Repositories.MessageRepository
 import com.aes.common.Repositories.MessageTopicsRepository
@@ -22,15 +23,15 @@ class MessageTaggingService(
     val messageRepository: MessageRepository
 ) : Logging {
     @Transactional
-    fun tagMessage(sms: Message) {
-        val crop = knowledgeEvaluator.getCropOfMessage(sms.message)
-        val topic = knowledgeEvaluator.getTopicOfMessage(sms.message)
+    fun tagMessage(messageToTag: TaggingMessage) {
+        val crop = knowledgeEvaluator.getCropOfMessage(messageToTag.message)
+        val topic = knowledgeEvaluator.getTopicOfMessage(messageToTag.message)
 
 
         if (crop != null && topic != null) {
             val area = knowledgeRepository.findByIdOrNull(KnowledgeAreaId(topic, crop))
                 ?: knowledgeRepository.save(KnowledgeArea(topic, crop, LocalDateTime.now()))
-            val message = messageRepository.findByIdOrNull(sms.id)!!
+            val message = messageRepository.findMessageByUser_IdAndTypeAndCreatedAtMin(messageToTag.userId)!!
             val topics = messageTopicsRepository.save(MessageTopics(area, message))
             if (!message.messageTopics.any { it.sms.id == message.id && it.knowledgeArea.topic == topic && it.knowledgeArea.cropName == crop }) {
                 message.messageTopics.add(topics)
