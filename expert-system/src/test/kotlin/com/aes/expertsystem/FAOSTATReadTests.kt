@@ -1,12 +1,12 @@
-package com.aes.common
+package com.aes.expertsystem
 
-import com.aes.common.Selling.services.CropPriceParsingService
+import com.aes.expertsystem.Selling.services.CropPriceParsingService
 import org.junit.jupiter.api.Test
 import java.io.File
 
 class FAOSTATReadTests {
     @Test
-    fun canReadFAOSTATData(){
+    fun canReadFAOSTATData() {
         val cropPriceParsingService = CropPriceParsingService()
         val fromFileName = "FAOSTATSellingData.csv"
         val fromFile = File(this::class.java.classLoader.getResource(fromFileName)!!.toURI())
@@ -17,7 +17,7 @@ class FAOSTATReadTests {
     }
 
     @Test
-    fun canReadCompressedFAOSTATData(){
+    fun canReadCompressedFAOSTATData() {
         val cropPriceParsingService = CropPriceParsingService()
         val fromFileName = "FAOSTATSellingData.csv"
         val fromFile = File(this::class.java.classLoader.getResource(fromFileName)!!.toURI())

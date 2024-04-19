@@ -12,9 +12,9 @@ class WeatherAPITests {
     val weatherService: WeatherService = WeatherService(GeocodingService())
 
     @Test
-    fun weatherFetchesCorrectly(){
+    fun weatherFetchesCorrectly() {
         val result = weatherService.getWeatherForDateAtLocation("London", "United States", LocalDateTime.now())
-        println(jacksonObjectMapper().apply{
+        println(jacksonObjectMapper().apply {
             registerModule(JavaTimeModule())
         }.writerWithDefaultPrettyPrinter().writeValueAsString(result))
     }

@@ -1,7 +1,7 @@
-package com.aes.common
+package com.aes.expertsystem
 
-import com.aes.common.Ecocrop.Services.FullPageParseService
-import com.aes.common.Ecocrop.Services.SummaryPageParseService
+import com.aes.expertsystem.Ecocrop.Services.FullPageParseService
+import com.aes.expertsystem.Ecocrop.Services.SummaryPageParseService
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -16,7 +16,7 @@ class EcocropUseTest {
 
 
     @Test
-    fun getAndStoreDataWorks(){
+    fun getAndStoreDataWorks() {
         val summaryService = SummaryPageParseService()
         val lettersSingle = letters.map { it.toString() }
         val ids = lettersSingle.flatMap {
@@ -29,9 +29,9 @@ class EcocropUseTest {
         var complete = 0
         val results = runBlocking(Dispatchers.IO) {
             println("START OF REQUESTS")
-            ids.map {id->
+            ids.map { id ->
                 async {
-                    fullService.getData(id).also{
+                    fullService.getData(id).also {
                         complete++
                         println("Completed $complete out of ${ids.size} ($id)")
                     }
