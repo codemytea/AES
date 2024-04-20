@@ -27,7 +27,7 @@ def extractInformation(locationCity, locationCountry, name, smallholdingSize, ma
     }
 
 
-client = OpenAI()
+client = OpenAI(api_key=kotlinInterop.getEnv("OPENAI_API_KEY"))
 
 
 def getNewInformation(userMessage, userDetails):

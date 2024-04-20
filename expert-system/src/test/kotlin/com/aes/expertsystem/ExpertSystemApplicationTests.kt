@@ -1,5 +1,6 @@
 package com.aes.expertsystem
 
+import com.aes.common.Entities.User
 import com.aes.common.Entities.UserSmallholding
 import com.aes.common.Enums.Crop
 import com.aes.common.Enums.SoilType
@@ -165,7 +166,7 @@ class ExpertSystemApplicationTests : Logging {
     fun seedRateTest() {
         val a = srs.seedRateForUserSmallholding(
             UserSmallholding(
-                userId = UUID.randomUUID(),
+                user = User(),
                 location_city = "Coventry",
                 location_country = "United Kingdom",
                 smallholdingSize = 1.0f,

@@ -4,6 +4,7 @@ import com.aes.common.Entities.Message
 import com.aes.common.Entities.User
 import com.aes.common.Enums.LanguageCode
 import com.aes.common.Enums.MessageType
+import com.aes.common.Models.MessageQueueItem
 import com.aes.common.Queue.LocalQueueService
 import com.aes.common.Repositories.MessageRepository
 import com.aes.common.Repositories.UserRepository
@@ -25,7 +26,8 @@ class RecieveSmsService(
 ) : Logging {
 
     fun sendToMessageHandler(sms: Message) {
-        localQueueService.writeItemToQueue("message_handler_queue", sms)
+        val messageQueueItem = MessageQueueItem(sms.id)
+        localQueueService.writeItemToQueue("message_handler_queue", messageQueueItem)
     }
 
     /**

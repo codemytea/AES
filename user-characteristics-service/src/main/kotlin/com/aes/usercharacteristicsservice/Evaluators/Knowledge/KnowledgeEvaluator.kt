@@ -70,15 +70,14 @@ class KnowledgeEvaluator(
                 if (!user.knowledgeAreas.any { ka ->
                         ka.topic == it.first.topic && ka.crop == it.first.cropName
                     }) {
-                    val ka = userKnowledgeRepository.save(
+                    userKnowledgeRepository.save(
                         UserKnowledge(
-                            user.id,
+                            user,
                             scaledKnowledge * decayFactor,
                             it.first.topic,
                             it.first.cropName
                         )
                     )
-                    user.knowledgeAreas.add(ka)
                 }
             }
         }

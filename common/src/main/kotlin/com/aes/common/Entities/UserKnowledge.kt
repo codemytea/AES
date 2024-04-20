@@ -14,7 +14,8 @@ class UserKnowledge(
      * The user
      * */
     @Id
-    val userId: UUID = UUID.randomUUID(),
+    @ManyToOne
+    val user: User? = null,
 
     /**
      * The users knowledge about this are (0-1)
@@ -39,7 +40,7 @@ class UserKnowledge(
 )
 
 data class UserKnowledgeId(
-    val userId: UUID? = UUID.randomUUID(),
+    val user: User? = null,
     val topic: Topic = Topic.GROWING,
     val crop: Crop = Crop.RICE,
 ) : Serializable

@@ -1,11 +1,10 @@
 package com.aes.usercharacteristicsservice.Tagging
 
 import com.aes.common.Entities.Message
-import com.aes.common.Models.MessageDTO
+import com.aes.common.Models.MessageQueueItem
 import com.aes.common.Queue.LocalQueueService
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
-import com.aes.messagehandler.Controller.MessagePipeline
 import com.aes.messagehandler.Services.MessageHandlerService
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.awaitAll
@@ -33,7 +32,7 @@ class MessageTaggingQueueReadService(
         var hasMore = true
         val asyncOps = mutableListOf<Deferred<Unit>>()
         while (hasMore) {
-            val result = localQueueService.withQueueItemAtPositionAsync<Message>("message_handler_queue", count) {
+            val result = localQueueService.withQueueItemAtPositionAsync<MessageQueueItem>("message_handler_queue", count) {
                 messageHandlerService.handleRequest(this)
                 true
             }

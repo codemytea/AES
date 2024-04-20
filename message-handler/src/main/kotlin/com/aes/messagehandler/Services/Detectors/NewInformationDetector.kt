@@ -23,7 +23,8 @@ class NewInformationDetector(
 
     override fun detectMessagePartType(remainingMessage: String, userID: UUID): List<String>? {
         //use openai?
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
+        return null
     }
 
     /**

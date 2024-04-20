@@ -68,7 +68,7 @@ class User(
      * A users knowledge areas
      * */
     @OneToMany
-    @JoinColumn(name = "userId", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     val knowledgeAreas: MutableList<UserKnowledge> = mutableListOf(),
 
     /**
@@ -79,7 +79,10 @@ class User(
         name = "user_knowledge_last_interaction",
         joinColumns = [JoinColumn(name = "user_id")]
     )
-    @MapKeyJoinColumn(name = "knowledge_area_id")
+    @MapKeyJoinColumns(
+        MapKeyJoinColumn(name="knowledge_area_crop_name"),
+        MapKeyJoinColumn(name="knowledge_area_topic")
+    )
     @Column(name = "last_interaction_time")
     val lastInteractionTime: MutableMap<KnowledgeArea, LocalDateTime> = mutableMapOf(),
 
@@ -87,7 +90,7 @@ class User(
      * The user may have multiple smallholdings they want to ask questions about
      * */
     @OneToMany
-    @JoinColumn(name = "userId", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     val userSmallholdingInfo: MutableList<UserSmallholding> = mutableListOf()
 ){
 

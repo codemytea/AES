@@ -30,7 +30,7 @@ class MessageTaggingService(
         if (crop != null && topic != null) {
             val area = knowledgeRepository.findByIdOrNull(KnowledgeAreaId(topic, crop))
                 ?: knowledgeRepository.save(KnowledgeArea(topic, crop, LocalDateTime.now()))
-            val message = messageRepository.findMessageByUser_IdAndTypeAndCreatedAtMin(messageToTag.userId)!!
+            val message = messageRepository.findFirstByUserIdAndTypeOrderByCreatedAtDesc(messageToTag.userId)!!
             val topics = messageTopicsRepository.save(MessageTopics(area, message))
             if (!message.messageTopics.any { it.sms.id == message.id && it.knowledgeArea.topic == topic && it.knowledgeArea.cropName == crop }) {
                 message.messageTopics.add(topics)

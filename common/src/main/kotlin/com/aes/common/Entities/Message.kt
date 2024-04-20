@@ -2,6 +2,7 @@ package com.aes.common.Entities
 
 import com.aes.common.Enums.MessageStatus
 import com.aes.common.Enums.MessageType
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -63,6 +64,7 @@ class Message(
      * The calculated message topics
      * */
     @OneToMany
+    @JsonIgnore
     val messageTopics: MutableSet<MessageTopics> = mutableSetOf(),
 
     /**

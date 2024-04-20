@@ -21,7 +21,7 @@ class CropGroupEntry(
 ) {
 
     @Id
-    val id: UUID = UUID.randomUUID()
+    val id: String = UUID.randomUUID().toString()
 
     override fun equals(other: Any?): Boolean {
         return (other as? CropGroupEntry)?.name == name

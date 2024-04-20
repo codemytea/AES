@@ -1,7 +1,7 @@
 import kotlinInterop
 from openai import OpenAI
 
-client = OpenAI()
+client = OpenAI(api_key=kotlinInterop.getEnv("OPENAI_API_KEY"))
 
 prompt = """ 
     You are a bot that re-writes suggestions (so users are more susceptible to them) by mirroring their characteristics.

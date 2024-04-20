@@ -2,7 +2,7 @@ from openai import OpenAI
 
 import kotlinInterop
 
-client = OpenAI()
+client = OpenAI(api_key=kotlinInterop.getEnv("OPENAI_API_KEY"))
 
 
 def generalChatbot(userMessage):

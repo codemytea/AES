@@ -12,7 +12,7 @@ class UserDetails(str, Enum):
     MAIN_CROP = "MAIN_CROP"
 
 
-client = OpenAI()
+client = OpenAI(api_key=kotlinInterop.getEnv("OPENAI_API_KEY"))
 
 
 def collect(userDetails):

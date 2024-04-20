@@ -8,7 +8,7 @@ def extractQuestion(questions):
     return (questions)
 
 
-client = OpenAI()
+client = OpenAI(api_key=kotlinInterop.getEnv("OPENAI_API_KEY"))
 
 
 def getQuestions(userMessage):
@@ -79,5 +79,5 @@ def getQuestions(userMessage):
 
 
 
-kotlinInterop.registerFunction('firstLine', getQuestions)
+kotlinInterop.registerFunction('getQuestions', getQuestions)
 kotlinInterop.execute()

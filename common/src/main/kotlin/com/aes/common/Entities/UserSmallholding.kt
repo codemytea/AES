@@ -4,7 +4,7 @@ import com.aes.common.Enums.Crop
 import com.aes.common.Enums.SoilType
 import jakarta.persistence.*
 import java.io.Serializable
-import java.util.*
+import java.util.UUID
 
 
 data class UserSmallholdingPoint(
@@ -15,11 +15,14 @@ data class UserSmallholdingPoint(
 @Entity
 class UserSmallholding(
 
+    @Id
+    val id: UUID = UUID.randomUUID(),
+
     /**
      * The user
      * */
-    @Id
-    val userId: UUID = UUID.randomUUID(),
+    @ManyToOne
+    val user: User? = null,
 
     /**
      * The city the smallholding is in

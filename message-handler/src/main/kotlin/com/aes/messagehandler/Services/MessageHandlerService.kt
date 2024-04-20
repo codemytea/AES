@@ -5,9 +5,12 @@ import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
 import com.aes.messagecompiler.Controller.CompilerPipeline
 import com.aes.common.Enums.HandlableMessageType
+import com.aes.common.Models.MessageQueueItem
+import com.aes.common.Repositories.MessageRepository
 import com.aes.messagehandler.MessageHandler
 import com.aes.messagehandler.Utilities.ifNotNullOrEmpty
 import com.aes.messagehandler.Utilities.replaceList
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 class MessageHandlerService(
     private val messageHandler: List<MessageHandler>,
     private val compilerPipeline: CompilerPipeline,
+    private val messageRepository: MessageRepository
 ) : Logging {
 
 
@@ -25,7 +29,8 @@ class MessageHandlerService(
      * @param request - the incoming message
      * */
     @Transactional
-    fun handleRequest(request: Message) {
+    fun handleRequest(message: MessageQueueItem) {
+        val request = messageRepository.findByIdOrNull(message.messageId)!!
         logger().info("Handling message handler request for message with id ${request.id}")
 
         var prompt = request.message

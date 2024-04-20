@@ -10,6 +10,15 @@ import kotlin.reflect.full.findAnnotations
 
 abstract class PythonClass {
 
+
+
+    companion object{
+        private const val OPENAI_API_KEY = "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"
+        val env
+        = mapOf("OPENAI_API_KEY" to OPENAI_API_KEY)
+            .toList().map { "${it.first}=${it.second}" }.joinToString("&")
+    }
+
     /**
      * Executes a given Python script
      *
@@ -65,6 +74,12 @@ abstract class PythonClass {
         mapper.writeValue(file, wrapper)
     }
 
+    fun cleanUp(uuid: String){
+        File(getPathForFile("$uuid.out.txt")).delete()
+        File(getPathForFile("$uuid.args.json")).delete()
+        File(getPathForFile("$uuid.result.json")).delete()
+    }
+
 
     /**
      * Reads the result of the Python execution
@@ -103,27 +118,39 @@ abstract class PythonClass {
                     getPythonProgram(scriptName),
                     programRunUID,
                     functionName,
-                    getPathForFile("")
+                    getPathForFile(""),
+                    env
                 )
             )
             .redirectOutput(outputFile)
             .redirectError(outputFile)
             .start()
+        var currentLines = 0
         val job = CoroutineScope(Dispatchers.IO).async {
-            var currentLines = 0
             while (true) {
-                delay(100)
                 val lines = outputFile.readLines()
                 for (i in currentLines until lines.size) {
                     println(lines[i])
                 }
                 currentLines = lines.size
+                delay(100)
             }
         }
         val result = process.onExit().join() // unused variable prevents warning being thrown in certain IDEs due to async process
         runBlocking {
             job.cancelAndJoin()
         }
-        return readResultFromFile<T>("$programRunUID.result.json")
+        val lines = outputFile.readLines()
+        for (i in currentLines until lines.size) {
+            println(lines[i])
+        }
+
+        return try{
+            readResultFromFile<T>("$programRunUID.result.json")
+        } catch(e: Throwable){
+            throw e
+        } finally {
+            cleanUp(programRunUID)
+        }
     }
 }
