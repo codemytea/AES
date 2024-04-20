@@ -16,4 +16,12 @@ class ExpertSystem {
 
 //https://developer-test.openepi.io/data-catalog/ <- geocoding + soil types
 
-//https://microdata.worldbank.org/index.php/catalog/4483/data-api -> market prices
+//TODO
+//soil
+//world zones
+//pests & diseases?
+//commenting
+
+
+//RAG
+//NER stuff - Order

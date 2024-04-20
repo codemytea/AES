@@ -120,12 +120,20 @@ class SeedPriceService(
 
     }
 
-    fun getSeedPriceForCropInCountryOnDate(crop: String, country: String, date: LocalDate): Pair<Float, PriceUnit> {
+    fun getSeedPriceForCropInCountryOnDate(
+        crop: String,
+        country: String,
+        date: LocalDate
+    ): Pair<Float, PriceUnit> {
         val pppUK = pppService.getPPPForCountryAtYear("United Kingdom", date.year)
         val pppCountry = pppService.getPPPForCountryAtYear(country, date.year)
         val pppProp = (pppCountry / pppUK)
+
         val (cropPrice, priceUnit) = getSeedPriceForCrop(crop)?.maxBulk()
-            ?: (cropSellingService.getExpectedPriceForDateInCountry(crop, date, country) / 1000f to PriceUnit.KG)
+            ?: (cropSellingService
+                    .getExpectedPriceForDateInCountry(crop, date, country)
+                        / 1000f to PriceUnit.KG)
+
         val standardBulkDecrease = 0.8f
         return cropPrice * standardBulkDecrease * pppProp to priceUnit
     }

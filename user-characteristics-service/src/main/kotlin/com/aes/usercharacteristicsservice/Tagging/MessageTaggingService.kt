@@ -27,7 +27,6 @@ class MessageTaggingService(
         val crop = knowledgeEvaluator.getCropOfMessage(messageToTag.message)
         val topic = knowledgeEvaluator.getTopicOfMessage(messageToTag.message)
 
-
         if (crop != null && topic != null) {
             val area = knowledgeRepository.findByIdOrNull(KnowledgeAreaId(topic, crop))
                 ?: knowledgeRepository.save(KnowledgeArea(topic, crop, LocalDateTime.now()))

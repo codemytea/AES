@@ -65,6 +65,9 @@ class Message(
     @OneToMany
     val messageTopics: MutableSet<MessageTopics> = mutableSetOf(),
 
+    /**
+     * If a message fails to be sent, it may need to be resent. This is the number of times the message has been attempted to be resent.
+     * */
     @Column
     var retried: Int = 0
 

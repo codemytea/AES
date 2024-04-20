@@ -101,7 +101,7 @@ class LiteracyEvaluator(
      * Calculates the number of syllables in a word
      *
      * @param word - the word to perform the calculation on
-     * @return the number of syllables in teh word
+     * @return the number of syllables in the word
      * */
     private fun countSyllables(word: String): Int {
         var syllableCount = 0

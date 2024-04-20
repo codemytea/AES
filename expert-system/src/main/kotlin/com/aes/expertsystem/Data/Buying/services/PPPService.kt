@@ -8,7 +8,8 @@ import java.io.File
 class PPPService {
 
     /**
-     * In memory map for the purchasing power parity (reduces query time and not very big so doesn't need to be stored in DB)
+     * In memory map for the purchasing power parity (reduces query time and not very big so
+     * doesn't need to be stored in DB)
      * Map<Pair<CountryName, TheYearConcerned>, ThePPP>
      *     For all years (about 20)
      * */
