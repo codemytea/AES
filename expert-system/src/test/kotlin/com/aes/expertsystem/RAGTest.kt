@@ -3,13 +3,9 @@ package com.aes.expertsystem
 import com.aes.expertsystem.Python.ExpertSystem
 import com.aes.expertsystem.Services.ExpertSystemService
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ActiveProfiles
 
 
 class RAGTest {
-
 
     val expertSystemService: ExpertSystemService = ExpertSystemService(
         ExpertSystem()
