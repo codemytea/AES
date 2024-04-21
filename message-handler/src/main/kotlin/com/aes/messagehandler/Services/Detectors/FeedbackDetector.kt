@@ -25,7 +25,6 @@ class FeedbackDetector(
     }
 
     override fun generateAnswer(prompts : List<String>, userID: UUID): List<String>? {
-        //TODO("Not yet implemented")
         userRepository.findUserById(userID)?.let { user ->
             prompts.forEach {
                 userFeedbackRepository.save(
