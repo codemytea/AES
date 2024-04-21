@@ -1,6 +1,5 @@
 package com.aes.expertsystem.Python
 
-import com.aes.common.Enums.UserDetails
 import com.aes.kotlinpythoninterop.PythonClass
 import com.aes.kotlinpythoninterop.PythonFunction
 import org.springframework.stereotype.Service
