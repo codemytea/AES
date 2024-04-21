@@ -26,13 +26,11 @@ class NewInformationDetector(
             newInformationService.saveNewInformation(remainingMessage, userID, it)
             return informationCollection.removeNewInformation(remainingMessage, it)
         }
-
         return null
     }
 
     override fun generateAnswer(prompts: List<String>, userID: UUID): List<String>? {
         val userChoice = userRepository.findUserById(userID)?.stopCollectingInformation
-
         var callToAction: String? = null
 
         //get remaining details to determine
@@ -45,7 +43,6 @@ class NewInformationDetector(
                 logger().info("User with id $userID has asked for stop in info collection")
             }
         }
-
         return callToAction?.let { listOf(it) }
     }
 
