@@ -2,7 +2,7 @@ package com.aes.messagehandler.Services.Detectors
 
 import com.aes.common.logging.Logging
 import com.aes.common.Enums.HandlableMessageType
-import com.aes.messagehandler.MessageHandler
+import com.aes.messagehandler.Interfaces.MessageHandler
 import com.aes.messagehandler.Python.GeneralChatbot
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Service

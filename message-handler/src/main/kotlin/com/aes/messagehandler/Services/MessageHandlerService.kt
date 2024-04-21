@@ -6,7 +6,7 @@ import com.aes.common.Repositories.MessageRepository
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
 import com.aes.messagecompiler.Controller.CompilerPipeline
-import com.aes.messagehandler.MessageHandler
+import com.aes.messagehandler.Interfaces.MessageHandler
 import com.aes.messagehandler.Utilities.ifNotNullOrEmpty
 import com.aes.messagehandler.Utilities.replaceList
 import org.springframework.data.repository.findByIdOrNull
@@ -25,7 +25,7 @@ class MessageHandlerService(
      * Sends a List of messages that need to be post-processed (tailored to user characteristics + limited to 255 chars)
      * ond what type there are. Leverages spring boot @Order to make it easily extensible.
      *
-     * @param request - the incoming message
+     * @param message - the incoming message
      * */
     @Transactional
     fun handleRequest(message: MessageQueueItem) {
@@ -49,3 +49,11 @@ class MessageHandlerService(
     }
 }
 
+
+//TODO
+//pests & diseases?
+//commenting
+
+
+//RAG
+//NER stuff - Order

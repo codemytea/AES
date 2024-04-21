@@ -4,6 +4,7 @@ import com.aes.usercharacteristicsservice.Evaluators.Age.AgeEvaluator
 import com.aes.usercharacteristicsservice.Evaluators.Gender.GenderEvaluator
 import com.aes.usercharacteristicsservice.Evaluators.Knowledge.KnowledgeEvaluator
 import com.aes.usercharacteristicsservice.Evaluators.Literacy.LiteracyEvaluator
+import com.aes.usercharacteristicsservice.Python.AttributeEstimator
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -33,7 +34,7 @@ class UserCharacteristicsServiceApplicationTests {
 
     @Test
     fun pythonInterop() {
-        //val result = AttributeEstimator().estimateGender(listOf("Hello"))
+        val result = AttributeEstimator().estimateGender(listOf("Hello"))
         //assert(result == Gender.MALE)
         //val result2 = AttributeEstimator().estimateAge(listOf("Hello"))
         //assert(result2 == Age.ADULT)

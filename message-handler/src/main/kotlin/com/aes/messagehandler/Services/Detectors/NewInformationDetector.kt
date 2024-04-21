@@ -4,7 +4,7 @@ import com.aes.common.Repositories.UserRepository
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
 import com.aes.common.Enums.HandlableMessageType
-import com.aes.messagehandler.MessageHandler
+import com.aes.messagehandler.Interfaces.MessageHandler
 import com.aes.messagehandler.Python.InformationCollection
 import com.aes.messagehandler.Services.NewInformationService
 import org.springframework.core.annotation.Order
@@ -22,22 +22,15 @@ class NewInformationDetector(
     override val messagePartType: HandlableMessageType = HandlableMessageType.INFORMATION
 
     override fun detectMessagePartType(remainingMessage: String, userID: UUID): List<String>? {
-        //use openai?
-        //TODO("Not yet implemented")
+        newInformationService.getDetailsToDetermine(userID)?.let {
+            newInformationService.saveNewInformation(remainingMessage, userID, it)
+            return listOf(informationCollection.removeNewInformation(remainingMessage, it))
+        }
+
         return null
     }
 
-    /**
-     * Get any new information provided in user message, save to DB, and, if user hasn't asked to stop information
-     * collection, compile message asking for any remaining information.
-     *
-     * @param message - the message without agricultural questions in it
-     * @return Pair("call to action collection message asking for more information", "leftover original message")
-     * */
     override fun generateAnswer(prompts: List<String>, userID: UUID): List<String>? {
-        val detailsToDetermine = newInformationService.getDetailsToDetermine(userID)
-        newInformationService.saveNewInformation(prompts, userID, detailsToDetermine)
-
         val userChoice = userRepository.findUserById(userID)?.stopCollectingInformation
 
         var callToAction: String? = null

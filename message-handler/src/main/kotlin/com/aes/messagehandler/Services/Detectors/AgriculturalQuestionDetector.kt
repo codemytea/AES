@@ -1,9 +1,8 @@
 package com.aes.messagehandler.Services.Detectors
 
 import com.aes.common.Enums.HandlableMessageType
-import com.aes.common.Queue.LocalQueueService
 import com.aes.expertsystem.Services.ExpertSystemService
-import com.aes.messagehandler.MessageHandler
+import com.aes.messagehandler.Interfaces.MessageHandler
 import com.aes.messagehandler.Python.AgriculturalQuestionExtraction
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Service
@@ -13,7 +12,6 @@ import java.util.*
 @Order(1)
 class AgriculturalQuestionDetector(
     private val agriculturalQuestionExtraction: AgriculturalQuestionExtraction,
-    private val localQueueService: LocalQueueService,
     private val expertSystemService: ExpertSystemService
 ) : MessageHandler {
 

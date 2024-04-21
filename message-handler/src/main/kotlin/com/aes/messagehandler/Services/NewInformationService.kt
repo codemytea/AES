@@ -77,10 +77,10 @@ class NewInformationService(
      * @return a pair of new information collected about the user, and the message without the bits that give that new information
      * */
     @Transactional
-    fun saveNewInformation(messages: List<String>, userID: UUID, detailsToDetermine: List<UserDetails>?) {
+    fun saveNewInformation(message: String, userID: UUID, detailsToDetermine: List<UserDetails>?) {
         detailsToDetermine?.let { it ->
             //use NER to scrape any NEW information given by the received message
-            val newInfo = informationCollection.getNewInformation(messages.joinToString(" "), it)
+            val newInfo = informationCollection.getNewInformation(message, it)
             val newInfoCollected = mutableListOf<UserDetails>()
 
             val user = userRepository.findUserById(userID)
@@ -89,25 +89,24 @@ class NewInformationService(
 
             //save info
             newInfo.forEach { (userDetail, info) ->
-                val ud = userDetail.toUserDetails()
-                if (info != null && ud != null) {
-                    if (ud == UserDetails.NAME) {
-                        newInfoCollected.add(UserDetails.NAME)
-                        user?.name = info as String
-                    } else if (ud == UserDetails.MAIN_CROP) {
-                        newInfoCollected.add(UserDetails.MAIN_CROP)
-                        userSmallholding?.cashCrop = (info as String).toCrop()
-                    } else if (ud == UserDetails.LOCATION_CITY) {
-                        newInfoCollected.add(UserDetails.LOCATION_CITY)
-                        userSmallholding?.location_city = info as String
-                    } else if (ud == UserDetails.LOCATION_COUNTRY) {
-                        newInfoCollected.add(UserDetails.LOCATION_COUNTRY)
-                        userSmallholding?.location_country = info as String
-                    } else if (ud == UserDetails.SMALLHOLDING_SIZE) {
-                        newInfoCollected.add(UserDetails.SMALLHOLDING_SIZE)
-                        userSmallholding?.smallholdingSize = (info as String).toFloat()
-                    }
+                val ud = userDetail
+                if (ud == UserDetails.NAME) {
+                    newInfoCollected.add(UserDetails.NAME)
+                    user?.name = info
+                } else if (ud == UserDetails.MAIN_CROP) {
+                    newInfoCollected.add(UserDetails.MAIN_CROP)
+                    userSmallholding?.cashCrop = info.toCrop()
+                } else if (ud == UserDetails.LOCATION_CITY) {
+                    newInfoCollected.add(UserDetails.LOCATION_CITY)
+                    userSmallholding?.location_city = info
+                } else if (ud == UserDetails.LOCATION_COUNTRY) {
+                    newInfoCollected.add(UserDetails.LOCATION_COUNTRY)
+                    userSmallholding?.location_country = info
+                } else if (ud == UserDetails.SMALLHOLDING_SIZE) {
+                    newInfoCollected.add(UserDetails.SMALLHOLDING_SIZE)
+                    userSmallholding?.smallholdingSize = info.toFloat()
                 }
+
             }
 
             user?.let {

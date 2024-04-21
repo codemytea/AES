@@ -1,4 +1,4 @@
-package com.aes.messagehandler
+package com.aes.messagehandler.Interfaces
 
 import com.aes.common.Enums.HandlableMessageType
 import java.util.*

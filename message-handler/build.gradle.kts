@@ -17,6 +17,10 @@ java {
 
 repositories {
     mavenCentral()
+    maven {
+        name = "clojars.org"
+        url = uri("https://repo.clojars.org")
+    }
 }
 
 dependencies {

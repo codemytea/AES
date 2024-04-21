@@ -3,14 +3,10 @@ package com.aes.usercharacteristicsservice.Evaluators.Knowledge
 import com.aes.common.Entities.User
 import com.aes.common.Entities.UserKnowledge
 import com.aes.common.Enums.Age
-import com.aes.common.Enums.Crop
-import com.aes.common.Enums.Topic
 import com.aes.common.Repositories.MessageRepository
 import com.aes.common.Repositories.UserKnowledgeRepository
 import com.aes.common.Repositories.UserRepository
 import com.aes.common.logging.Logging
-import com.aes.common.logging.logger
-import com.aes.usercharacteristicsservice.Python.KnowledgeClassifiers
 import com.aes.usercharacteristicsservice.Utilities.Utils
 import jakarta.transaction.Transactional
 import org.springframework.context.annotation.Configuration
@@ -19,14 +15,12 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
-import kotlin.math.E
 import kotlin.math.exp
 
 @Service
 @Configuration
 @EnableScheduling
 class KnowledgeEvaluator(
-    private val knowledgeClassifier: KnowledgeClassifiers,
     private val messageRepository: MessageRepository,
     private val userKnowledgeRepository: UserKnowledgeRepository,
     private val userRepository: UserRepository,
@@ -90,7 +84,7 @@ class KnowledgeEvaluator(
         val halfLife = calculateHalfLife(user.age ?: Age.ADULT, user.literacy ?: 50.0f)
 
         // Apply the Ebbinghaus forgetting curve formula
-        return exp( -daysSinceLastInteraction / halfLife)
+        return exp(-daysSinceLastInteraction / halfLife)
     }
 
 

@@ -7,22 +7,23 @@ import org.springframework.stereotype.Service
 
 @Service
 class InformationCollection : PythonClass() {
-//    @PythonFunction("collect", "InformationCollectionNER.py")
-//    fun collect(userDetails : List<UserDetails>, message: String): Map<UserDetails, String> {
-//        return execute(::collect, userDetails, message)
-//    }
 
     /**
      * Use NER to collect information about a user
      * */
     @PythonFunction("getNewInformation", "InformationCollectionNER.py")
-    fun getNewInformation(userMessage: String, userDetails: List<UserDetails>): Map<String, Any?> {
-        return execute(::getNewInformation, userMessage, userDetails)
+    fun getNewInformation(userMessage: String, userDetails: List<UserDetails>): Map<UserDetails, String> {
+        return execute(::getNewInformation, userDetails, userMessage)
     }
 
     @PythonFunction("collect", "InformationCollector.py")
     fun collect(userDetails: List<UserDetails>): String? {
         return execute(::collect, userDetails)
+    }
+
+    @PythonFunction("removeNewInformation", "InformationRetriever.py")
+    fun removeNewInformation(userMessage: String, userDetails: List<UserDetails>): String {
+        return execute(::removeNewInformation, userMessage, userDetails)
     }
 }
 
