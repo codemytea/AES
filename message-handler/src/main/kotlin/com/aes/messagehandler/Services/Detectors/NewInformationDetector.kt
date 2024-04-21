@@ -24,7 +24,7 @@ class NewInformationDetector(
     override fun extractPartAndReturnRemaining(remainingMessage: String, userID: UUID): List<String>? {
         newInformationService.getDetailsToDetermine(userID)?.let {
             newInformationService.saveNewInformation(remainingMessage, userID, it)
-            return listOf(informationCollection.removeNewInformation(remainingMessage, it))
+            return informationCollection.removeNewInformation(remainingMessage, it)
         }
 
         return null

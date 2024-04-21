@@ -13,9 +13,9 @@ class UserDetails(str, Enum):
     MAIN_CROP = "MAIN_CROP"
 
 
-def cleanMessage(messageWithoutInformation):
+def retrievedSentences(context):
     """cleaned message"""
-    return messageWithoutInformation
+    return context
 
 
 client = OpenAI(api_key=kotlinInterop.getEnv("OPENAI_API_KEY"))
@@ -29,8 +29,11 @@ def removeNewInformation(userMessage, userDetails):
                 "role": "system",
                 "content": f"""
                             The user input contains the following information {userDetails}. 
-                            Remove parts of the user input which gave information, and pass the cleaned input as the messageWithoutInformation parameter.
-                            
+                            Get the parts of the user input which gave information, and pass that list to the 'context' parameter, separately as a list. Else, just pass an empty list.
+                           
+                           
+                           Examples:
+                           1. "Hello. My name is Jim. Please stop sending me notifications. I think this system is really terrible. But I like that it's intuitive to use. My smallholding is 5 acres" -> ["My name is Jim", "My smallholding is 5 acres"]
                             """
             },
             {
@@ -42,25 +45,27 @@ def removeNewInformation(userMessage, userDetails):
             {
                 "type": "function",
                 "function": {
-                    "name": "cleanMessage",
-                    "description": "returns the cleaned message",
+                    "name": "retrievedSentences",
+                    "description": "Get the parts of the user input which gave information",
                     "parameters": {
                         "type": "object",
                         "properties": {
-
-                            "messageWithoutInformation": {
-                                "type": "string",
-                                "description": "Remove parts of the user input which gave information and pass the cleaned input as the messageWithoutInformation parameter"
+                            "context": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "Get the parts of the user input which gave information, and pass that list to the 'context' parameter. If the user has provided one piece of information, pass an array with one value - that info."
                             },
                         },
-                        "required": ["messageWithoutInformation"]
+                        "required": ["context"]
                     }
                 }
             }
         ],
         tool_choice={
             "type": "function",
-            "function": {"name": "cleanMessage"},
+            "function": {"name": "retrievedSentences"},
         },
         temperature=0.1
     )
@@ -68,7 +73,7 @@ def removeNewInformation(userMessage, userDetails):
     tool_calls = response.choices[0].message.tool_calls
     if tool_calls:
         available_functions = {
-            "cleanMessage": cleanMessage,
+            "retrievedSentences": retrievedSentences,
         }
         for tool_call in tool_calls:
             function_name = tool_call.function.name
@@ -76,7 +81,7 @@ def removeNewInformation(userMessage, userDetails):
             function_args = json.loads(tool_call.function.arguments)
 
             function_response = function_to_call(
-                messageWithoutInformation=function_args.get("messageWithoutInformation"),
+                context=function_args.get("context"),
             )
 
             return function_response

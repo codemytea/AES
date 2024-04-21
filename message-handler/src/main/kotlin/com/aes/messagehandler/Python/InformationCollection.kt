@@ -22,7 +22,7 @@ class InformationCollection : PythonClass() {
     }
 
     @PythonFunction("removeNewInformation", "InformationRetriever.py")
-    fun removeNewInformation(userMessage: String, userDetails: List<UserDetails>): String {
+    fun removeNewInformation(userMessage: String, userDetails: List<UserDetails>): List<String> {
         return execute(::removeNewInformation, userMessage, userDetails)
     }
 }
