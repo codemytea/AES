@@ -61,7 +61,7 @@ class CompilerPipeline(
         logger().info("Improving suggestibility of message")
         initialResponse[HandlableMessageType.AGRICULTURAL_QUESTION]?.let{
             it.map {
-                var knowledgeLevel = 0.0f
+                var knowledgeLevel = 0.0
                 messageTaggingService.tagMessage(it, user.id)?.let {
                     user.knowledgeAreas.find { uka ->  (uka.crop == it.cropName) && (uka.topic == it.topic) }?.knowledgeLevel?.let{
                         knowledgeLevel =  it

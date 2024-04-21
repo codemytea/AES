@@ -14,7 +14,7 @@ class Compiler : PythonClass() {
     }
 
     @PythonFunction("userKnowledgeCompiling", "UserKnowledgeApplied.py")
-    fun userKnowledgeCompiling(userMessage: String, knowledgeLevel: Float): String? {
+    fun userKnowledgeCompiling(userMessage: String, knowledgeLevel: Double): String? {
         return execute(::userKnowledgeCompiling, userMessage, knowledgeLevel)
     }
 
