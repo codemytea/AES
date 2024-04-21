@@ -7,7 +7,7 @@ interface MessageHandler {
 
     val messagePartType: HandlableMessageType
 
-    fun detectMessagePartType(remainingMessage: String, userID: UUID): List<String>?
+    fun extractPartAndReturnRemaining(remainingMessage: String, userID: UUID): List<String>?
 
     fun generateAnswer(prompts : List<String>, userID: UUID): List<String>?
 }

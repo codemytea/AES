@@ -21,7 +21,7 @@ class NewInformationDetector(
 
     override val messagePartType: HandlableMessageType = HandlableMessageType.INFORMATION
 
-    override fun detectMessagePartType(remainingMessage: String, userID: UUID): List<String>? {
+    override fun extractPartAndReturnRemaining(remainingMessage: String, userID: UUID): List<String>? {
         newInformationService.getDetailsToDetermine(userID)?.let {
             newInformationService.saveNewInformation(remainingMessage, userID, it)
             return listOf(informationCollection.removeNewInformation(remainingMessage, it))

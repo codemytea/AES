@@ -11,7 +11,7 @@ import java.util.*
 class StopRequestDetector : MessageHandler {
     override val messagePartType: HandlableMessageType = HandlableMessageType.STOP
 
-    override fun detectMessagePartType(remainingMessage: String, userID : UUID): List<String>? {
+    override fun extractPartAndReturnRemaining(remainingMessage: String, userID : UUID): List<String>? {
         //save relevant stop info to db - need to check if info stop or notification stop
         //TODO("Not yet implemented")
         return null

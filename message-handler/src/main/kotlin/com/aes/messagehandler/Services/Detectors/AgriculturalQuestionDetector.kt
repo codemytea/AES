@@ -25,7 +25,7 @@ class AgriculturalQuestionDetector(
      * @param userID
      * @return a list of the agricultural questions
      * */
-    override fun detectMessagePartType(remainingMessage: String, userID: UUID): List<String>? {
+    override fun extractPartAndReturnRemaining(remainingMessage: String, userID: UUID): List<String>? {
         //extract the agricultural questions using OpenAI
         return agriculturalQuestionExtraction.getQuestions(remainingMessage).mapNotNull { it }.ifEmpty { null }
     }

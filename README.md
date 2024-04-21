@@ -58,7 +58,6 @@ Each module has unique set up and running instructions, but here are some genera
 1) Unzip the code into an IDE of your choosing (IntelliJ STRONGLY recommended (https://www.jetbrains.com/idea/ - community version is free), else you may have to install many dependencies).
 2) If you do not have Python installed on your machine, install Python (latest version).
 3) Create an OpenAI account (LLM used throughout multiple modules) and create an API key (https://platform.openai.com/settings/profile?tab=api-keys and SAVE it - it disappears once you create it). Then follow the instructions on the website (windows and mac instructions given https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety). Please note, in order to get accuracy benchmarks discussed in dissertation, you will need to use the paid version. You will also need to pip install openai. The following tutorial also explains set up - https://platform.openai.com/docs/quickstart?context=python.
-4) Install Docker (https://docs.docker.com/get-docker/) [ISAAC]
 
 ### sms-services
 
@@ -82,7 +81,12 @@ NERTrainerProject/
 
 Note that this assumes that your current working directory (cwd) is the NERTrainerProject folder.
 
-To run the NER trainer, you will need to import the SpaCy library (https://spacy.io/usage) and sklearn.model_selection (https://scikit-learn.org/stable/install.html). Finally, follow the instructions here https://spacy.io/usage/training to use the script to train the model.
+To run the NER trainer, you will need to import the SpaCy library (`pip install spacy`) and sklearn (`pip install -U scikit-learn`). 
+Then run the following commands:
+
+- `python -m spacy init fill-config ./Data/base_config.cfg ./Data/config.cfg`
+- `python -m spacy train ./Data/config.cfg  --output ./Data  --paths.train ./Data/train_data.spacy  --paths.dev ./Data/test_data.spacy`
+
 
 Once the model has been trained, copy the folder `model-best` from the output and put it in the `data` folder under `resources` under `main` in the `message-handler` module (`message-handler/src/main/resources/data`).
 

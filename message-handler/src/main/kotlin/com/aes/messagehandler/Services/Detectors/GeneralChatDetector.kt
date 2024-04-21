@@ -16,7 +16,7 @@ class GeneralChatDetector(
     override val messagePartType: HandlableMessageType = HandlableMessageType.GENERAL
 
 
-    override fun detectMessagePartType(remainingMessage: String, userID: UUID): List<String>? {
+    override fun extractPartAndReturnRemaining(remainingMessage: String, userID: UUID): List<String>? {
         return if (remainingMessage.isBlank()) null else listOf(remainingMessage)
     }
 

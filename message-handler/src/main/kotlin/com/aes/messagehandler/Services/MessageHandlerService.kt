@@ -36,7 +36,7 @@ class MessageHandlerService(
         val toReturn = mutableMapOf<HandlableMessageType, List<String>>()
 
         messageHandler.forEach { handler ->
-            handler.detectMessagePartType(prompt, request.user.id).ifNotNullOrEmpty {
+            handler.extractPartAndReturnRemaining(prompt, request.user.id).ifNotNullOrEmpty {
                 logger().info("The following message type was detected in the message with id ${request.id}: ${handler.messagePartType}")
 
                 handler.generateAnswer(it, request.user.id)

@@ -11,7 +11,7 @@ import java.util.*
 class FeedbackDetector : MessageHandler {
     override val messagePartType: HandlableMessageType = HandlableMessageType.FEEDBACK
 
-    override fun detectMessagePartType(remainingMessage: String, userID: UUID): List<String>? {
+    override fun extractPartAndReturnRemaining(remainingMessage: String, userID: UUID): List<String>? {
         //TODO("Not yet implemented")
         return null
     }

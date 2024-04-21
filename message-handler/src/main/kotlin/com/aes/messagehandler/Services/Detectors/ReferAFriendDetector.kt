@@ -11,7 +11,7 @@ import java.util.*
 class ReferAFriendDetector : MessageHandler {
     override val messagePartType: HandlableMessageType = HandlableMessageType.REFER_FRIEND
 
-    override fun detectMessagePartType(remainingMessage: String, userID : UUID): List<String>? {
+    override fun extractPartAndReturnRemaining(remainingMessage: String, userID : UUID): List<String>? {
         //TODO("Not yet implemented")
         return null
     }
