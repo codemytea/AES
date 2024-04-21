@@ -17,20 +17,13 @@ class BuyingPriceContextProvider(
             it.value.any{message.contains(" $it ", ignoreCase = true)}
         }.map { it.key }
         val country = user.userSmallholdingInfo.first().location_country!!
-        return (1 until 60).flatMap {
-            val datePast = LocalDate.now().minusDays(it.toLong())
+        return (1 until 120).flatMap {
             val dateFuture = LocalDate.now().plusDays(it.toLong())
-            referencedCrops.flatMap {
-                val pastPrice = seedPriceService.getSeedPriceForCropInCountryOnDate(
-                    it, country, datePast
-                )
+            referencedCrops.map {
                 val futurePrice = seedPriceService.getSeedPriceForCropInCountryOnDate(
                     it, country, dateFuture
                 )
-                listOf(
-                    "Data Point Provided: Seeds of $it bought for $pastPrice on ${datePast.format(DateTimeFormatter.ISO_DATE)}",
-                    "Data Point Provided: Seeds of $it bought for $futurePrice on ${dateFuture.format(DateTimeFormatter.ISO_DATE)}"
-                )
+                "Seeds of $it predicted to cost $futurePrice on ${dateFuture.format(DateTimeFormatter.ISO_DATE)}"
             }
         }
 

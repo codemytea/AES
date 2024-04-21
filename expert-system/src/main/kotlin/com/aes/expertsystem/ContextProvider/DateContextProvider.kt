@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter
 class DateContextProvider: ContextProvider {
     override fun contextForMessage(message: String, user: User): List<String> {
         return listOf(
-            "The date today is ${LocalDate.now().format(DateTimeFormatter.ISO_DATE)}",
+            "Today is ${LocalDate.now().format(DateTimeFormatter.ISO_DATE)}",
         )
     }
 }

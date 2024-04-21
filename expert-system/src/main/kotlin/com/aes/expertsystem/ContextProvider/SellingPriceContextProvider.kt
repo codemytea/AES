@@ -21,20 +21,13 @@ class SellingPriceContextProvider(
 
         logger().info("Referenced crops [${referencedCrops.joinToString(" && ")}]")
         val country = user.userSmallholdingInfo.first().location_country!!
-        return (1 until 60).flatMap {
-            val datePast = LocalDate.now().minusDays(it.toLong())
+        return (1 until 120).flatMap {
             val dateFuture = LocalDate.now().plusDays(it.toLong())
-            referencedCrops.flatMap {
-                val pastPrice = sellingService.getExpectedPriceForDateInCountry(
-                    it, datePast, country
-                )
+            referencedCrops.map {
                 val futurePrice = sellingService.getExpectedPriceForDateInCountry(
                     it, dateFuture, country
                 )
-                listOf(
-                    "Data Point Provided: $it sold for $pastPrice on ${datePast.format(DateTimeFormatter.ISO_DATE)}",
-                    "Data Point Provided: $it sold for $futurePrice on ${dateFuture.format(DateTimeFormatter.ISO_DATE)}"
-                )
+                "$it predicted to be sold for $futurePrice on date ${dateFuture.format(DateTimeFormatter.ISO_DATE)}"
             }
         }
 
