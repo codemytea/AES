@@ -1,9 +1,8 @@
 package com.aes.messagehandler.Services.Detectors
 
-import com.aes.common.Models.TaggingMessage
-import com.aes.common.Queue.LocalQueueService
-import com.aes.messagehandler.AgriculturalQuestionAnswerer.ExpertSystem.ExpertSystem
 import com.aes.common.Enums.HandlableMessageType
+import com.aes.common.Queue.LocalQueueService
+import com.aes.expertsystem.Services.ExpertSystemService
 import com.aes.messagehandler.MessageHandler
 import com.aes.messagehandler.Python.AgriculturalQuestionExtraction
 import org.springframework.core.annotation.Order
@@ -14,8 +13,8 @@ import java.util.*
 @Order(1)
 class AgriculturalQuestionDetector(
     private val agriculturalQuestionExtraction: AgriculturalQuestionExtraction,
-    private val expertSystem: ExpertSystem,
     private val localQueueService: LocalQueueService,
+    private val expertSystemService: ExpertSystemService
 ) : MessageHandler {
 
     override val messagePartType: HandlableMessageType = HandlableMessageType.AGRICULTURAL_QUESTION
@@ -41,9 +40,8 @@ class AgriculturalQuestionDetector(
      * @return the answers to the given questions
      * */
     override fun generateAnswer(prompts: List<String>, userID: UUID): List<String>? {
-        return prompts.map { expertSystem.getAgriculturalAnswer(it) }
+        return prompts.map { expertSystemService.getAgriculturalAnswer(it) }
     }
-
 
 
 }

@@ -23,8 +23,6 @@ class CompilerPipeline(
 ) : Logging {
 
 
-    class ListCarrier(val list: List<NewMessageDTO>)
-
     /**
      * Compiles a message by tweaking it to the users characteristics and then chunking/amalgamating them to one
      * message long chunks. After it
@@ -128,7 +126,6 @@ class CompilerPipeline(
                                 wait[0] = wait[0] + " " + it
                             }
                         }
-
                     }
                     result
                 } else {

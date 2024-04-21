@@ -1,15 +1,15 @@
-package com.aes.messagehandler.AgriculturalQuestionAnswerer.ExpertSystem
+package com.aes.expertsystem.Services
 
-import com.aes.common.Models.MessageDTO
 import org.springframework.stereotype.Service
 
 @Service
-class ExpertSystem {
+class ExpertSystemService {
 
     fun getAgriculturalAnswer(message : String): String {
         return ""
     }
 }
+
 //API KEY for perenual - plant info (base) + pests/disease
 //sk-PRTt65e740fc544e74470
 
