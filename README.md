@@ -80,6 +80,8 @@ NERTrainerProject/
 --------annotations.json
 ```
 
+Note that this assumes that your current working directory (cwd) is the NERTrainerProject folder.
+
 To run the NER trainer, you will need to import the SpaCy library (https://spacy.io/usage) and sklearn.model_selection (https://scikit-learn.org/stable/install.html). Finally, follow the instructions here https://spacy.io/usage/training to use the script to train the model.
 
 Once the model has been trained, copy the folder `model-best` from the output and put it in the `data` folder under `resources` under `main` in the `message-handler` module (`message-handler/src/main/resources/data`).

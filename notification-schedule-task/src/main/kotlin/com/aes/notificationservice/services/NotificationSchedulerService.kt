@@ -42,11 +42,11 @@ class NotificationSchedulerService(
             return
         }
         val notification = ScheduledNotification(
-            UUID.randomUUID().toString(),
+            UUID.randomUUID(),
             time,
+            user,
             crop,
             topic,
-            user,
             "Tell me more about ${topic.name.lowercase()} for ${crop.name.lowercase()}"
         )
         scheduledNotificationRepository.save(notification)
