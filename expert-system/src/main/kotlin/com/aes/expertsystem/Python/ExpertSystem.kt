@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 class ExpertSystem : PythonClass() {
 
     @PythonFunction("getAnswer", "RAG.py")
-    fun getAnswer(userMessage: String): String {
-        return execute(::getAnswer, userMessage)
+    fun getAnswer(userMessage: String, inputData: List<String>): String {
+        return execute(::getAnswer, userMessage, inputData)
     }
 }

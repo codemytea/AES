@@ -91,7 +91,12 @@ class User(
      * */
     @OneToMany
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    val userSmallholdingInfo: MutableList<UserSmallholding> = mutableListOf()
+    val userSmallholdingInfo: MutableList<UserSmallholding> = mutableListOf(),
+
+    @OneToMany
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    val messages: MutableList<Message> = mutableListOf()
+
 ){
 
     fun crops(): List<Crop>{

@@ -1,18 +1,22 @@
 package com.aes.messagehandler.Services.Detectors
 
 import com.aes.common.Enums.HandlableMessageType
+import com.aes.common.Repositories.UserRepository
 import com.aes.expertsystem.Services.ExpertSystemService
 import com.aes.messagehandler.Interfaces.MessageHandler
 import com.aes.messagehandler.Python.AgriculturalQuestionExtraction
 import org.springframework.core.annotation.Order
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
 @Order(1)
 class AgriculturalQuestionDetector(
     private val agriculturalQuestionExtraction: AgriculturalQuestionExtraction,
-    private val expertSystemService: ExpertSystemService
+    private val expertSystemService: ExpertSystemService,
+    private val userRepository: UserRepository
 ) : MessageHandler {
 
     override val messagePartType: HandlableMessageType = HandlableMessageType.AGRICULTURAL_QUESTION
@@ -37,8 +41,12 @@ class AgriculturalQuestionDetector(
      * @param userID
      * @return the answers to the given questions
      * */
+    @Transactional
     override fun generateAnswer(prompts: List<String>, userID: UUID): List<String>? {
-        return prompts.map { expertSystemService.getAgriculturalAnswer(it) }
+
+        val user = userRepository.findByIdOrNull(userID)!!
+
+        return prompts.map { expertSystemService.getAgriculturalAnswer(it, user) }
     }
 
 
