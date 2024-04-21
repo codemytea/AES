@@ -1,5 +1,6 @@
 package com.aes.messagecompiler.Controller
 
+import com.aes.common.Entities.User
 import com.aes.common.Enums.Age
 import com.aes.common.Enums.Gender
 import com.aes.common.Enums.HandlableMessageType
@@ -17,7 +18,8 @@ import org.springframework.stereotype.Service
 class CompilerPipeline(
     val compiler: Compiler,
     val userRepository: UserRepository,
-    val localQueueService: LocalQueueService
+    val localQueueService: LocalQueueService,
+    val messageTaggingService: MessageTaggingService
 ) : Logging {
 
 
@@ -33,10 +35,12 @@ class CompilerPipeline(
      * */
     fun compileMessage(initialResponse : Map<HandlableMessageType, List<String>>, phoneNumber : Long) : List<NewMessageDTO>? {
         logger().info("Compiling message for user with phone number $phoneNumber")
-        val user = userRepository.findByPhoneNumberContaining(phoneNumber)
-        val improved = improveSuggestability(initialResponse, user?.literacy ?: 50f, user?.age ?: Age.ADULT, user?.gender ?: Gender.MALE) //if not known, assume standard
+        var improved :  Map<HandlableMessageType, List<String>>? = null
+        userRepository.findByPhoneNumberContaining(phoneNumber)?.let {
+            improved = improveSuggestability(initialResponse, it) //if a user with information exists, improve the message
+        }
 
-        return finalSplit(improved).toNewMessageDTO(phoneNumber).also {
+        return finalSplit(improved ?: initialResponse).toNewMessageDTO(phoneNumber).also {
             logger().info("Putting message for user with phone number $phoneNumber on queue to be sent")
             it.forEach {
                 localQueueService.writeItemToQueue("send_message_queue", it) //messages added to queue one at a time for safety
@@ -50,17 +54,27 @@ class CompilerPipeline(
      * the message suggestions will be implemented.
      *
      * @param initialResponse - an initial list of responses with what they correspond to
-     * @param literacyLevel - literacy level of user 0-100f
-     * @param age - age of user as part of Age enum
-     * @param gender - gender of user as part of Gender enum
+     * @param user - the user we are tailoring for
      * @return the responses tailored to user characteristics
      * */
-    fun improveSuggestability(initialResponse: Map<HandlableMessageType, List<String>>, literacyLevel : Float, age : Age, gender: Gender) : Map<HandlableMessageType, List<String>>{
+    fun improveSuggestability(initialResponse: Map<HandlableMessageType, List<String>>, user : User) : Map<HandlableMessageType, List<String>>{
         logger().info("Improving suggestibility of message")
+        initialResponse[HandlableMessageType.AGRICULTURAL_QUESTION]?.let{
+            it.map {
+                var knowledgeLevel = 0.0f
+                messageTaggingService.tagMessage(it, user.id)?.let {
+                    user.knowledgeAreas.find { uka ->  (uka.crop == it.cropName) && (uka.topic == it.topic) }?.knowledgeLevel?.let{
+                        knowledgeLevel =  it
+                    }
+                }
+
+                compiler.userKnowledgeCompiling(it, knowledgeLevel)
+            }
+        }
 
         return initialResponse.mapValues{
             it.value.joinToString(" ").let {
-                listOfNotNull(compiler.userCharacteristicCompiling(it, literacyLevel, gender, age))
+                listOfNotNull(compiler.userCharacteristicCompiling(it, user.literacy ?: 50f,  user.gender ?: Gender.MALE, user.age ?: Age.ADULT,))
             }
         }.toSortedMap().also {
             logger().info("Message with better suggestibility is $it")

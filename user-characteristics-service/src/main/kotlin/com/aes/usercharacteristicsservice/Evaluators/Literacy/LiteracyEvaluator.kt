@@ -126,7 +126,7 @@ class LiteracyEvaluator(
     /**
      * Calculates a messages' readability based on Flesch reading-ease score (FRES) test
      *
-     * @param message - teh users message to perform the calculation on
+     * @param message - the users message to perform the calculation on
      * @return a double between 0 and 100 where 0 is very difficult to read and 100 is very easy to read
      * */
     private fun messageReadability(message: String): Double {

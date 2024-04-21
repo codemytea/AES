@@ -13,4 +13,9 @@ class Compiler : PythonClass() {
         return execute(::userCharacteristicCompiling, userMessage, literacyLevel, gender.toString(), age.toString())
     }
 
+    @PythonFunction("userKnowledgeCompiling", "UserKnowledgeApplied.py")
+    fun userKnowledgeCompiling(userMessage: String, knowledgeLevel: Float): String? {
+        return execute(::userKnowledgeCompiling, userMessage, knowledgeLevel)
+    }
+
 }

@@ -31,13 +31,6 @@ class KnowledgeEvaluator(
     private val userKnowledgeRepository: UserKnowledgeRepository,
     private val userRepository: UserRepository,
 ) : Logging {
-    fun getTopicOfMessage(message: String): Topic? {
-        return knowledgeClassifier.getTopicOfMessage(listOf(message))
-    }
-
-    fun getCropOfMessage(message: String): Crop? {
-        return knowledgeClassifier.getCropOfMessage(listOf(message))
-    }
 
     /**
      * Calculates a user's expertise on a given Knowledge Area (KA) given all their messages.

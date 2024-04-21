@@ -1,4 +1,4 @@
-package com.aes.usercharacteristicsservice.Python
+package com.aes.messagecompiler.Python
 
 import com.aes.common.Enums.Crop
 import com.aes.common.Enums.Topic

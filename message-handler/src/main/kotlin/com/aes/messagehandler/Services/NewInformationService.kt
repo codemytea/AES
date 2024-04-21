@@ -1,8 +1,6 @@
 package com.aes.messagehandler.Services
 
-import com.aes.common.Entities.Message
 import com.aes.common.Enums.UserDetails
-import com.aes.common.Models.MessageDTO
 import com.aes.common.Repositories.UserRepository
 import com.aes.common.Repositories.UserSmallholdingRepository
 import com.aes.common.logging.Logging
@@ -79,7 +77,7 @@ class NewInformationService(
      * @return a pair of new information collected about the user, and the message without the bits that give that new information
      * */
     @Transactional
-    fun saveNewInformation(messages : List<String>, userID: UUID, detailsToDetermine : List<UserDetails>?) {
+    fun saveNewInformation(messages: List<String>, userID: UUID, detailsToDetermine: List<UserDetails>?) {
         detailsToDetermine?.let { it ->
             //use NER to scrape any NEW information given by the received message
             val newInfo = informationCollection.getNewInformation(messages.joinToString(" "), it)

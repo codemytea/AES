@@ -31,7 +31,6 @@ class AgriculturalQuestionDetector(
     override fun detectMessagePartType(remainingMessage: String, userID: UUID): List<String>? {
         //extract the agricultural questions using OpenAI
         return agriculturalQuestionExtraction.getQuestions(remainingMessage).mapNotNull { it }.ifEmpty { null }
-            ?.also { tagIncomingMessage(it, userID) }
     }
 
     /**
@@ -45,18 +44,6 @@ class AgriculturalQuestionDetector(
         return prompts.map { expertSystem.getAgriculturalAnswer(it) }
     }
 
-    /**
-     * Tags the agricultural question(s) in the message by adding questions to the message_tag_queue.
-     * This is ultimately used to calculate a users knowledge in a given area.
-     *
-     * @param questions a list of agricultural questions
-     * @param userID
-     * */
-    private fun tagIncomingMessage(questions: List<String>, userID: UUID) {
-        //writes to the queue
-        questions.forEach {
-            localQueueService.writeItemToQueue("message_tag_queue", TaggingMessage(it, userID))
-        }
-    }
+
 
 }
