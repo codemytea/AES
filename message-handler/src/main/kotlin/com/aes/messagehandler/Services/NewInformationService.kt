@@ -1,12 +1,13 @@
 package com.aes.messagehandler.Services
 
+import com.aes.common.Entities.User
+import com.aes.common.Entities.UserSmallholding
 import com.aes.common.Enums.UserDetails
 import com.aes.common.Repositories.UserRepository
 import com.aes.common.Repositories.UserSmallholdingRepository
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
 import com.aes.messagehandler.Mappers.toCrop
-import com.aes.messagehandler.Mappers.toUserDetails
 import com.aes.messagehandler.Python.InformationCollection
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -77,15 +78,32 @@ class NewInformationService(
      * @return a pair of new information collected about the user, and the message without the bits that give that new information
      * */
     @Transactional
-    fun saveNewInformation(message: String, userID: UUID, detailsToDetermine: List<UserDetails>?) {
+    fun saveNewInformation(
+        message: String,
+        userID: UUID,
+        detailsToDetermine: List<UserDetails>?,
+        newUserNumber: Long? = null
+    ) {
         detailsToDetermine?.let { it ->
             //use NER to scrape any NEW information given by the received message
             val newInfo = informationCollection.getNewInformation(message, it)
             val newInfoCollected = mutableListOf<UserDetails>()
 
-            val user = userRepository.findUserById(userID)
-            val userSmallholding =
-                user?.userSmallholdingInfo?.getOrNull(0) //TODO check which smallholding the user is talking about and select the right one
+            var user: User?
+
+            if (newUserNumber == null) {
+                user = userRepository.findUserById(userID)
+
+            } else {
+                user = userRepository.save(
+                    User(
+                        UUID.randomUUID(),
+                        listOf(newUserNumber)
+                    )
+                )
+            }
+
+            val userSmallholding = user?.userSmallholdingInfo?.getOrNull(0) //TODO check which smallholding the user is talking about and select the right one
 
             //save info
             newInfo.forEach { (userDetail, info) ->
