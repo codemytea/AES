@@ -14,9 +14,10 @@ class SellingPriceContextProvider(
     private val dataCacheService: DataCacheService
 ): ContextProvider, Logging {
 
+
     override fun contextForMessage(message: String, user: User): List<String> {
         val referencedCrops = dataCacheService.possibleSellingCropNames.filter {
-            it.value.any{ message.contains(" $it ", ignoreCase = true) }
+            it.value.any{ message.containsAnyCardinality(it, ignoreCase = true) }
         }.map { it.key }
 
         logger().info("Referenced crops [${referencedCrops.joinToString(" && ")}]")
@@ -28,6 +29,7 @@ class SellingPriceContextProvider(
                     it, dateFuture, country
                 )
                 "$it predicted to be sold for $futurePrice on date ${dateFuture.format(DateTimeFormatter.ISO_DATE)}"
+                "$it cannot be sold until it has finished its crop cycle"
             }
         }
 

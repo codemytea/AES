@@ -77,3 +77,20 @@ class EcocropData(
     @Id
     val id: String = UUID.randomUUID().toString()
 }
+
+
+val EcocropData.averageCropCycle: Int? get() {
+    val minCropCycle = minCropCycle?.toIntOrNull()
+    val maxCropCycle = maxCropCycle?.toIntOrNull()
+    return if(minCropCycle != null && maxCropCycle != null){
+        (minCropCycle + maxCropCycle) / 2
+    } else minCropCycle ?: maxCropCycle
+}
+
+val EcocropData.averageOptimalTemperature: Int? get() {
+    val minTemp = optimalMinTempRequired?.toIntOrNull()
+    val maxTemp = optimalMaxTempRequired?.toIntOrNull()
+    return if(minTemp != null && maxTemp != null){
+        (minTemp + maxTemp) / 2
+    } else minTemp ?: maxTemp
+}

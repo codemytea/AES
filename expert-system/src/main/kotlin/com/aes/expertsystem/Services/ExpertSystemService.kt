@@ -7,6 +7,7 @@ import com.aes.expertsystem.ContextProvider.ContextProvider
 import com.aes.expertsystem.ContextProvider.InitialContextProvider
 import com.aes.expertsystem.Python.ExpertSystem
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ExpertSystemService(
@@ -15,7 +16,7 @@ class ExpertSystemService(
     private val initialContextProviders: List<InitialContextProvider>,
 ):Logging {
 
-    //HI ISAAC ! I love you!!
+    @Transactional
     fun getAgriculturalAnswer(message : String, user: User): String {
 
         val initialContext = initialContextProviders.flatMap {

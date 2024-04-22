@@ -13,8 +13,8 @@ class BuyingPriceContextProvider(
 ): ContextProvider {
 
     override fun contextForMessage(message: String, user: User): List<String> {
-        val referencedCrops = dataCacheService.possibleSellingCropNames.filter {
-            it.value.any{message.contains(" $it ", ignoreCase = true)}
+        val referencedCrops = dataCacheService.possibleSeedBuyingCropNames.filter {
+            it.value.any{message.containsWord(it, ignoreCase = true)}
         }.map { it.key }
         val country = user.userSmallholdingInfo.first().location_country!!
         return (1 until 120).flatMap {
