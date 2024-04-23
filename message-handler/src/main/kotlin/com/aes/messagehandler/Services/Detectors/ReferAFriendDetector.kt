@@ -51,6 +51,5 @@ class ReferAFriendDetector(
         } else {
             listOf("Please repeat your referral, but include the users phone number as well.")
         }
-        //TODO send friend a message - make a new person send message overnight task ie if user with no messages, send them a 'you've been referred, this is what system does message'
     }
 }

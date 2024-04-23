@@ -22,8 +22,8 @@ fun MessageStatusDTO.toNewMessageDTO(message : String) : NewMessageDTO {
 
     return NewMessageDTO(
         message = message,
-        recipient = RecipientDTO(
+        recipients = listOf(RecipientDTO(
             msisdn
-        )
+        ))
     )
 }

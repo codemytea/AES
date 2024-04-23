@@ -12,7 +12,7 @@ fun List<String>.toNewMessageDTO(phoneNumber : Long): List<NewMessageDTO> {
     return this.map {
         NewMessageDTO(
             message = it,
-            recipient = RecipientDTO(phoneNumber)
+            recipients = listOf(RecipientDTO(phoneNumber))
         )
     }
 }
