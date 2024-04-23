@@ -41,23 +41,30 @@ fun Message.toDTO(): MessageDTO {
 
 fun String.toHectares(): Float? {
     return when {
-        containsIgnoringPlurality("acre")-> this.removeAndConvert(SmallholdingUnit.ACRES)
-        containsIgnoringPlurality("hectare")-> this.removeAndConvert(SmallholdingUnit.HECTARES)
-        containsIgnoringPlurality("meter")->3f
-        containsIgnoringPlurality("yard")->3f
-        else ->  null
+        containsIgnoringPlurality(SmallholdingUnit.ACRES.unitIdentifier) -> this.removeAndConvert(SmallholdingUnit.ACRES)
+        containsIgnoringPlurality(SmallholdingUnit.HECTARES.unitIdentifier) -> this.removeAndConvert(SmallholdingUnit.HECTARES)
+        containsIgnoringPlurality(SmallholdingUnit.METERS.unitIdentifier) -> this.removeAndConvert(SmallholdingUnit.METERS)
+        containsIgnoringPlurality(SmallholdingUnit.YARDS.unitIdentifier) -> this.removeAndConvert(SmallholdingUnit.YARDS)
+        containsIgnoringPlurality(SmallholdingUnit.KM.unitIdentifier) -> this.removeAndConvert(SmallholdingUnit.KM)
+        containsIgnoringPlurality(SmallholdingUnit.MILE.unitIdentifier) -> this.removeAndConvert(SmallholdingUnit.MILE)
+        else -> null
     }
 }
 
-fun String.containsIgnoringPlurality(str: String): Boolean {
-    return (this.contains(str, true) || this.contains(str+"s", true))
+fun String.containsIgnoringPlurality(str: List<String>): Boolean {
+    str.forEach {
+        if (this.contains(it)){
+            return true
+        }
+    }
+    return false
 }
 
-fun String.removeAndConvert(sUnit : SmallholdingUnit): Float {
+fun String.removeAndConvert(sUnit: SmallholdingUnit): Float {
     return sUnit.getHectares(this.replaceList(sUnit.unitIdentifier, "").trim().toFloat())
 }
 
-fun String.replaceList(toReplace : List<String>, replaceToken: String) : String {
+fun String.replaceList(toReplace: List<String>, replaceToken: String): String {
     toReplace.forEach {
         this.replace(it, replaceToken)
     }
