@@ -5,9 +5,9 @@ import com.aes.kotlinpythoninterop.PythonFunction
 import org.springframework.stereotype.Service
 
 
-enum class Stop {
-    INFORMATION,
-    NOTIFICATION
+enum class Stop(val str : String) {
+    INFORMATION("INFORMATION"),
+    NOTIFICATION("NOTIFICATION")
 }
 
 
@@ -15,7 +15,7 @@ enum class Stop {
 class StopExtraction : PythonClass() {
 
     @PythonFunction("getStopRequests", "StopExtractor.py")
-    fun getStopRequests(userMessage: String) : List<Pair<String, Stop>>? {
+    fun getStopRequests(userMessage: String) : List<List<String>>? {
         return execute(::getStopRequests, userMessage)
     }
 

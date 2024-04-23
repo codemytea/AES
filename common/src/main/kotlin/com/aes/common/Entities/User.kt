@@ -63,6 +63,12 @@ class User(
     @Column
     var stopCollectingInformation: Boolean = false,
 
+    /**
+     * Whether or not the user has asked to stop sending them notifications
+     * */
+    @Column
+    var stopSendingNotifications: Boolean = false,
+
 
     /**
      * A users knowledge areas
