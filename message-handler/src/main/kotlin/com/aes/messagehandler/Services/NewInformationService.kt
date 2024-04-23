@@ -8,6 +8,7 @@ import com.aes.common.Repositories.UserSmallholdingRepository
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
 import com.aes.messagehandler.Mappers.toCrop
+import com.aes.messagehandler.Mappers.toHectares
 import com.aes.messagehandler.Python.InformationCollection
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -122,9 +123,8 @@ class NewInformationService(
                     userSmallholding?.location_country = info
                 } else if (ud == UserDetails.SMALLHOLDING_SIZE) {
                     newInfoCollected.add(UserDetails.SMALLHOLDING_SIZE)
-                    userSmallholding?.smallholdingSize = info.toFloat()
+                    userSmallholding?.smallholdingSize = info.toHectares()
                 }
-
             }
 
             user?.let {

@@ -5,6 +5,7 @@ import com.aes.common.Enums.Crop
 import com.aes.common.Enums.MessageStatus
 import com.aes.common.Enums.UserDetails
 import com.aes.common.Models.MessageDTO
+import com.aes.messagehandler.Enum.SmallholdingUnit
 
 fun String.toUserDetails(): UserDetails? {
 
@@ -35,4 +36,30 @@ fun Message.toDTO(): MessageDTO {
         phoneNumber,
         status ?: MessageStatus.PENDING
     )
+}
+
+
+fun String.toHectares(): Float? {
+    return when {
+        containsIgnoringPlurality("acre")-> this.removeAndConvert(SmallholdingUnit.ACRES)
+        containsIgnoringPlurality("hectare")-> this.removeAndConvert(SmallholdingUnit.HECTARES)
+        containsIgnoringPlurality("meter")->3f
+        containsIgnoringPlurality("yard")->3f
+        else ->  null
+    }
+}
+
+fun String.containsIgnoringPlurality(str: String): Boolean {
+    return (this.contains(str, true) || this.contains(str+"s", true))
+}
+
+fun String.removeAndConvert(sUnit : SmallholdingUnit): Float {
+    return sUnit.getHectares(this.replaceList(sUnit.unitIdentifier, "").trim().toFloat())
+}
+
+fun String.replaceList(toReplace : List<String>, replaceToken: String) : String {
+    toReplace.forEach {
+        this.replace(it, replaceToken)
+    }
+    return this
 }
