@@ -10,8 +10,4 @@ enum class HandlableMessageType {
     GENERAL
 }
 
-enum class Stop {
-    INFORMATION,
-    NOTIFICATION
-}
 

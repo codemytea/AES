@@ -1,16 +1,8 @@
 import json
 from openai import OpenAI
-from enum import Enum
 
 import kotlinInterop
 
-
-class UserDetails(str, Enum):
-    LOCATION_CITY = "LOCATION_CITY"
-    LOCATION_COUNTRY = "LOCATION_COUNTRY"
-    SMALLHOLDING_SIZE = "SMALLHOLDING_SIZE"
-    NAME = "NAME"
-    MAIN_CROP = "MAIN_CROP"
 
 
 def retrievedSentences(context):
