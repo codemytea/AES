@@ -17,7 +17,7 @@ class StopRequestDetector(
 ) : MessageHandler {
     override val messagePartType: HandlableMessageType = HandlableMessageType.STOP
 
-    override fun extractPartAndReturnRemaining(remainingMessage: String, userID : UUID): List<String>? {
+    override fun extractPartAndReturn(remainingMessage: String, userID : UUID): List<String>? {
         val stopRequest = stopExtraction.getStopRequests(remainingMessage)
         if (stopRequest.isNullOrEmpty()) return listOf()
 

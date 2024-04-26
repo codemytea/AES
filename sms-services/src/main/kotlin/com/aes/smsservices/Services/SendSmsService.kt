@@ -46,7 +46,6 @@ class SendSmsService(
         logger().info("Sending message at ${resource.sendtime}")
 
         val internalMessage = resource.message
-
         val messages = sendMessage(resource)
 
         messages.forEach {
@@ -70,7 +69,6 @@ class SendSmsService(
      * @return A list of messages sent:the user it was sent to
      * */
     fun sendMessage(newMessageDTO: NewMessageDTO): List<Pair<MessageDTO, User>> {
-
         return newMessageDTO.recipients.mapNotNull { recipient ->
             val user = userRepository.findByPhoneNumberContaining(recipient.phoneNumber)
                 ?: userRepository.save(

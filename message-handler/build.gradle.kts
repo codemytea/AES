@@ -30,7 +30,6 @@ dependencies {
     implementation(project(mapOf("path" to ":message-compiler")))
     implementation(project(mapOf("path" to ":kotlin-python-interop")))
     implementation(project(mapOf("path" to ":expert-system")))
-    implementation(project(":expert-system"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")

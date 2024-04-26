@@ -104,33 +104,48 @@ class NewInformationService(
                 )
             }
 
-            val userSmallholding = user?.userSmallholdingInfo?.getOrNull(0) //TODO check which smallholding the user is talking about and select the right one
+            var userSmallholding = user?.userSmallholdingInfo?.getOrNull(0) //TODO check which smallholding the user is talking about and select the right one
+
+            if (userSmallholding == null) {
+                userSmallholding = userSmallholdingRepository.save(
+                    UserSmallholding(
+                        user = user
+                    )
+                )
+            }
 
             //save info
             newInfo.forEach { (userDetail, info) ->
-                val ud = userDetail
-                if (ud == UserDetails.NAME) {
-                    newInfoCollected.add(UserDetails.NAME)
-                    user?.name = info
-                } else if (ud == UserDetails.MAIN_CROP) {
-                    newInfoCollected.add(UserDetails.MAIN_CROP)
-                    userSmallholding?.cashCrop = info.toCrop()
-                } else if (ud == UserDetails.LOCATION_CITY) {
-                    newInfoCollected.add(UserDetails.LOCATION_CITY)
-                    userSmallholding?.location_city = info
-                } else if (ud == UserDetails.LOCATION_COUNTRY) {
-                    newInfoCollected.add(UserDetails.LOCATION_COUNTRY)
-                    userSmallholding?.location_country = info
-                } else if (ud == UserDetails.SMALLHOLDING_SIZE) {
-                    newInfoCollected.add(UserDetails.SMALLHOLDING_SIZE)
-                    userSmallholding?.smallholdingSize = info.toHectares()
+                if (info != null){
+                    when (userDetail) {
+                        UserDetails.NAME.strForm -> {
+                            newInfoCollected.add(UserDetails.NAME)
+                            user?.name = info
+                        }
+                        UserDetails.MAIN_CROP.strForm -> {
+                            newInfoCollected.add(UserDetails.MAIN_CROP)
+                            userSmallholding.cashCrop = info.toCrop()
+                        }
+                        UserDetails.LOCATION_CITY.strForm -> {
+                            newInfoCollected.add(UserDetails.LOCATION_CITY)
+                            userSmallholding.location_city = info
+                        }
+                        UserDetails.LOCATION_COUNTRY.strForm -> {
+                            newInfoCollected.add(UserDetails.LOCATION_COUNTRY)
+                            userSmallholding.location_country = info
+                        }
+                        UserDetails.SMALLHOLDING_SIZE.strForm -> {
+                            newInfoCollected.add(UserDetails.SMALLHOLDING_SIZE)
+                            userSmallholding.smallholdingSize = info.toHectares()
+                        }
+                    }
                 }
             }
 
             user?.let {
                 userRepository.save(it)
             }
-            userSmallholding?.let {
+            userSmallholding.let {
                 userSmallholdingRepository.save(it)
             }
 

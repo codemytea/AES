@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.io.File
 
 /**
- * Writes data extracted from SID dataset to database for ease of querying
+ * Writes Data extracted from SID dataset to database for ease of querying
  * */
 @Service
 open class SeedDataSavingService(

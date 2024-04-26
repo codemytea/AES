@@ -10,7 +10,7 @@ import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Service
 import java.util.*
 
-@Order(4)
+@Order(3)
 @Service
 class ReferAFriendDetector(
     private val referAFriendExtraction: ReferAFriendExtraction,
@@ -21,12 +21,12 @@ class ReferAFriendDetector(
 
     val phoneNumberUtil: PhoneNumberUtil = PhoneNumberUtil.getInstance()
 
-    override fun extractPartAndReturnRemaining(remainingMessage: String, userID : UUID): List<String>? {
+    override fun extractPartAndReturn(remainingMessage: String, userID : UUID): List<String>? {
 
         val info = referAFriendExtraction.getReferral(remainingMessage).mapNotNull { it }.ifEmpty { null }
         info?.let { infoInner->
-            val numbers = phoneNumberUtil.findNumbers(infoInner.joinToString(" "), "GB")
-            if (numbers != null){
+            val numbers = phoneNumberUtil.findNumbers(infoInner.joinToString(" "), "GB")?.toList()
+            if (numbers?.isNotEmpty() == true){ //TODO check if duff referral - ie user already exists in system
                 containsPhoneNumber = true
                 newInformationService.saveNewInformation(
                     infoInner.joinToString(" "),
@@ -36,7 +36,7 @@ class ReferAFriendDetector(
                         UserDetails.LOCATION_CITY, UserDetails.LOCATION_COUNTRY,
                         UserDetails.SMALLHOLDING_SIZE
                     ),
-                    numbers.first().number().nationalNumber
+                    (numbers.first().number().countryCode.toString() + numbers.first().number().nationalNumber.toString()).toLong()
                 )
             }
         }
@@ -49,7 +49,7 @@ class ReferAFriendDetector(
         return if(containsPhoneNumber){
             listOf("Thank you for your referral.")
         } else {
-            listOf("Please repeat your referral, but include the users phone number as well.")
+            listOf("Please repeat your referral, but include the users phone number as well, or check the number is in the correct format.")
         }
     }
 }

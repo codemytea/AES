@@ -65,8 +65,10 @@ fun String.removeAndConvert(sUnit: SmallholdingUnit): Float {
 }
 
 fun String.replaceList(toReplace: List<String>, replaceToken: String): String {
+    var toReturn = this
     toReplace.forEach {
-        this.replace(it, replaceToken)
+        toReturn = toReturn.replace(it, replaceToken)
     }
-    return this
+    toReturn = toReturn.replace("squared", replaceToken)
+    return toReturn.trim()
 }

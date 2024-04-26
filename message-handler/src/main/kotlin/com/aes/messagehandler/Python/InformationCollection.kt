@@ -12,7 +12,7 @@ class InformationCollection : PythonClass() {
      * Use NER to collect information about a user
      * */
     @PythonFunction("getNewInformation", "InformationCollectionNER.py")
-    fun getNewInformation(userMessage: String, userDetails: List<UserDetails>): Map<UserDetails, String> {
+    fun getNewInformation(userMessage: String, userDetails: List<UserDetails>): Map<String, String> {
         return execute(::getNewInformation, userDetails, userMessage)
     }
 

@@ -24,7 +24,8 @@ class Message(
     /**
      * Contents of message
      * */
-    @Column
+    @Lob
+    @Column(length = 5000)
     val message: String = "",
 
     /**

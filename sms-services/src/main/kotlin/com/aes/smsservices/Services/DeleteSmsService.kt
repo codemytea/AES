@@ -14,7 +14,8 @@ class DeleteSmsService(
 ) : Logging {
 
     /**
-     * Deletes message stored in system using its id
+     * Deletes message stored in system using its id - function has been created to demonstrate compliance with
+     * GDPR and a users right to request data is deleted.
      *
      * @param resourceId
      *

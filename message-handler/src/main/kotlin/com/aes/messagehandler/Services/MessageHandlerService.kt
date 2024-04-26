@@ -4,7 +4,6 @@ import com.aes.common.Enums.HandlableMessageType
 import com.aes.common.Models.MessageQueueItem
 import com.aes.common.Repositories.MessageRepository
 import com.aes.common.logging.Logging
-import com.aes.common.logging.logger
 import com.aes.messagecompiler.Controller.CompilerPipeline
 import com.aes.messagehandler.Interfaces.MessageHandler
 import com.aes.messagehandler.Utilities.ifNotNullOrEmpty
@@ -20,28 +19,25 @@ class MessageHandlerService(
     private val messageRepository: MessageRepository
 ) : Logging {
 
-
     /**
-     * Sends a List of messages that need to be post-processed (tailored to user characteristics + limited to 255 chars)
-     * ond what type there are. Leverages spring boot @Order to make it easily extensible.
+     * Sends a list of responses that need to be tailored and what type there are
+     * to the compiler pipeline.
+     * Leverages spring boot @Order to make it easily extensible.
      *
      * @param message - the incoming message
      * */
     @Transactional
     fun handleRequest(message: MessageQueueItem) {
         val request = messageRepository.findByIdOrNull(message.messageId)!!
-        logger().info("Handling message handler request for message with id ${request.id}")
-
         var prompt = request.message
         val toReturn = mutableMapOf<HandlableMessageType, List<String>>()
 
         messageHandler.forEach { handler ->
-            handler.extractPartAndReturnRemaining(prompt, request.user.id).ifNotNullOrEmpty {
-                logger().info("The following message type was detected in the message with id ${request.id}: ${handler.messagePartType}")
-
-                handler.generateAnswer(it, request.user.id)
-                    ?.let { answers -> toReturn.put(handler.messagePartType, answers) }
+            handler.extractPartAndReturn(prompt, request.user.id).ifNotNullOrEmpty {
                 prompt = prompt.replaceList(it)
+                handler.generateAnswer(it, request.user.id)?.let { answers ->
+                    toReturn.put(handler.messagePartType, answers)
+                }
             }
         }
 
@@ -50,10 +46,3 @@ class MessageHandlerService(
 }
 
 
-//TODO
-//pests & diseases?
-//commenting
-
-
-//RAG
-//NER stuff - Order

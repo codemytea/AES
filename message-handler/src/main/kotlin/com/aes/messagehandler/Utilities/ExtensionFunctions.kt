@@ -1,11 +1,13 @@
 package com.aes.messagehandler.Utilities
 
 fun String?.replaceList(list : List<String>?): String {
+    var toReturn = this
     list?.forEach {
-        this?.replace(it, "")
+        toReturn = toReturn?.replace(it, "")
     }
-    return this ?: ""
+    return toReturn ?: ""
 }
+//not working?
 
 
 fun <E> List<E>?.ifNotNullOrEmpty(func : (List<E>) -> Unit): Boolean {

@@ -1,6 +1,10 @@
 import json
 import sys
 import traceback
+import os
+from os.path import abspath, dirname
+
+os.chdir(dirname(abspath(__file__)))
 
 
 functionMap = {

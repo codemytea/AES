@@ -17,16 +17,19 @@ class SendMessageTask(
     private val sendSmsService: SendSmsService,
     private val userRepository: UserRepository
 ) : Logging {
-    @Scheduled(cron = "0 0 1 * * ?")
+    @Scheduled(cron = "0 * * * * *")
     @Transactional
     fun sendNewSmallholdersMessage() {
         userRepository.findAllPhoneNumbersByMessagesIsEmpty()?.let {
-            sendSmsService.sendSMS(
-                NewMessageDTO(
-                    message = "Hello, you have been referred to this service by a friend. You can ask me any agricultural queries you have.",
-                    recipients = it
+            if (it.isNotEmpty()){
+                sendSmsService.sendSMS(
+                    NewMessageDTO(
+                        message = "Hello, you have been referred to this service by a friend. You can ask me any agricultural queries you have.",
+                        recipients = it
+                    )
                 )
-            )
+            }
+
         }
     }
 }
