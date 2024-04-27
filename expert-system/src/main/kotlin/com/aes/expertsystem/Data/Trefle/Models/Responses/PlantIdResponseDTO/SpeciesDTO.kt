@@ -136,7 +136,7 @@ class SpeciesDTO(
     var growth: Growth,
 
     /**
-     * Any additional data
+     * Any additional Data
      */
     var extras: Any?
 )

@@ -11,8 +11,10 @@ class UserMessagesContextProvider: InitialContextProvider {
 
     fun Message.toContext(index: Int): String?{
         return when(type){
-            MessageType.INCOMING -> "User sent message $index: \"$message\" at ${createdAt.format(DateTimeFormatter.ISO_DATE_TIME)}"
-            MessageType.OUTGOING -> "System sent message $index: \"$message\" at ${createdAt.format(DateTimeFormatter.ISO_DATE_TIME)}"
+            MessageType.INCOMING -> "User sent message $index: " +
+                    "\"$message\" at ${createdAt.format(DateTimeFormatter.ISO_DATE_TIME)}"
+            MessageType.OUTGOING -> "System sent message $index: " +
+                    "\"$message\" at ${createdAt.format(DateTimeFormatter.ISO_DATE_TIME)}"
             else -> null
         }
     }
@@ -22,3 +24,4 @@ class UserMessagesContextProvider: InitialContextProvider {
         } + listOf("You are System")
     }
 }
+

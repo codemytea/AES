@@ -14,7 +14,7 @@ import java.io.File
  * - no csv/api so iterate through webpages and use JSOUP
  * Information stored in DB
  *
- * This service writes all collected data to the DB
+ * This service writes all collected Data to the DB
  * */
 @Service
 open class EcocropDataSaveService(

@@ -19,11 +19,9 @@ class NewMessageDTO(
     var sendtime: Int = LocalDateTime.now().atZone(ZoneId.systemDefault()).toEpochSecond().toInt() + 5,
 
     /**
-     * List of who will receive message
+     * The recipients of the message
      * */
-    @JsonIgnore
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    var recipient: RecipientDTO? = null,
+    var recipients: List<RecipientDTO> = listOfNotNull(),
 
     /**
      * UK Shortcode all messages are sent from
@@ -38,8 +36,5 @@ class NewMessageDTO(
 
     ) {
 
-    /**
-     * The recipients of the message
-     * */
-    val recipients = listOfNotNull(recipient)
+
 }

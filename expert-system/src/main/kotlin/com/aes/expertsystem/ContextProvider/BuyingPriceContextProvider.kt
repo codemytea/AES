@@ -16,7 +16,7 @@ class BuyingPriceContextProvider(
         val referencedCrops = dataCacheService.possibleSeedBuyingCropNames.filter {
             it.value.any{message.containsWord(it, ignoreCase = true)}
         }.map { it.key }
-        val country = user.userSmallholdingInfo.first().location_country!!
+        val country = user.userSmallholdingInfo.firstOrNull()?.location_country ?: "United Kingdom"
         return (1 until 120).flatMap {
             val dateFuture = LocalDate.now().plusDays(it.toLong())
             referencedCrops.map {

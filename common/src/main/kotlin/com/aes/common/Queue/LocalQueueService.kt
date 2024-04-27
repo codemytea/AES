@@ -1,5 +1,7 @@
 package com.aes.common.Queue
 
+import com.aes.common.logging.Logging
+import com.aes.common.logging.logger
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.CoroutineScope
@@ -8,16 +10,36 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import org.springframework.stereotype.Service
 import java.io.File
+import java.nio.file.Paths
+import kotlin.io.path.absolutePathString
 
 /**
  * Own Queue structure used throughout the project. Cloud queues such as AWS SQS could be used by they incur a significant cost.
  * Some functions are unused in this project but have been added to create a holistic queue structure ready for publishing
  * */
 @Service
-class LocalQueueService {
+class LocalQueueService: Logging {
+
+
+    fun String.pathParent(): String?{
+        val lastSlash = lastIndexOf('/')
+        return substring(0, lastSlash).ifBlank { null }
+    }
+
+    val topLevelDir by lazy {
+        var currentPath = Paths.get("").absolutePathString()
+        while(true) {
+            if (File("${currentPath}/gradlew.bat").exists()) {
+                return@lazy currentPath
+            } else currentPath.pathParent()?.let {
+                currentPath = it
+            } ?: throw Exception("Invalid folder structure, make sure you have the gradlew script")
+        }
+    }
 
     val MAX_QUEUE_SIZE = 999 //If it's less, risk loosing items in queue, if more, means possible error in system
-    val queueDir = { queueName: String -> "queues/$queueName" } //the directory teh queue is stored in
+    val queueRoot = File("$topLevelDir/queues")
+    val queueDir = { queueName: String -> "${queueRoot.absolutePath}/$queueName" } //the directory the queue is stored in
     val mapper = jacksonObjectMapper().registerModules(JavaTimeModule()) //JSON converter
 
     /**
@@ -37,7 +59,7 @@ class LocalQueueService {
      * @param queueName The name of the queue to be created
      * */
     private fun createQueueIfNeeded(queueName: String) {
-        val fileTop = File("queues")
+        val fileTop = queueRoot
         if (!fileTop.exists()) fileTop.mkdir()
         val file = File(queueDir(queueName))
         if (file.exists()) return
@@ -122,6 +144,7 @@ class LocalQueueService {
      * @param queueName the name of the queue
      * */
     fun popTopQueueItem(queueName: String) {
+        logger().info("Popping queue item from $queueName")
         getMinQueueItem(queueName)?.delete()
     }
 

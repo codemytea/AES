@@ -21,7 +21,7 @@ class SellingPriceContextProvider(
         }.map { it.key }
 
         logger().info("Referenced crops [${referencedCrops.joinToString(" && ")}]")
-        val country = user.userSmallholdingInfo.first().location_country!!
+        val country = user.userSmallholdingInfo.firstOrNull()?.location_country ?: "United Kingdom"
         return (1 until 120).flatMap {
             val dateFuture = LocalDate.now().plusDays(it.toLong())
             referencedCrops.map {

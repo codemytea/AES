@@ -28,14 +28,24 @@ class WeatherContextProvider(
             if (it.location_city == null || it.location_country == null) return@mapNotNull null
             getWeatherData(it).flatMap {
                 listOf(
-                    "The temperature on date ${it.time.format(DateTimeFormatter.ISO_DATE)} at time ${it.time.format(DateTimeFormatter.ISO_TIME)} is expected to be ${it.temperature ?: 0f} degrees celsius",
-                    "The rainfall on date ${it.time.format(DateTimeFormatter.ISO_DATE)} at time ${it.time.format(DateTimeFormatter.ISO_TIME)} is expected to be ${it.precipitation ?: 0f}mm",
-                    "The cloud cover on date ${it.time.format(DateTimeFormatter.ISO_DATE)} at time ${it.time.format(DateTimeFormatter.ISO_TIME)} is expected to be ${it.cloudCoverPercentage ?: 0f}%",
-                    "The snowfall on date ${it.time.format(DateTimeFormatter.ISO_DATE)} at time ${it.time.format(DateTimeFormatter.ISO_TIME)} is expected to be ${it.snowfallCm ?: 0f}cm",
-                    "The humidity on date ${it.time.format(DateTimeFormatter.ISO_DATE)} at time ${it.time.format(DateTimeFormatter.ISO_TIME)} is expected to be ${it.humidity ?: 0f}%"
+                    "The temperature on date ${it.time.format(DateTimeFormatter.ISO_DATE)} " +
+                            "at time ${it.time.format(DateTimeFormatter.ISO_TIME)} is expected to be " +
+                            "${it.temperature ?: 0f} degrees celsius",
+                    "The rainfall on date ${it.time.format(DateTimeFormatter.ISO_DATE)} " +
+                            "at time ${it.time.format(DateTimeFormatter.ISO_TIME)} is expected to be " +
+                            "${it.precipitation ?: 0f}mm",
+                    "The cloud cover on date ${it.time.format(DateTimeFormatter.ISO_DATE)} " +
+                            "at time ${it.time.format(DateTimeFormatter.ISO_TIME)} is expected to be " +
+                            "${it.cloudCoverPercentage ?: 0f}%",
+                    "The snowfall on date ${it.time.format(DateTimeFormatter.ISO_DATE)} " +
+                            "at time ${it.time.format(DateTimeFormatter.ISO_TIME)} is expected to be " +
+                            "${it.snowfallCm ?: 0f}cm",
+                    "The humidity on date ${it.time.format(DateTimeFormatter.ISO_DATE)} " +
+                            "at time ${it.time.format(DateTimeFormatter.ISO_TIME)} is expected to be" +
+                            " ${it.humidity ?: 0f}%"
                 )
             }
         }.flatten()
-
     }
 }
+

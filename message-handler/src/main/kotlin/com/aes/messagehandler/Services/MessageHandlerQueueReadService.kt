@@ -20,13 +20,13 @@ class MessageTaggingQueueReadService(
 
 
     /**
-     * Reads message-handler-queue every 1 second. May take longer to execute entire message handling pipeline for all
+     * Reads message_handler_queue every 1 second. May take longer to execute entire message handling pipeline for all
      * messages currently in the queue, in which case, it only reads the queue again after the current messages on the
      * queue have finished processing.
      * */
-    @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedDelay = 10, timeUnit = TimeUnit.SECONDS)
     fun readFromQueue() {
-        logger().info("Reading messages from message-handler-queue")
+        logger().info("Reading messages from message_handler_queue")
         var count = 0
         var hasMore = true
         val asyncOps = mutableListOf<Deferred<Unit>>()

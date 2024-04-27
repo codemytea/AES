@@ -11,7 +11,7 @@ import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Service
 import java.util.*
 
-@Order(3)
+@Order(4)
 @Service
 class NewInformationDetector(
     private val newInformationService: NewInformationService,
@@ -21,10 +21,12 @@ class NewInformationDetector(
 
     override val messagePartType: HandlableMessageType = HandlableMessageType.INFORMATION
 
-    override fun extractPartAndReturnRemaining(remainingMessage: String, userID: UUID): List<String>? {
+    override fun extractPartAndReturn(remainingMessage: String, userID: UUID): List<String>? {
         newInformationService.getDetailsToDetermine(userID)?.let {
             newInformationService.saveNewInformation(remainingMessage, userID, it)
-            return informationCollection.removeNewInformation(remainingMessage, it)
+            return informationCollection.removeNewInformation(remainingMessage, it).also{
+                logger().info("collected following new piece of information: ${it.joinToString("")}")
+            }
         }
         return null
     }
@@ -46,5 +48,5 @@ class NewInformationDetector(
         return callToAction?.let { listOf(it) }
     }
 
-
+//TODO response included info that user had just given
 }

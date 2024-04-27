@@ -13,7 +13,7 @@ class UserDetails(str, Enum):
 
 
 # Load the trained spaCy NER model
-nlp = spacy.load('Data/model-best')
+nlp = spacy.load('model-best')
 
 def processText(text):
     return nlp(text).ents

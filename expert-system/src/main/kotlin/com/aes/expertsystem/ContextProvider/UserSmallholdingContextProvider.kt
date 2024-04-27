@@ -11,7 +11,7 @@ class UserSmallholdingContextProvider: InitialContextProvider {
             listOfNotNull(
                 it.location_country?.let { "in the country $it" },
                 it.location_city?.let { "in the city $it" },
-                it.smallholdingSize?.let { "${it / 3f} hectares" },
+                it.smallholdingSize?.let { "${it} hectares" },
                 it.cashCrop?.name?.lowercase()?.let { "used to grow $it" }
             ).map {
                 "The user's smallholding is $it."
@@ -19,3 +19,5 @@ class UserSmallholdingContextProvider: InitialContextProvider {
         } + listOf("The user's smallholding information should be used to scale any results.")
     }
 }
+
+

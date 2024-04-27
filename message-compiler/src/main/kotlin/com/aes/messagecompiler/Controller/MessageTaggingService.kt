@@ -42,7 +42,11 @@ class MessageTaggingService(
                 ?: knowledgeRepository.save(KnowledgeArea(topic, crop, LocalDateTime.now())).also {
                     val message = messageRepository.findFirstByUserIdAndTypeOrderByCreatedAtDesc(userId)!!
                     val topics = messageTopicsRepository.save(MessageTopics(it, message))
-                    if (!message.messageTopics.any { it.sms.id == message.id && it.knowledgeArea.topic == topic && it.knowledgeArea.cropName == crop }) {
+                    if (!message.messageTopics.any {
+                        it.sms.id == message.id &&
+                        it.knowledgeArea.topic == topic &&
+                        it.knowledgeArea.cropName == crop
+                    }) {
                         message.messageTopics.add(topics)
                     }
                 }

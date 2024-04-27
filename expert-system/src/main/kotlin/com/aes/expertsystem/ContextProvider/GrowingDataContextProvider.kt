@@ -27,7 +27,7 @@ class GrowingDataContextProvider(
             listOf(
                 "The minimum crop cycle of $it is ${ecocrop?.minCropCycle ?: "Unknown"} days",
                 "The maximum crop cycle of $it is ${ecocrop?.maxCropCycle ?: "Unknown"} days",
-                //Doesn't seem to correlate temperature with the weather data
+                //Doesn't seem to correlate temperature with the weather Data
                 "Do not plant $it if the temperature is below ${ecocrop?.absoluteMinTempRequired} degrees celsius on any date.",
                 "Do not plant $it if the temperature is above ${ecocrop?.absoluteMaxTempRequired} degrees celsius on any date.",
                 "$it will grow fastest if the temperature is ${ecocrop?.averageOptimalTemperature} degrees celsius on any date"

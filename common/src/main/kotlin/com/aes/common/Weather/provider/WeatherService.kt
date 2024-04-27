@@ -35,7 +35,7 @@ class WeatherService(
     }
 
     /**
-     * Creates the correct URL for querying historical data
+     * Creates the correct URL for querying historical Data
      * */
     private fun historicalUrl(
         lat: Float,

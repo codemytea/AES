@@ -4,6 +4,8 @@ import com.aes.common.Entities.UserFeedback
 import com.aes.common.Enums.HandlableMessageType
 import com.aes.common.Repositories.UserFeedbackRepository
 import com.aes.common.Repositories.UserRepository
+import com.aes.common.logging.Logging
+import com.aes.common.logging.logger
 import com.aes.messagehandler.Interfaces.MessageHandler
 import com.aes.messagehandler.Python.FeedbackExtraction
 import org.springframework.core.annotation.Order
@@ -16,12 +18,14 @@ class FeedbackDetector(
     private val feedbackExtraction: FeedbackExtraction,
     private val userFeedbackRepository: UserFeedbackRepository,
     private val userRepository: UserRepository,
-) : MessageHandler {
+) : MessageHandler, Logging {
     override val messagePartType: HandlableMessageType = HandlableMessageType.FEEDBACK
 
-    override fun extractPartAndReturnRemaining(remainingMessage: String, userID: UUID): List<String>? {
+    override fun extractPartAndReturn(remainingMessage: String, userID: UUID): List<String>? {
         //extract the agricultural questions using OpenAI
-        return feedbackExtraction.getFeedback(remainingMessage).mapNotNull { it }.ifEmpty { null }
+        return feedbackExtraction.getFeedback(remainingMessage).mapNotNull { it }.ifEmpty { null }.also {
+            logger().info("Received following feedback: ${it?.joinToString(" ") }}")
+        }
     }
 
     override fun generateAnswer(prompts : List<String>, userID: UUID): List<String>? {

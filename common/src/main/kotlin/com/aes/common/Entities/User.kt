@@ -19,7 +19,7 @@ class User(
 
     /**
      * The phone number(s) of the user. The user could have multiple phones/
-     * change phone number. Don't want data to be lost.
+     * change phone number. Don't want Data to be lost.
      * */
     @ElementCollection
     val phoneNumber: List<Long> = mutableListOf(),
@@ -62,6 +62,12 @@ class User(
      * */
     @Column
     var stopCollectingInformation: Boolean = false,
+
+    /**
+     * Whether or not the user has asked to stop sending them notifications
+     * */
+    @Column
+    var stopSendingNotifications: Boolean = false,
 
 
     /**
