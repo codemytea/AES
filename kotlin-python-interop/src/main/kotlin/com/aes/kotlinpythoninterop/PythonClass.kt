@@ -11,7 +11,6 @@ import kotlin.reflect.full.findAnnotations
 abstract class PythonClass {
 
 
-
     companion object{
         private const val OPENAI_API_KEY = "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"
         val env
@@ -113,7 +112,7 @@ abstract class PythonClass {
         outputFile.writeText("")
         val process = ProcessBuilder()
             .command(
-                mutableListOf(
+                listOfNotNull(
                     "python3",
                     getPythonProgram(scriptName),
                     programRunUID,
@@ -150,7 +149,7 @@ abstract class PythonClass {
         } catch(e: Throwable){
             throw e
         } finally {
-            cleanUp(programRunUID)
+            //cleanUp(programRunUID)
         }
     }
 }
