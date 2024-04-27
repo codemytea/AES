@@ -23,19 +23,19 @@ class SmsServicesApplicationTests {
     @Autowired
     lateinit var smsController: SmsController
 
-
     @Test
     fun sendMessage() {
         sendSmsService.sendSMS(
             NewMessageDTO(
-                message = "this is a test!",
+                message = "Test Message",
                 recipients = listOf(RecipientDTO(
-                    447565533834
+                    447565000000
                 )
             )),
             MessageType.OUTGOING
         )
     }
+
 
     @Test
     fun receiveMessageTest(){

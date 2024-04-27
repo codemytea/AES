@@ -11,7 +11,6 @@ class UserFeedback (
     @Id
     var id: UUID = UUID.randomUUID(),
 
-
     /**
      * Who the message is actually associated with
      * */
@@ -25,5 +24,5 @@ class UserFeedback (
     @Column(length = 5000)
     var feedback: String = ""
 
-
     )
+

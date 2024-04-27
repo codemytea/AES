@@ -14,8 +14,3 @@ interface MessageRepository : CrudRepository<Message, Long> {
     fun getMessageByUserIdAndType(userUUID: UUID, type: MessageType = MessageType.INCOMING): List<Message>?
     fun findFirstByUserIdAndTypeOrderByCreatedAtDesc(userUUID: UUID, type: MessageType = MessageType.INCOMING): Message?
 }
-
-
-
-
-

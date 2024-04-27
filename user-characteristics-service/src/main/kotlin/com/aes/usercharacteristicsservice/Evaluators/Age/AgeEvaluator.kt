@@ -20,26 +20,24 @@ class AgeEvaluator(
     private val attributeEstimator: AttributeEstimator
 ) : Logging {
 
-
     /**
-     * Estimates the age of the user given a list of all their messages, using an Age Model from HuggingFace.
+     * Estimates the age of the user given a list of all
+     * their messages, using an Age Model from HuggingFace.
      * This estimated age is then saved to the DB
      * */
     @Scheduled(cron = "0 0 1 * * ?")
-    //@Scheduled(cron = "0/10 * * ? * *")
     @Transactional
     fun getAgeEstimate() {
         userRepository.findAll().forEach { user ->
             val messages = messageRepository.getMessageByUserIdAndType(user.id).also {
                 if (it.isNullOrEmpty()) return@forEach
             }
-
             val age = messages?.let { attributeEstimator.estimateAge(it.map { it.message }) }
 
             user.age = age
             userRepository.save(user)
-
             logger().info("User ${user.id} estimated age is $age")
         }
     }
 }
+
