@@ -37,7 +37,9 @@ class ExpertSystemService(
 
         logger().info("Getting full answer")
 
-        return expertSystem.getAnswer(message, fullContext)
+        return expertSystem.getAnswer(message, fullContext).also {
+            println("Answer is $it")
+        }
     }
 }
 

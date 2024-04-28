@@ -70,12 +70,25 @@ class RAGTest {
 
     @Test
     fun answersAreRelevant(){
-        val question = "How many tomato seeds should I plant?"
-        val answer = expertSystemService.getAgriculturalAnswer(
-            question,
-            this.mockUser
+        val questions = listOf(
+            "How many tomato seeds should I plant?",
+            "What temperature is it best to plant aubergines at?",
+            "When should I sell apples?",
+            "How much could I buy orange seeds for?",
+            "When should I sow wheat?",
+            "Is now a good time to harvest my onions",
+            "How much can I sell my apples for in a month?",
+            "What is the weather like in two days? Should I be outside planting?",
+            "Should I plant garlic when it is cold?",
+            "How long will my olives take to mature?"
         )
-        pythonRagTest.testRagRelevance(listOf(question), listOf(answer))
+        val answers = questions.map {
+            expertSystemService.getAgriculturalAnswer(
+                it,
+                this.mockUser
+            )
+        }
+        pythonRagTest.testRagRelevance(questions, answers)
 
     }
 }
