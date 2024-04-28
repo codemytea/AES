@@ -10,6 +10,7 @@ import com.aes.common.Repositories.MessageRepository
 import com.aes.common.Repositories.UserRepository
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
+import com.aes.smsservices.Configuration.SmsServiceConfiguration
 import com.aes.smsservices.Exceptions.MessageRequestException
 import com.aes.smsservices.Mappers.getLanguageCodeForCountry
 import com.aes.smsservices.Mappers.toStandardLanguage
@@ -26,11 +27,11 @@ import java.time.ZoneId
 class SendSmsService(
     val messageRepository: MessageRepository,
     val userRepository: UserRepository,
-    val translateSmsService: TranslateSmsService
+    val translateSmsService: TranslateSmsService,
+    smsServiceConfiguration: SmsServiceConfiguration
     //add in repositories here to save message to entities and find users etc
 ) : Logging {
-    final val token = "QWg_52T4ToSxD4YPZnwWpb7PT7HiBJx0I-kaHSnNNdrTgp9_XRdzg3gHI51tu2h6"
-    val uri = URI.create("https://gatewayapi.com/rest/mtsms?token=$token")
+    val uri = URI.create("https://gatewayapi.com/rest/mtsms?token=${smsServiceConfiguration.gatewayApiKey}")
 
     val restTemplate: RestTemplate by lazy {
         RestTemplate()

@@ -6,15 +6,18 @@ import com.aes.expertsystem.Data.Trefle.Models.Id
 import com.aes.expertsystem.Data.Trefle.Models.PlantListDTO
 import com.aes.expertsystem.Data.Trefle.Models.Responses.PlantIdResponseDTO.PlantIdResponseDTO
 import com.aes.expertsystem.Data.Trefle.Models.Responses.PlantListResponse.PlantListResponseDTO
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
 
 @Service
-class TrefleService : Logging {
+@EnableConfigurationProperties(TrefleConfiguration::class)
+class TrefleService(
+    val trefleConfiguration: TrefleConfiguration
+) : Logging {
 
-    private val key = "MtG0fklvA_J60KpvmuCqhKuwKLXsjYqjS5vXuqKLXWA"
 
     private final inline fun <reified T> RestTemplate.getForEntity(url: String, params: Map<String, Any>): T? {
         val realUrl = "$url?${params.toList().joinToString("&") { "${it.first}=${it.second}" }}"
@@ -29,7 +32,7 @@ class TrefleService : Logging {
      * */
     fun allPlants(resource: PlantListDTO): PlantListResponseDTO {
         val params = resource.toQueryParams().toMutableMap().apply {
-            put("token", key)
+            put("token", trefleConfiguration.apiKey)
         }
         return RestTemplateBuilder().build().getForEntity("${uri}plants", params)!!
     }
@@ -41,7 +44,7 @@ class TrefleService : Logging {
      * */
     fun getPlantById(resource: Id): PlantIdResponseDTO {
         return RestTemplateBuilder().build()
-            .getForEntity("${uri}plants/${resource.id}", mapOf<String, Any>(Pair("token", key)))!!
+            .getForEntity("${uri}plants/${resource.id}", mapOf<String, Any>(Pair("token", trefleConfiguration.apiKey)))!!
     }
 
     /**
@@ -49,7 +52,7 @@ class TrefleService : Logging {
      * */
     fun getPlantBySearchQuery(resource: PlantListDTO): PlantListResponseDTO {
         val params = resource.toQueryParams().toMutableMap().apply {
-            put("token", key)
+            put("token", trefleConfiguration.apiKey)
         }
         return RestTemplateBuilder().build().getForEntity("${uri}plants/search", params)!!
     }

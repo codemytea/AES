@@ -18,6 +18,9 @@ class RAGTest {
     @Autowired
     lateinit var expertSystemService: ExpertSystemService
 
+    @Autowired
+    lateinit var pythonRagTest: PythonRAGTest
+
 
     fun <T> MutableList<T>.add(vararg t: T){
         this.addAll(t.toList())
@@ -72,7 +75,7 @@ class RAGTest {
             question,
             this.mockUser
         )
-        PythonRAGTest().testRagRelevance(listOf(question), listOf(answer))
+        pythonRagTest.testRagRelevance(listOf(question), listOf(answer))
 
     }
 }

@@ -1,22 +1,23 @@
 package com.aes.kotlinpythoninterop
 
+import com.aes.common.Configuration.OpenAIConfiguration
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.*
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.stereotype.Service
 import java.io.File
 import java.util.*
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.findAnnotations
 
-abstract class PythonClass {
+@Service
+@EnableConfigurationProperties(OpenAIConfiguration::class)
+abstract class PythonClass{
 
-
-    companion object{
-        private const val OPENAI_API_KEY = "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"
-        val env
-        = mapOf("OPENAI_API_KEY" to OPENAI_API_KEY)
-            .toList().map { "${it.first}=${it.second}" }.joinToString("&")
-    }
+    @Autowired
+    lateinit var openAIConfiguration: OpenAIConfiguration
 
     /**
      * Executes a given Python script
@@ -25,7 +26,7 @@ abstract class PythonClass {
      * @param args - the arguments to the python function
      * @return the result of the python function
      * */
-    protected inline fun <reified T> execute(function: KFunction<T>, vararg args: Any?): T {
+    protected final inline fun <reified T> execute(function: KFunction<T>, vararg args: Any?): T {
         val annot = function.findAnnotations(PythonFunction::class).firstOrNull()
         val functionName = annot?.functionName ?: function.name
         val scriptName = annot?.scriptName ?: "main.py"
@@ -87,7 +88,7 @@ abstract class PythonClass {
      * @return the result of the program
      * @throws PythonException if the python execution fails
      * */
-    inline fun <reified T> readResultFromFile(filename: String): T {
+    final inline fun <reified T> readResultFromFile(filename: String): T {
         val file = File(getPathForFile(filename))
         val mapper = jacksonObjectMapper().registerModules(JavaTimeModule())
         val (result, error) = file.readLines()
@@ -105,7 +106,10 @@ abstract class PythonClass {
      * @return the result of the function
      * @throws PythonException if Python execution fails
      * */
-    inline fun <reified T> executeProgram(scriptName: String, functionName: String, arguments: List<Any?>): T {
+    final inline fun <reified T> executeProgram(scriptName: String, functionName: String, arguments: List<Any?>): T {
+        val env
+                = mapOf("OPENAI_API_KEY" to openAIConfiguration.openAIApiKey)
+            .toList().map { "${it.first}=${it.second}" }.joinToString("&")
         val programRunUID = UUID.randomUUID().toString()
         writeArgumentsToFile(arguments, "$programRunUID.args.json")
         val outputFile = File(getPathForFile("$programRunUID.out.txt"))

@@ -1,4 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.io.FileInputStream
+import java.util.*
 
 plugins {
     id("org.springframework.boot") version "3.2.1"
@@ -51,6 +53,21 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+val localProperties = Properties()
+val credentialsFile = rootProject.file("credentials.properties")
+val key = if (credentialsFile.exists()) {
+    localProperties.load(FileInputStream(credentialsFile))
+    (localProperties["GATEWAY_API_KEY"] as? String)?.also{
+        println("Credentials found")
+    }
+} else null
 tasks.withType<Test> {
     useJUnitPlatform()
+    tasks.withType<Test> {
+        key?.let {
+            this.jvmArgs("-Dcom.aes.smsservice.gatewayApiKey=$it")
+        }
+    }
 }
+
+

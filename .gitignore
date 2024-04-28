@@ -37,3 +37,4 @@ out/
 .vscode/
 /message-handler/src/main/resources/data/model-best/
 /NERTrainerProject/
+/credentials.properties

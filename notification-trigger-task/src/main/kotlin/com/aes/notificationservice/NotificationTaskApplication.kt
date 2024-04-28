@@ -12,10 +12,10 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @EntityScan(basePackages = ["com.aes"])
 @ComponentScan(basePackages = ["com.aes"])
 @EnableScheduling
-class NotificationServiceApplication
+class NotificationTaskApplication
 
 fun main(args: Array<String>) {
-	runApplication<NotificationServiceApplication>(*args)
+	runApplication<NotificationTaskApplication>(*args)
 }
 
 //read db & find lowest knowledge area
