@@ -23,9 +23,7 @@ class FeedbackDetector(
 
     override fun extractPartAndReturn(remainingMessage: String, userID: UUID): List<String>? {
         //extract the agricultural questions using OpenAI
-        return feedbackExtraction.getFeedback(remainingMessage).mapNotNull { it }.ifEmpty { null }.also {
-            logger().info("Received following feedback: ${it?.joinToString(" ") }}")
-        }
+        return feedbackExtraction.getFeedback(remainingMessage).mapNotNull { it }.ifEmpty { null }
     }
 
     override fun generateAnswer(prompts : List<String>, userID: UUID): List<String>? {
@@ -40,7 +38,6 @@ class FeedbackDetector(
                 )
             }
         }
-
         return listOf("Thank you for your feedback.")
     }
 }

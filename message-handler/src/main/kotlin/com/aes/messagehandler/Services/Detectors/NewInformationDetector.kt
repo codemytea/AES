@@ -47,6 +47,4 @@ class NewInformationDetector(
         }
         return callToAction?.let { listOf(it) }
     }
-
-//TODO response included info that user had just given
 }

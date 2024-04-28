@@ -28,6 +28,8 @@ def getStopRequests(userMessage):
                            You want to check if user input contains a request for the system to stop asking them for more information, or stop sending them notifications.
                            If it does, extract any stop request(s) WITH surrounding context and pass them to returnStop as the stopRequestInformation or stopRequestNotifications parameter depending on the type. 
                            Else, just pass null to both.
+                           
+                           Make sure you check for the word STOP, it is ver important you manage to extract this correctly.
 
 
                            Examples:

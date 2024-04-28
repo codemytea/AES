@@ -32,7 +32,7 @@ class SmsController(
     /**
      * Webhook for receiving incoming messages from users
      *
-     * @param resource - the recieved message
+     * @param resource - the received message
      * @return the saved message dto
      * */
     @PostMapping("/receive")
@@ -43,7 +43,6 @@ class SmsController(
         //If no associated user, create a new one and determine preferred language
         val sms = recieveSmsService.save(resource)
 
-        //
         logger().info("Sending ${sms.id} to message handler.")
         recieveSmsService.sendToMessageHandler(sms)
 

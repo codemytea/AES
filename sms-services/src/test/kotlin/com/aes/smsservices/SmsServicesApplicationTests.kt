@@ -43,7 +43,7 @@ class SmsServicesApplicationTests {
             RecievedMessageDTO(
                 id = 12345,
                 phoneNumber = 447000000000,
-                message = "Hello. This is a test message. What is your favourite colour? Please stop sending me notifications. I'd like to refer a guy called Jamali to this service. His number is 07500338340. This system is delicious. My smallholding is 10 meters. How can I plant aubergines? How do I harvest tomatoes?",
+                message = "Hello. This is a test message. What is your favourite colour? Please stop sending me notifications. I'd like to refer a guy called Jamali to this service. His number is 07500338340. This system gives good feedback on corn growing but could be better at pest management explanations. My smallholding is 10 acres. At what depth should I plant aubergines? When do I harvest tomatoes?",
                 senttime = 20241110,
                 country = "GB"
             )

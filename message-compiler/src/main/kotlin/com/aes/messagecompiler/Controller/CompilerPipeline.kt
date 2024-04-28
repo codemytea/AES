@@ -25,7 +25,7 @@ class CompilerPipeline(
 
     /**
      * Compiles a message by tweaking it to the users characteristics and then chunking/amalgamating them to one
-     * message long chunks. After it
+     * message long chunks. A
      *
      * @param initialResponse - an initial list of responses with what they correspond to
      * @param phoneNumber - the receiving users' phone number
@@ -84,40 +84,39 @@ class CompilerPipeline(
      * So user doesn't get very short or very long messages.
      *
      * Each topic is considered separately, and then all messages in each topic are amalgamated.
-     * If this is less than 25 words, the now amalgamated message is sent.
+     * If this is less than 17 words, the now amalgamated message is sent.
      *
-     * If the message is more than 25 words, it is split at punctuation using positive lookahead assertion.
-     * Each sentence is considered individually, if the sentence has more than 25 words, that is sent by itself as a message.
+     * If the message is more than 17 words, it is split at punctuation using positive lookahead assertion.
+     * Each sentence is considered individually, if the sentence has more than 17 words, that is sent by itself as a message.
      * If the message is less, it's added to a 'wait' list.
      * When the next sentence comes along if the wait list isn't empty, we try to add the two sentences together, and if
-     * those are less than 25 we continue, else we remove the existing message in wait and send that as a message and if
-     * the new one is less than 25, we add that to wait, else we send that as well.
+     * those are less than 17 we continue, else we remove the existing message in wait and send that as a message and if
+     * the new one is less than 17, we add that to wait, else we send that as well.
      *
      * This is repeated until all messages are amalgamated or split.
      *
      * @param tailoredResponses - the responses tailored to user characteristics
      * @return a list of messages to be sent to the user, chunked and amalgamated as appropriate
      * */
-    //TODO introduces commas bc takes punctuation from the fact it's a map eg {k1=["abc."], k2=["def"]} -> "abc., def". Need to fix.
     fun finalSplit(tailoredResponses: Map<HandlableMessageType, List<String>>) : List<String>{
         logger().info("Amalgamating message")
         val mappedTopics =  tailoredResponses.map { topic ->
             topic.value.joinToString(" ").let {
-                if(it.split(" ").size > 25){
+                if(it.split(" ").size > 17){
                     val result = mutableListOf<String>()
                     val wait = mutableListOf<String>()
                     it.split(Regex("(?<=[.!?])\\s*")).forEach {
                         if (wait.size == 0){
-                            if (it.split(" ").size > 25){
+                            if (it.split(" ").size > 17){
                                 result.add(it)
                             } else {
                                 wait.add(it)
                             }
                         } else {
-                            if (wait.joinToString(" ").split(" ").size + it.split(" ").size > 25){
+                            if (wait.joinToString(" ").split(" ").size + it.split(" ").size > 17){
                                 result.add(wait[0])
                                 wait.clear()
-                                if (it.split(" ").size > 25){
+                                if (it.split(" ").size > 17){
                                     result.add(it)
                                 } else {
                                     wait.add(it)
