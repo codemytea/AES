@@ -98,7 +98,6 @@ class CompilerPipeline(
      * @param tailoredResponses - the responses tailored to user characteristics
      * @return a list of messages to be sent to the user, chunked and amalgamated as appropriate
      * */
-    //TODO introduces commas bc takes punctuation from the fact it's a map eg {k1=["abc."], k2=["def"]} -> "abc., def". Need to fix.
     fun finalSplit(tailoredResponses: Map<HandlableMessageType, List<String>>) : List<String>{
         logger().info("Amalgamating message")
         val mappedTopics =  tailoredResponses.map { topic ->

@@ -2,6 +2,7 @@ package com.aes.messagehandler.Services.Detectors
 
 import com.aes.common.Enums.HandlableMessageType
 import com.aes.common.Enums.UserDetails
+import com.aes.common.Repositories.UserRepository
 import com.aes.messagehandler.Interfaces.MessageHandler
 import com.aes.messagehandler.Python.ReferAFriendExtraction
 import com.aes.messagehandler.Services.NewInformationService
@@ -15,6 +16,7 @@ import java.util.*
 class ReferAFriendDetector(
     private val referAFriendExtraction: ReferAFriendExtraction,
     private val newInformationService: NewInformationService,
+    private val userRepository: UserRepository
 ) : MessageHandler {
     override val messagePartType: HandlableMessageType = HandlableMessageType.REFER_FRIEND
     var containsPhoneNumber = false
@@ -26,19 +28,22 @@ class ReferAFriendDetector(
         val info = referAFriendExtraction.getReferral(remainingMessage).mapNotNull { it }.ifEmpty { null }
         info?.let { infoInner->
             val numbers = phoneNumberUtil.findNumbers(infoInner.joinToString(" "), "GB")?.toList()
-            if (numbers?.isNotEmpty() == true){ //TODO check if duff referral - ie user already exists in system
-                containsPhoneNumber = true
-                newInformationService.saveNewInformation(
-                    infoInner.joinToString(" "),
-                    userID,
-                    listOf(
-                        UserDetails.NAME, UserDetails.MAIN_CROP,
-                        UserDetails.LOCATION_CITY, UserDetails.LOCATION_COUNTRY,
-                        UserDetails.SMALLHOLDING_SIZE
-                    ),
-                    (numbers.first().number().countryCode.toString() + numbers.first().number().nationalNumber.toString()).toLong()
-                )
+            if (numbers?.isNotEmpty() == true){
+                if (userRepository.findByPhoneNumberContaining((numbers.first().number().countryCode.toString() + numbers.first().number().nationalNumber.toString()).toLong()) == null){
+                    containsPhoneNumber = true
+                    newInformationService.saveNewInformation(
+                        infoInner.joinToString(" "),
+                        userID,
+                        listOf(
+                            UserDetails.NAME, UserDetails.MAIN_CROP,
+                            UserDetails.LOCATION_CITY, UserDetails.LOCATION_COUNTRY,
+                            UserDetails.SMALLHOLDING_SIZE
+                        ),
+                        (numbers.first().number().countryCode.toString() + numbers.first().number().nationalNumber.toString()).toLong()
+                    )
+                }
             }
+
         }
 
         return info

@@ -39,7 +39,6 @@ class NewInformationService(
             }
         }
 
-        //TODO check which smallholding the user is talking about and select the right one
         user?.userSmallholdingInfo?.getOrNull(0)?.let {
             it.location_city?.let {
                 knownSet.plus(UserDetails.LOCATION_CITY)
@@ -104,7 +103,7 @@ class NewInformationService(
                 )
             }
 
-            var userSmallholding = user?.userSmallholdingInfo?.getOrNull(0) //TODO check which smallholding the user is talking about and select the right one
+            var userSmallholding = user?.userSmallholdingInfo?.getOrNull(0)
 
             if (userSmallholding == null) {
                 userSmallholding = userSmallholdingRepository.save(
