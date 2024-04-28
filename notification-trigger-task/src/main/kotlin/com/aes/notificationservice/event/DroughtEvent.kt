@@ -13,19 +13,25 @@ class DroughtEvent(
 ): NotificationTriggerEvent {
 
     val droughtThreshold = 0.2
-
     override val delayDays: Int = 0
+
     override fun notificationBody(crops: List<Crop>, topics: List<Topic>): String {
         return "A drought is expected in the next couple of days"
     }
 
-    override val executionType: ExecutionType = ExecutionType.CROP_FLAG_DRIVEN { it.shouldWorryAboutDrought }
+    override val executionType: ExecutionType = ExecutionType.CROP_FLAG_DRIVEN {
+        it.shouldWorryAboutDrought
+    }
     override fun shouldTriggerNotification(time: LocalDateTime, location: Location): Boolean {
         val todayWeathers = (0..5).map {
-            weatherService.getWeatherForDateAtLocation(location.cityName, location.countryName, time.plusDays(it.toLong()))
+            weatherService.getWeatherForDateAtLocation(
+                location.cityName, location.countryName, time.plusDays(it.toLong())
+            )
         }
         val lastYearWeathers = (0..5).map {
-            weatherService.getWeatherForDateAtLocation(location.cityName, location.countryName, time.minusYears(1).plusDays(it.toLong()))
+            weatherService.getWeatherForDateAtLocation(
+                location.cityName, location.countryName, time.minusYears(1).plusDays(it.toLong())
+            )
         }
 
         val sumRainfallToday = todayWeathers.sumOf { (it.precipitation?:0f).toDouble() }
@@ -33,3 +39,7 @@ class DroughtEvent(
         return sumRainfallToday < sumRainfallLastYear*droughtThreshold
     }
 }
+
+
+
+

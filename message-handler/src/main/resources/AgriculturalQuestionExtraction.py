@@ -21,6 +21,8 @@ def getQuestions(userMessage):
                            You want to check if user input contains an agricultural question. There could be more than one.
                            If it does, extract the question(s) WITH surrounding context and pass them to extractQuestion as the questions parameter. Else, just pass an empty list.
                            
+                           DO NOT extract feedback about the system, or information about the user or their smallholding.
+                           
                            
                            Examples:
                            1. "Hello. I would like know how to sell corn please, thank you. also, when do I plant beets? Furthermore, it's been raining lot's recently, is it still the best time to sow jerusalem artichokes?" -> ["I would like to know how to sell corn?", "When do I plant beets?", "It's been raining lot's recently, is it still the best time to sow jerusalem artichokes?"]

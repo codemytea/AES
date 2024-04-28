@@ -13,14 +13,25 @@ interface NotificationTriggerEvent {
 
     fun shouldTriggerNotification(time: LocalDateTime, location: Location): Boolean
 
-    fun getNotificationOrNull(time: LocalDateTime, location: Location, crops: List<Crop>, topics: List<Topic>): String?{
+    fun getNotificationOrNull(
+        time: LocalDateTime,
+        location: Location,
+        crops: List<Crop>,
+        topics: List<Topic>
+    ): String?{
         return if(shouldTriggerNotification(time, location)) notificationBody(crops, topics)
         else null
     }
 
-    fun execute(time: LocalDateTime, location: Location, crops: List<Crop>, topics: List<Topic>): List<TriggeredNotification>{
+    fun execute(time: LocalDateTime,
+                location: Location,
+                crops: List<Crop>,
+                topics: List<Topic>
+    ): List<TriggeredNotification>{
         val possibleCropsAndTopics = executionType.filterCropsAndTopics(crops, topics)
-        val possibleNotification = this.getNotificationOrNull(time, location, possibleCropsAndTopics.keys.toList(), possibleCropsAndTopics.values.toList()) ?: return listOf()
+        val possibleNotification = this.getNotificationOrNull(
+            time, location, possibleCropsAndTopics.keys.toList(),
+            possibleCropsAndTopics.values.toList()) ?: return listOf()
         return possibleCropsAndTopics.map {
             TriggeredNotification(
                 time.plusDays(delayDays.toLong()),
@@ -29,7 +40,7 @@ interface NotificationTriggerEvent {
                 possibleNotification
             )
         }
-
     }
-
 }
+
+

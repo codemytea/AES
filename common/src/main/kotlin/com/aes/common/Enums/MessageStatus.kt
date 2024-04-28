@@ -8,5 +8,6 @@ enum class MessageStatus {
     DELIVERED,
     FAILED,
     ENROUTE,
-    REJECTED
+    REJECTED,
+    UNDELIVERABLE
 }

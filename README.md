@@ -55,9 +55,12 @@ To understand more about how the interop works, please have a look at the `kotli
 
 Each module has unique set up and running instructions, but here are some general ones first.
 
-1) Unzip the code into an IDE of your choosing (IntelliJ STRONGLY recommended (https://www.jetbrains.com/idea/ - community version is free), else you may have to install many dependencies).
+1) Unzip the code into an IDE of your choosing (IntelliJ IDEA STRONGLY recommended (https://www.jetbrains.com/idea/ - community version is free), else you may have to install many dependencies. IntelliJ IDEA is the only IDE this project has been tested on).
 2) If you do not have Python installed on your machine, install Python (latest version).
-3) Create an OpenAI account (LLM used throughout multiple modules) and create an API key (https://platform.openai.com/settings/profile?tab=api-keys and SAVE it - it disappears once you create it). Then follow the instructions on the website (windows and mac instructions given https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety). Please note, in order to get accuracy benchmarks discussed in dissertation, you will need to use the paid version. You will also need to pip install openai. The following tutorial also explains set up - https://platform.openai.com/docs/quickstart?context=python.
+3) Create an OpenAI account (LLM used throughout multiple modules) and create an API key (https://platform.openai.com/settings/profile?tab=api-keys and SAVE it - it disappears once you create it). Then follow the instructions on the website (windows and mac instructions given https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety). The Open AI version has been set to 3.5-turbo throughout the codebase so you can run it without paying for version 4.0, but please note, in order to get accuracy benchmarks discussed in dissertation, you will need to use the paid 4.0 version as that is what this project was developed with. You will also need to pip install openai. The following tutorial also explains set up - https://platform.openai.com/docs/quickstart?context=python.
+4) Run the tests in ExpertSystemApplicationTests to pre-populate your database with some data necessary for the Expert System to run.
+
+Note, all API keys must be put into a credentials.properties file, copying the template provided in credentials.properties.example file. You database settings must also be added to each applications.properties file, following the instructions provided in them.
 
 ### sms-services
 
@@ -98,11 +101,8 @@ This service uses the Hugging Face `facebook/bart-large-mnli`, `Abderrahim2/bert
 ### expert-system
 
 1) Please follow the quick-start set up docs here https://docs.llamaindex.ai/en/stable/getting_started/installation/ to start.
-2) You will then need to set up the following APIs:
-    - TrefleAPI (replace `[TREFLEAPIKEY]` with your key in the code) - https://trefle.io/
-    - Weather
-    - Soil
-    - Terrain
+2) You will then need to set up TrefleAPI (replace `[TREFLEAPIKEY]` with your key in the code) - https://trefle.io/
+
 3) [ISAAC]
 
 ## Running
