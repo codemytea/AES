@@ -17,7 +17,7 @@ class ScheduledNotification(
     @Id
     val id: UUID = UUID.randomUUID(),
     /**
-     * When teh notification should be sent
+     * When the notification should be sent
      * */
     val time: LocalDateTime = LocalDateTime.now(),
     /**
