@@ -8,16 +8,13 @@ import com.aes.common.Models.MessageDTO
 import com.aes.messagehandler.Enum.SmallholdingUnit
 
 fun String.toUserDetails(): UserDetails? {
-
     if (this == "locationCity") return UserDetails.LOCATION_CITY
     if (this == "locationCountry") return UserDetails.LOCATION_COUNTRY
     if (this == "mainCrop") return UserDetails.MAIN_CROP
     if (this == "smallholdingSize") return UserDetails.SMALLHOLDING_SIZE
     if (this == "name") return UserDetails.NAME
     return null
-
 }
-
 
 fun String.toCrop(): Crop? {
     if (this == "MAIZE") return Crop.MAIZE
@@ -34,10 +31,9 @@ fun Message.toDTO(): MessageDTO {
         user.id,
         message,
         phoneNumber,
-        status ?: MessageStatus.PENDING
+        status ?: MessageStatus.PENDING,
     )
 }
-
 
 fun String.toHectares(): Float? {
     return when {
@@ -53,7 +49,7 @@ fun String.toHectares(): Float? {
 
 fun String.containsIgnoringPlurality(str: List<String>): Boolean {
     str.forEach {
-        if (this.contains(it)){
+        if (this.contains(it)) {
             return true
         }
     }
@@ -64,7 +60,10 @@ fun String.removeAndConvert(sUnit: SmallholdingUnit): Float {
     return sUnit.getHectares(this.replaceList(sUnit.unitIdentifier, "").trim().toFloat())
 }
 
-fun String.replaceList(toReplace: List<String>, replaceToken: String): String {
+fun String.replaceList(
+    toReplace: List<String>,
+    replaceToken: String,
+): String {
     var toReturn = this
     toReplace.forEach {
         toReturn = toReturn.replace(it, replaceToken)

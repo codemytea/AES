@@ -17,4 +17,3 @@ class MessageHandlerApplication
 fun main(args: Array<String>) {
     runApplication<MessageHandlerApplication>(*args)
 }
-

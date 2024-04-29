@@ -5,10 +5,12 @@ import com.aes.kotlinpythoninterop.PythonFunction
 import org.springframework.stereotype.Service
 
 @Service
-class PythonRAGTest: PythonClass() {
-
+class PythonRAGTest : PythonClass() {
     @PythonFunction("test_answer_relevance", "RAGTest.py")
-    fun testRagRelevance(questions: List<String>, answers: List<String>){
+    fun testRagRelevance(
+        questions: List<String>,
+        answers: List<String>,
+    ) {
         return super.execute(::testRagRelevance, questions, answers)
     }
 }

@@ -1,10 +1,7 @@
 package com.aes.common.Enums
 
 enum class MessageType {
-    INCOMING,  //sent by user
-    OUTGOING,  //sent by system
+    INCOMING, // sent by user
+    OUTGOING, // sent by system
     OUTGOING_COLLECTION,
 }
-
-
-

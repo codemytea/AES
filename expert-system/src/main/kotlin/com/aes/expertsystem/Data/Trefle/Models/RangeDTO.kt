@@ -27,5 +27,5 @@ class RangeDTO(
     var sources_count: String? = null,
     var synonyms_count: String? = null,
     var toxicity: String? = null,
-    var year: String? = null
+    var year: String? = null,
 )

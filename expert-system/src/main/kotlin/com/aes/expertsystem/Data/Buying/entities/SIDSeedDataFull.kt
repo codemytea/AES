@@ -25,7 +25,6 @@ class SIDSeedDataFull(
     val sp3: String? = null,
     val author3: String? = null,
     val binomial: String? = null,
-
     @OneToMany(cascade = [CascadeType.ALL])
     val germination: List<Germination>? = null,
     @OneToMany(cascade = [CascadeType.ALL])
@@ -39,7 +38,5 @@ class SIDSeedDataFull(
     @OneToMany(cascade = [CascadeType.ALL])
     val oil_content: List<OilContent>? = null,
     @OneToMany(cascade = [CascadeType.ALL])
-    val morphology: List<Morphology>? = null
-
-) {
-}
+    val morphology: List<Morphology>? = null,
+)

@@ -51,5 +51,5 @@ class OrderDTO(
     var toxicity: String? = null,
     var updated_at: String? = null,
     var vegetable: String? = null,
-    var year: String? = null
+    var year: String? = null,
 )

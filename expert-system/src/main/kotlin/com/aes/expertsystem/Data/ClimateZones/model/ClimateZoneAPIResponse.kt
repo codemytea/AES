@@ -5,12 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 class ClimateZoneAPIResponse(
-    @JsonAlias("return_values") val returnValues: List<ClimateZoneAPIReturnValues>
+    @JsonAlias("return_values") val returnValues: List<ClimateZoneAPIReturnValues>,
 ) {
-
     @JsonIgnoreProperties(ignoreUnknown = true)
     class ClimateZoneAPIReturnValues(
-        @JsonAlias("koppen_geiger_zone") val koppenClimateZone: KoppenClimateZone
+        @JsonAlias("koppen_geiger_zone") val koppenClimateZone: KoppenClimateZone,
     )
-
 }

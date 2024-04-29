@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class KnowledgeClassifiers : PythonClass() {
-
     @PythonFunction("getTopicOfMessage", "knowledgeClassifier.py")
     fun getTopicOfMessage(messages: List<String>): Topic {
         return execute(::getTopicOfMessage, messages.toTypedArray())

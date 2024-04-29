@@ -15,10 +15,8 @@ import java.util.concurrent.TimeUnit
 @Service
 class MessageTaggingQueueReadService(
     val localQueueService: LocalQueueService,
-    val messageHandlerService: MessageHandlerService
+    val messageHandlerService: MessageHandlerService,
 ) : Logging {
-
-
     /**
      * Reads message_handler_queue every 1 second. May take longer to execute entire message handling pipeline for all
      * messages currently in the queue, in which case, it only reads the queue again after the current messages on the
@@ -48,5 +46,4 @@ class MessageTaggingQueueReadService(
         }
         logger().info("${asyncOps.size} messages read")
     }
-
 }

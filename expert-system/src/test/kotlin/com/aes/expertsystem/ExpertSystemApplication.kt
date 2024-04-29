@@ -15,4 +15,3 @@ class ExpertSystemApplication
 fun main(args: Array<String>) {
     runApplication<ExpertSystemApplication>(*args)
 }
-

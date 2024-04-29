@@ -28,5 +28,5 @@ enum class CropGroup(val plantingType: PlantingType, val dbName: String) {
     TROPICAL_FRUIT_EDIBLE_PEEL(PlantingType.DIBBLE, "tropical and subtropical fruit, edible peel"),
     TROPICAL_FRUIT_INEDIBLE_PEEL(PlantingType.DIBBLE, "tropical and subtropical fruit, inedible peel"),
     HERBS(PlantingType.BROADCAST, "herb crop"),
-    SPICES(PlantingType.BROADCAST, "spices crop")
+    SPICES(PlantingType.BROADCAST, "spices crop"),
 }

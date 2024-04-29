@@ -3,7 +3,6 @@ package com.aes.expertsystem.Data.Trefle.Models.Responses.PlantIdResponseDTO
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import kotlin.reflect.full.memberProperties
 
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Growth {
     /**
@@ -115,7 +114,6 @@ class Growth {
         return this::class.memberProperties.count {
             it.getter.call(this) == null
         } / this::class.memberProperties.size.toFloat() > 0.5
-
     }
 }
 
@@ -134,19 +132,18 @@ enum class Month {
     sep,
     oct,
     nov,
-    dec
+    dec,
 }
 
-
 class Cm(
-    val cm: Int?
+    val cm: Int?,
 )
 
 class Mm(
-    val mm: Int?
+    val mm: Int?,
 )
 
 class Temperature(
     val deg_f: Int?,
-    val deg_c: Int?
+    val deg_c: Int?,
 )

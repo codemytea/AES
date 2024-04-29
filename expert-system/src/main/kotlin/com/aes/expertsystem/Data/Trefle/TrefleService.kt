@@ -11,15 +11,15 @@ import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
-
 @Service
 @EnableConfigurationProperties(TrefleConfiguration::class)
 class TrefleService(
-    val trefleConfiguration: TrefleConfiguration
+    val trefleConfiguration: TrefleConfiguration,
 ) : Logging {
-
-
-    private final inline fun <reified T> RestTemplate.getForEntity(url: String, params: Map<String, Any>): T? {
+    private final inline fun <reified T> RestTemplate.getForEntity(
+        url: String,
+        params: Map<String, Any>,
+    ): T? {
         val realUrl = "$url?${params.toList().joinToString("&") { "${it.first}=${it.second}" }}"
         logger().info(realUrl)
         return getForEntity(realUrl, T::class.java).body
@@ -31,9 +31,10 @@ class TrefleService(
      * Get a list of all plants supported by Trefle API
      * */
     fun allPlants(resource: PlantListDTO): PlantListResponseDTO {
-        val params = resource.toQueryParams().toMutableMap().apply {
-            put("token", trefleConfiguration.apiKey)
-        }
+        val params =
+            resource.toQueryParams().toMutableMap().apply {
+                put("token", trefleConfiguration.apiKey)
+            }
         return RestTemplateBuilder().build().getForEntity("${uri}plants", params)!!
     }
 
@@ -51,9 +52,10 @@ class TrefleService(
      * Get a plant by a search query Trefle API
      * */
     fun getPlantBySearchQuery(resource: PlantListDTO): PlantListResponseDTO {
-        val params = resource.toQueryParams().toMutableMap().apply {
-            put("token", trefleConfiguration.apiKey)
-        }
+        val params =
+            resource.toQueryParams().toMutableMap().apply {
+                put("token", trefleConfiguration.apiKey)
+            }
         return RestTemplateBuilder().build().getForEntity("${uri}plants/search", params)!!
     }
 
@@ -63,8 +65,8 @@ class TrefleService(
     fun getPlantByCommonName(name: String): PlantListResponseDTO {
         return getPlantBySearchQuery(
             PlantListDTO(
-                q = name
-            )
+                q = name,
+            ),
         )
     }
 }

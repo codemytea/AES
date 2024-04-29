@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service
  * */
 @Service
 class FullPageParseService {
-
     private fun link(id: String) = "https://ecocrop.review.fao.org/ecocrop/srv/en/dataSheet?id=$id"
 
     private fun getScientificName(content: Element): String {
@@ -26,8 +25,11 @@ class FullPageParseService {
     private fun String?.format(): String? {
         return if (this.isNullOrBlank()) {
             null
-        } else if (this.all { it == '-' }) null
-        else this
+        } else if (this.all { it == '-' }) {
+            null
+        } else {
+            this
+        }
     }
 
     private fun Element.findTableByTitle(title: String): Element {
@@ -39,12 +41,13 @@ class FullPageParseService {
     private fun parsePage(document: Document): EcocropData {
         val content = document.getElementById("content")!!
         val scientificName = getScientificName(content)
-        val descriptionTableChildren = content.findTableByTitle("description")
-            .getElementsByTag("tr")
-            .let { it.subList(1, it.size) }
-            .flatMap {
-                it.children()
-            }
+        val descriptionTableChildren =
+            content.findTableByTitle("description")
+                .getElementsByTag("tr")
+                .let { it.subList(1, it.size) }
+                .flatMap {
+                    it.children()
+                }
         val lifeform = descriptionTableChildren[1].text()
         val physiology = descriptionTableChildren[3].text()
         val habit = descriptionTableChildren[5].text()
@@ -52,12 +55,13 @@ class FullPageParseService {
         val lifespan = descriptionTableChildren[9].text()
         val plantAttributes = descriptionTableChildren[11].text()
 
-        val ecologyTableChildren = content.findTableByTitle("ecology")
-            .getElementsByTag("tr")
-            .let { it.subList(2, it.size) }
-            .flatMap {
-                it.children()
-            }
+        val ecologyTableChildren =
+            content.findTableByTitle("ecology")
+                .getElementsByTag("tr")
+                .let { it.subList(2, it.size) }
+                .flatMap {
+                    it.children()
+                }
 
         val optimalSoilDepth = ecologyTableChildren[6].text()
         val absoluteSoilDepth = ecologyTableChildren[7].text()
@@ -96,11 +100,12 @@ class FullPageParseService {
         val absoluteMinLightIntensity = ecologyTableChildren[51].text()
         val absoluteMaxLightIntensity = ecologyTableChildren[52].text()
 
-        val climateTable = content.findTableByTitle("climate zone")
-            .getElementsByTag("tr")
-            .flatMap {
-                it.children()
-            }
+        val climateTable =
+            content.findTableByTitle("climate zone")
+                .getElementsByTag("tr")
+                .flatMap {
+                    it.children()
+                }
         val climateZone = climateTable[1].text()
         val photoPeriod = climateTable[3].text()
         val killingTempRest = climateTable[5].text()
@@ -109,12 +114,13 @@ class FullPageParseService {
         val abioticSusceptibility = climateTable[11].text()
         val introductionRisks = climateTable[13].text()
 
-        val cultivationTableChildren = content.findTableByTitle("cultivation")
-            .getElementsByTag("tr")
-            .let { it.subList(2, it.size) }
-            .flatMap {
-                it.children()
-            }
+        val cultivationTableChildren =
+            content.findTableByTitle("cultivation")
+                .getElementsByTag("tr")
+                .let { it.subList(2, it.size) }
+                .flatMap {
+                    it.children()
+                }
         val productionSystem = cultivationTableChildren[1].text()
         val minCropCycle = cultivationTableChildren[3].text()
         val maxCropCycle = cultivationTableChildren[4].text()
@@ -124,13 +130,14 @@ class FullPageParseService {
         val mechanisationLevel = cultivationTableChildren.getOrNull(13)?.text()
         val labourIntensity = cultivationTableChildren.getOrNull(14)?.text()
 
-        val uses = content.findTableByTitle("uses")
-            .getElementsByTag("tr")
-            .let { it.subList(2, it.size) }
-            .map {
-                val data = it.getElementsByTag("td")
-                EcocropUse(data[0].text().format(), data[1].text().format(), data[2].text().format())
-            }
+        val uses =
+            content.findTableByTitle("uses")
+                .getElementsByTag("tr")
+                .let { it.subList(2, it.size) }
+                .map {
+                    val data = it.getElementsByTag("td")
+                    EcocropUse(data[0].text().format(), data[1].text().format(), data[2].text().format())
+                }
 
         return EcocropData(
             scientificName.format(),
@@ -191,7 +198,7 @@ class FullPageParseService {
             companionSpecies.format(),
             mechanisationLevel.format(),
             labourIntensity.format(),
-            uses.toMutableList()
+            uses.toMutableList(),
         )
     }
 

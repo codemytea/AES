@@ -50,5 +50,5 @@ class FilterNotDTO(
     var synonyms_count: String? = null,
     var toxicity: String? = null,
     var vegetable: String? = null,
-    var year: String? = null
+    var year: String? = null,
 )

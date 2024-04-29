@@ -5,7 +5,6 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.springframework.stereotype.Service
 
-
 /**
  * Service to get Crop Data from ECOCROP (run by FAOSTAT)
  * - no csv/api so iterate through webpages and use JSOUP
@@ -15,9 +14,7 @@ import org.springframework.stereotype.Service
  * */
 @Service
 class SummaryPageParseService {
-
-    private fun link(letter: String) =
-        "https://ecocrop.review.fao.org/ecocrop/srv/en/cropList?name=$letter&relation=beginsWith"
+    private fun link(letter: String) = "https://ecocrop.review.fao.org/ecocrop/srv/en/cropList?name=$letter&relation=beginsWith"
 
     private fun parseTableRow(tr: Element): String? {
         return tr.getElementsByTag("td").getOrNull(1)?.text()

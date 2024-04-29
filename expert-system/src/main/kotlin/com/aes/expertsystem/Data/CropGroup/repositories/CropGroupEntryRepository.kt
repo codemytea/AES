@@ -6,7 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface CropGroupEntryRepository : CrudRepository<CropGroupEntry, String> {
-
     fun findAllByNameLikeIgnoreCase(cropName: String): List<CropGroupEntry>
-
 }

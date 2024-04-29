@@ -18,29 +18,29 @@ import kotlin.io.path.absolutePathString
  * Some functions are unused in this project but have been added to create a holistic queue structure ready for publishing
  * */
 @Service
-class LocalQueueService: Logging {
-
-
-    fun String.pathParent(): String?{
+class LocalQueueService : Logging {
+    fun String.pathParent(): String? {
         val lastSlash = lastIndexOf('/')
         return substring(0, lastSlash).ifBlank { null }
     }
 
     val topLevelDir by lazy {
         var currentPath = Paths.get("").absolutePathString()
-        while(true) {
-            if (File("${currentPath}/gradlew.bat").exists()) {
+        while (true) {
+            if (File("$currentPath/gradlew.bat").exists()) {
                 return@lazy currentPath
-            } else currentPath.pathParent()?.let {
-                currentPath = it
-            } ?: throw Exception("Invalid folder structure, make sure you have the gradlew script")
+            } else {
+                currentPath.pathParent()?.let {
+                    currentPath = it
+                } ?: throw Exception("Invalid folder structure, make sure you have the gradlew script")
+            }
         }
     }
 
-    val MAX_QUEUE_SIZE = 999 //If it's less, risk loosing items in queue, if more, means possible error in system
+    val MAX_QUEUE_SIZE = 999 // If it's less, risk loosing items in queue, if more, means possible error in system
     val queueRoot = File("$topLevelDir/queues")
-    val queueDir = { queueName: String -> "${queueRoot.absolutePath}/$queueName" } //the directory the queue is stored in
-    val mapper = jacksonObjectMapper().registerModules(JavaTimeModule()) //JSON converter
+    val queueDir = { queueName: String -> "${queueRoot.absolutePath}/$queueName" } // the directory the queue is stored in
+    val mapper = jacksonObjectMapper().registerModules(JavaTimeModule()) // JSON converter
 
     /**
      * Gets the name of an item at a specific position of the queue
@@ -62,10 +62,12 @@ class LocalQueueService: Logging {
         val fileTop = queueRoot
         if (!fileTop.exists()) fileTop.mkdir()
         val file = File(queueDir(queueName))
-        if (file.exists()) return
-        else file.mkdir()
+        if (file.exists()) {
+            return
+        } else {
+            file.mkdir()
+        }
     }
-
 
     /**
      * Gets the position of an item with a specific name in the queue
@@ -118,12 +120,14 @@ class LocalQueueService: Logging {
      * @param position the position the item is in
      * @return the queue item (a txt file)
      * */
-    fun getQueueItemAtPosition(queueName: String, position: Int): File? {
+    fun getQueueItemAtPosition(
+        queueName: String,
+        position: Int,
+    ): File? {
         return getAllQueueItems(queueName).sortedBy {
             getQueuePosition(it.name)
         }.getOrNull(position)
     }
-
 
     /**
      * Gets the current top items of the queue (the last item to be processed). Used to determine where additional
@@ -159,8 +163,11 @@ class LocalQueueService: Logging {
     fun getNextQueuePosition(queueName: String): Int {
         val currentMaxQueueItem = getMaxQueueItem(queueName) ?: return 0
         val currentPos = getQueuePosition(currentMaxQueueItem.name)
-        return if (currentPos == MAX_QUEUE_SIZE) 0
-        else currentPos + 1
+        return if (currentPos == MAX_QUEUE_SIZE) {
+            0
+        } else {
+            currentPos + 1
+        }
     }
 
     /**
@@ -199,7 +206,10 @@ class LocalQueueService: Logging {
      * @param position the position in the queue
      * @return the item
      * */
-    inline fun <reified T> readQueueItemAtPosition(queueName: String, position: Int): T? {
+    inline fun <reified T> readQueueItemAtPosition(
+        queueName: String,
+        position: Int,
+    ): T? {
         val itemFile = getQueueItemAtPosition(queueName, position) ?: return null
         return mapper.readValue(itemFile, T::class.java)
     }
@@ -212,7 +222,10 @@ class LocalQueueService: Logging {
      * @param block the function to be executed
      * @return if the operation has successfully been performed
      * */
-    inline fun <reified T> withLatestQueueItem(queueName: String, block: T.() -> Boolean): Boolean {
+    inline fun <reified T> withLatestQueueItem(
+        queueName: String,
+        block: T.() -> Boolean,
+    ): Boolean {
         val obj = readTopQueueItem<T>(queueName) ?: return false
         if (block(obj)) {
             popTopQueueItem(queueName)
@@ -229,7 +242,11 @@ class LocalQueueService: Logging {
      * @param block the function to be executed
      * @return if the operation has successfully been performed
      * */
-    inline fun <reified T> withQueueItemAtPosition(queueName: String, position: Int, block: T.() -> Boolean): Boolean {
+    inline fun <reified T> withQueueItemAtPosition(
+        queueName: String,
+        position: Int,
+        block: T.() -> Boolean,
+    ): Boolean {
         val obj = readQueueItemAtPosition<T>(queueName, position) ?: return false
         if (block(obj)) {
             popTopQueueItem(queueName)
@@ -251,7 +268,7 @@ class LocalQueueService: Logging {
     inline fun <reified T> withQueueItemAtPositionAsync(
         queueName: String,
         position: Int,
-        crossinline block: T.() -> Boolean
+        crossinline block: T.() -> Boolean,
     ): Deferred<Unit>? {
         val obj = readQueueItemAtPosition<T>(queueName, position) ?: return null
         return CoroutineScope(Dispatchers.IO).async {
@@ -267,7 +284,10 @@ class LocalQueueService: Logging {
      * @param queueName the name of the queue to add the new item to
      * @param item the item to add to the queue
      * */
-    fun <T> writeItemToQueue(queueName: String, item: T) {
+    fun <T> writeItemToQueue(
+        queueName: String,
+        item: T,
+    ) {
         val nextPos = getNextQueuePosition(queueName)
         val queueItemFile = getNextQueueItemFile(queueName)
         mapper.writeValue(queueItemFile, item)

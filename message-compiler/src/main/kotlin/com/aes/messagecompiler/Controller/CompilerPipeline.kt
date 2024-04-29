@@ -13,16 +13,13 @@ import com.aes.messagecompiler.Mappers.toNewMessageDTO
 import com.aes.messagecompiler.Python.Compiler
 import org.springframework.stereotype.Service
 
-
 @Service
 class CompilerPipeline(
     val compiler: Compiler,
     val userRepository: UserRepository,
     val localQueueService: LocalQueueService,
-    val messageTaggingService: MessageTaggingService
+    val messageTaggingService: MessageTaggingService,
 ) : Logging {
-
-
     /**
      * Compiles a message by tweaking it to the users characteristics and then chunking/amalgamating them to one
      * message long chunks. A
@@ -31,21 +28,23 @@ class CompilerPipeline(
      * @param phoneNumber - the receiving users' phone number
      * @return list of NewMessageDTOs ready to be sent
      * */
-    fun compileMessage(initialResponse : Map<HandlableMessageType, List<String>>, phoneNumber : Long) : List<NewMessageDTO>? {
+    fun compileMessage(
+        initialResponse: Map<HandlableMessageType, List<String>>,
+        phoneNumber: Long,
+    ): List<NewMessageDTO>? {
         logger().info("Compiling message for user with phone number $phoneNumber")
-        var improved :  Map<HandlableMessageType, List<String>>? = null
+        var improved: Map<HandlableMessageType, List<String>>? = null
         userRepository.findByPhoneNumberContaining(phoneNumber)?.let {
-            improved = improveSuggestability(initialResponse, it) //if a user with information exists, improve the message
+            improved = improveSuggestability(initialResponse, it) // if a user with information exists, improve the message
         }
 
         return finalSplit(improved ?: initialResponse).toNewMessageDTO(phoneNumber).also {
             logger().info("Putting message for user with phone number $phoneNumber on queue to be sent")
             it.forEach {
-                localQueueService.writeItemToQueue("send_message_queue", it) //messages added to queue one at a time for safety
+                localQueueService.writeItemToQueue("send_message_queue", it) // messages added to queue one at a time for safety
             }
         }
     }
-
 
     /**
      * First step in the message compiling pipeline - change messages to match user characteristics to improve chances
@@ -55,14 +54,17 @@ class CompilerPipeline(
      * @param user - the user we are tailoring for
      * @return the responses tailored to user characteristics
      * */
-    fun improveSuggestability(initialResponse: Map<HandlableMessageType, List<String>>, user : User) : Map<HandlableMessageType, List<String>>{
+    fun improveSuggestability(
+        initialResponse: Map<HandlableMessageType, List<String>>,
+        user: User,
+    ): Map<HandlableMessageType, List<String>> {
         logger().info("Improving suggestibility of message")
-        initialResponse[HandlableMessageType.AGRICULTURAL_QUESTION]?.let{
+        initialResponse[HandlableMessageType.AGRICULTURAL_QUESTION]?.let {
             it.map {
                 var knowledgeLevel = 0.0
                 messageTaggingService.tagMessage(it, user.id)?.let {
-                    user.knowledgeAreas.find { uka ->  (uka.crop == it.cropName) && (uka.topic == it.topic) }?.knowledgeLevel?.let{
-                        knowledgeLevel =  it
+                    user.knowledgeAreas.find { uka -> (uka.crop == it.cropName) && (uka.topic == it.topic) }?.knowledgeLevel?.let {
+                        knowledgeLevel = it
                     }
                 }
 
@@ -70,9 +72,11 @@ class CompilerPipeline(
             }
         }
 
-        return initialResponse.mapValues{
+        return initialResponse.mapValues {
             it.value.joinToString(" ").let {
-                listOfNotNull(compiler.userCharacteristicCompiling(it, user.literacy ?: 50f,  user.gender ?: Gender.MALE, user.age ?: Age.ADULT,))
+                listOfNotNull(
+                    compiler.userCharacteristicCompiling(it, user.literacy ?: 50f, user.gender ?: Gender.MALE, user.age ?: Age.ADULT),
+                )
             }
         }.toSortedMap().also {
             logger().info("Message with better suggestibility is $it")
@@ -98,46 +102,48 @@ class CompilerPipeline(
      * @param tailoredResponses - the responses tailored to user characteristics
      * @return a list of messages to be sent to the user, chunked and amalgamated as appropriate
      * */
-    fun finalSplit(tailoredResponses: Map<HandlableMessageType, List<String>>) : List<String>{
+    fun finalSplit(tailoredResponses: Map<HandlableMessageType, List<String>>): List<String> {
         logger().info("Amalgamating message")
-        val mappedTopics =  tailoredResponses.map { topic ->
-            topic.value.joinToString(" ").let {
-                if(it.split(" ").size > 17){
-                    val result = mutableListOf<String>()
-                    val wait = mutableListOf<String>()
-                    it.split(Regex("(?<=[.!?])\\s*")).forEach {
-                        if (wait.size == 0){
-                            if (it.split(" ").size > 17){
-                                result.add(it)
-                            } else {
-                                wait.add(it)
-                            }
-                        } else {
-                            if (wait.joinToString(" ").split(" ").size + it.split(" ").size > 17){
-                                result.add(wait[0])
-                                wait.clear()
-                                if (it.split(" ").size > 17){
+        val mappedTopics =
+            tailoredResponses.map { topic ->
+                topic.value.joinToString(" ").let {
+                    if (it.split(" ").size > 17) {
+                        val result = mutableListOf<String>()
+                        val wait = mutableListOf<String>()
+                        it.split(Regex("(?<=[.!?])\\s*")).forEach {
+                            if (wait.size == 0) {
+                                if (it.split(" ").size > 17) {
                                     result.add(it)
                                 } else {
                                     wait.add(it)
                                 }
                             } else {
-                                wait[0] = wait[0] + " " + it
+                                if (wait.joinToString(" ").split(" ").size + it.split(" ").size > 17) {
+                                    result.add(wait[0])
+                                    wait.clear()
+                                    if (it.split(" ").size > 17) {
+                                        result.add(it)
+                                    } else {
+                                        wait.add(it)
+                                    }
+                                } else {
+                                    wait[0] = wait[0] + " " + it
+                                }
                             }
                         }
+                        result
+                    } else {
+                        it
                     }
-                    result
-                } else {
-                    it
                 }
             }
-        }
 
         val toReturn = mutableListOf<String>()
 
         mappedTopics.forEach {
-            if (it is String) toReturn.add(it)
-            else if (it is List<*>){
+            if (it is String) {
+                toReturn.add(it)
+            } else if (it is List<*>) {
                 it.forEach {
                     toReturn.add(it as String)
                 }

@@ -48,7 +48,6 @@ class EcocropData(
     val optimalMaxLightIntensity: String? = null,
     val absoluteMinLightIntensity: String? = null,
     val absoluteMaxLightIntensity: String? = null,
-
     @Lob
     @Column(length = 5000)
     val climateZone: String? = null,
@@ -63,34 +62,34 @@ class EcocropData(
     val maxCropCycle: String? = null,
     val croppingSystem: String? = null,
     val subsystem: String? = null,
-
-
     @Lob
     @Column(length = 5000)
     val companionSpecies: String? = null,
     val mechanisationLevel: String? = null,
     val labourIntensity: String? = null,
-
     @OneToMany(cascade = [CascadeType.ALL])
-    val uses: MutableList<EcocropUse> = mutableListOf()
+    val uses: MutableList<EcocropUse> = mutableListOf(),
 ) {
     @Id
     val id: String = UUID.randomUUID().toString()
 }
 
-
 val EcocropData.averageCropCycle: Int? get() {
     val minCropCycle = minCropCycle?.toIntOrNull()
     val maxCropCycle = maxCropCycle?.toIntOrNull()
-    return if(minCropCycle != null && maxCropCycle != null){
+    return if (minCropCycle != null && maxCropCycle != null) {
         (minCropCycle + maxCropCycle) / 2
-    } else minCropCycle ?: maxCropCycle
+    } else {
+        minCropCycle ?: maxCropCycle
+    }
 }
 
 val EcocropData.averageOptimalTemperature: Int? get() {
     val minTemp = optimalMinTempRequired?.toIntOrNull()
     val maxTemp = optimalMaxTempRequired?.toIntOrNull()
-    return if(minTemp != null && maxTemp != null){
+    return if (minTemp != null && maxTemp != null) {
         (minTemp + maxTemp) / 2
-    } else minTemp ?: maxTemp
+    } else {
+        minTemp ?: maxTemp
+    }
 }

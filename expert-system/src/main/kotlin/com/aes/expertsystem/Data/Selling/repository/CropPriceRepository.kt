@@ -8,7 +8,10 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface CropPriceRepository : CrudRepository<CropPrice, CropPriceId> {
-    fun findAllByCropNameAndCountryLike(cropName: String, country: String): List<CropPrice>
+    fun findAllByCropNameAndCountryLike(
+        cropName: String,
+        country: String,
+    ): List<CropPrice>
 
     @Query("SELECT DISTINCT CP.cropName from CropPrice CP")
     fun findCropNames(): List<String>

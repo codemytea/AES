@@ -6,10 +6,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class GeneralChatbot : PythonClass() {
-
     @PythonFunction("generalChatbot", "GeneralChatbot.py")
     fun generalChatbot(userMessage: String): String? {
         return execute(::generalChatbot, userMessage)
     }
-
 }

@@ -6,5 +6,5 @@ import jakarta.persistence.Embeddable
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Embeddable
 class MaterialWeighed(
-    val description: String? = null
+    val description: String? = null,
 )

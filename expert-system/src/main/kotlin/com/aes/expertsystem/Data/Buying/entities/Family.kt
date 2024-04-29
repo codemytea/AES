@@ -6,5 +6,5 @@ import jakarta.persistence.Embeddable
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Embeddable
 class Family(
-    val name: String = ""
+    val name: String = "",
 )

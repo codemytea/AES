@@ -16,8 +16,8 @@ class Germination(
     val medium: String? = null,
     val provenance: String? = null,
     val sample_size: Int? = null,
-    val reference_id: Int? = null
-){
+    val reference_id: Int? = null,
+) {
     @Id
     val id: String = UUID.randomUUID().toString()
 }

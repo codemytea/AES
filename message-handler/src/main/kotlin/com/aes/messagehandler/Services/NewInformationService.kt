@@ -20,7 +20,6 @@ class NewInformationService(
     val userSmallholdingRepository: UserSmallholdingRepository,
     val informationCollection: InformationCollection,
 ) : Logging {
-
     /**
      * Checks if there are any more details left to determine about the user
      * @param userID - the ID of the user the system is checking
@@ -66,7 +65,6 @@ class NewInformationService(
         return if (returnList.isEmpty()) null else returnList
     }
 
-
     /**
      * Using the user's message, and what information there is left to determine about the user
      * Check if the message contains any new information and return a list of any new user information obtained
@@ -82,10 +80,10 @@ class NewInformationService(
         message: String,
         userID: UUID,
         detailsToDetermine: List<UserDetails>?,
-        newUserNumber: Long? = null
+        newUserNumber: Long? = null,
     ) {
         detailsToDetermine?.let { it ->
-            //use NER to scrape any NEW information given by the received message
+            // use NER to scrape any NEW information given by the received message
             val newInfo = informationCollection.getNewInformation(message, it)
             val newInfoCollected = mutableListOf<UserDetails>()
 
@@ -93,29 +91,30 @@ class NewInformationService(
 
             if (newUserNumber == null) {
                 user = userRepository.findUserById(userID)
-
             } else {
-                user = userRepository.save(
-                    User(
-                        UUID.randomUUID(),
-                        listOf(newUserNumber)
+                user =
+                    userRepository.save(
+                        User(
+                            UUID.randomUUID(),
+                            listOf(newUserNumber),
+                        ),
                     )
-                )
             }
 
             var userSmallholding = user?.userSmallholdingInfo?.getOrNull(0)
 
             if (userSmallholding == null) {
-                userSmallholding = userSmallholdingRepository.save(
-                    UserSmallholding(
-                        user = user
+                userSmallholding =
+                    userSmallholdingRepository.save(
+                        UserSmallholding(
+                            user = user,
+                        ),
                     )
-                )
             }
 
-            //save info
+            // save info
             newInfo.forEach { (userDetail, info) ->
-                if (info != null){
+                if (info != null) {
                     when (userDetail) {
                         UserDetails.NAME.strForm -> {
                             newInfoCollected.add(UserDetails.NAME)
@@ -147,7 +146,6 @@ class NewInformationService(
             userSmallholding.let {
                 userSmallholdingRepository.save(it)
             }
-
         }
     }
 }

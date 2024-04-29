@@ -16,9 +16,8 @@ import org.springframework.transaction.annotation.Transactional
 class MessageHandlerService(
     private val messageHandler: List<MessageHandler>,
     private val compilerPipeline: CompilerPipeline,
-    private val messageRepository: MessageRepository
+    private val messageRepository: MessageRepository,
 ) : Logging {
-
     /**
      * Sends a list of responses that need to be tailored and what type there are
      * to the compiler pipeline.
@@ -44,5 +43,3 @@ class MessageHandlerService(
         compilerPipeline.compileMessage(toReturn, request.phoneNumber)
     }
 }
-
-

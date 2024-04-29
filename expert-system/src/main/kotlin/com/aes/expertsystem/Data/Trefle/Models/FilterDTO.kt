@@ -1,6 +1,5 @@
 package com.aes.expertsystem.Data.Trefle.Models
 
-
 class FilterDTO(
     var author: String? = null,
     var bloom_months: String? = null,
@@ -30,5 +29,5 @@ class FilterDTO(
     var rank: String? = null,
     var scientific_name: String? = null,
     var status: String? = null,
-    var vegetable: String? = null
+    var vegetable: String? = null,
 )

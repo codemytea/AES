@@ -2,18 +2,16 @@ package com.aes.expertsystem.Data.Trefle.Models.Responses.PlantIdResponseDTO
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Flower(
     /**
      * The flower colour(s)
      */
     var color: List<FlowerColor>? = null,
-
     /**
      * Is the flower visible?
      */
-    var conspicuous: Boolean? = null
+    var conspicuous: Boolean? = null,
 )
 
 /**
@@ -32,5 +30,5 @@ enum class FlowerColor {
     purple,
     magenta,
     grey,
-    black
+    black,
 }

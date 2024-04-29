@@ -7,7 +7,6 @@ import java.time.LocalDate
 
 @Service
 open class CropPriceParsingService {
-
     companion object {
         const val AREA_INDEX = 2
         const val ITEM_INDEX = 5
@@ -30,7 +29,8 @@ open class CropPriceParsingService {
         September,
         October,
         November,
-        December;
+        December,
+        ;
 
         fun toDateRange(year: Int): Pair<LocalDate, LocalDate> {
             return if (this == Annualvalue) {
@@ -46,7 +46,10 @@ open class CropPriceParsingService {
         return FAOSTATMonth.valueOf(this.replace(" ", ""))
     }
 
-    fun compressData(inputFile: File, outputFile: File) {
+    fun compressData(
+        inputFile: File,
+        outputFile: File,
+    ) {
         inputFile.forEachLine {
             parseSingleLine(it)?.let {
                 outputFile.appendText(it.toFileLine())

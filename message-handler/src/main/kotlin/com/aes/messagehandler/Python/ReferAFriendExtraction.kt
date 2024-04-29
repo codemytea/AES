@@ -6,10 +6,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class ReferAFriendExtraction : PythonClass() {
-
     @PythonFunction("getReferral", "ReferralExtractor.py")
-    fun getReferral(userMessage: String):List<String?> {
+    fun getReferral(userMessage: String): List<String?> {
         return execute(::getReferral, userMessage)
     }
-
 }

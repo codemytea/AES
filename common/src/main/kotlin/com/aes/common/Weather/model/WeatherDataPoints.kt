@@ -11,9 +11,12 @@ class WeatherDataPoints(
     var precipitation: List<Float?>? = null,
     var precipitation_probability: List<Float?>? = null,
     var snowfall: List<Float?>? = null,
-    var cloud_cover: List<Float?>? = null
+    var cloud_cover: List<Float?>? = null,
 ) {
-    fun toWeatherInfo(lat: Float, lng: Float): List<WeatherInfo> {
+    fun toWeatherInfo(
+        lat: Float,
+        lng: Float,
+    ): List<WeatherInfo> {
         return time.indices.map {
             WeatherInfo(
                 time[it],
@@ -24,7 +27,7 @@ class WeatherDataPoints(
                 precipitation?.get(it),
                 precipitation_probability?.get(it),
                 snowfall?.get(it),
-                cloud_cover?.get(it)
+                cloud_cover?.get(it),
             )
         }
     }

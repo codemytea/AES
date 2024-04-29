@@ -6,8 +6,5 @@ enum class HandlableMessageType {
     REFER_FRIEND,
     FEEDBACK,
     STOP,
-    GENERAL;
+    GENERAL,
 }
-
-
-

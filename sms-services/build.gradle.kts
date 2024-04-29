@@ -5,7 +5,7 @@ import java.util.*
 plugins {
     id("org.springframework.boot") version "3.2.1"
     id("io.spring.dependency-management") version "1.1.4"
-    kotlin("jvm") version "1.9.21"
+    kotlin("jvm")
     kotlin("plugin.spring") version "1.9.21"
     kotlin("plugin.jpa") version "1.9.21"
 }
@@ -42,8 +42,6 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-
-
 }
 
 tasks.withType<KotlinCompile> {
@@ -55,12 +53,15 @@ tasks.withType<KotlinCompile> {
 
 val localProperties = Properties()
 val credentialsFile = rootProject.file("credentials.properties")
-val key = if (credentialsFile.exists()) {
-    localProperties.load(FileInputStream(credentialsFile))
-    (localProperties["GATEWAY_API_KEY"] as? String)?.also{
-        println("Credentials found")
+val key =
+    if (credentialsFile.exists()) {
+        localProperties.load(FileInputStream(credentialsFile))
+        (localProperties["GATEWAY_API_KEY"] as? String)?.also {
+            println("Credentials found")
+        }
+    } else {
+        null
     }
-} else null
 tasks.withType<Test> {
     useJUnitPlatform()
     tasks.withType<Test> {
@@ -69,5 +70,3 @@ tasks.withType<Test> {
         }
     }
 }
-
-

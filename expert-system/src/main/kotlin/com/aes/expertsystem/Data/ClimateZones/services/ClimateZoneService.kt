@@ -8,12 +8,14 @@ import org.springframework.web.client.getForEntity
 
 @Service
 class ClimateZoneService {
-
-    private val link = {lat: Float, lng: Float ->
+    private val link = { lat: Float, lng: Float ->
         "http://climateapi.scottpinkelman.com/api/v1/location/$lat/$lng"
     }
 
-    fun getClimateZoneForLocation(lat: Float, lng: Float): KoppenClimateZone{
+    fun getClimateZoneForLocation(
+        lat: Float,
+        lng: Float,
+    ): KoppenClimateZone {
         return RestTemplateBuilder().build()
             .getForEntity<ClimateZoneAPIResponse>(link(lat, lng)).body
             ?.returnValues?.firstOrNull()?.koppenClimateZone

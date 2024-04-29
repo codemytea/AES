@@ -6,35 +6,30 @@ import jakarta.persistence.*
 import java.io.Serializable
 import java.time.LocalDateTime
 
-
 /**
  * Represents a Knowledge Area
  * */
 @Entity
 @IdClass(KnowledgeAreaId::class)
 class KnowledgeArea(
-
     /**
      * A crop cycle topic
      * */
     @Id
     @Enumerated(EnumType.STRING)
     val topic: Topic = Topic.PESTS,
-
     /**
      * A crop
      * */
     @Id
     @Enumerated(EnumType.STRING)
     val cropName: Crop = Crop.RICE,
-
     /**
      * When the knowledge area was last modified
      * */
     @Column
-    val modifiedAt: LocalDateTime = LocalDateTime.now()
+    val modifiedAt: LocalDateTime = LocalDateTime.now(),
 ) {
-
     override fun equals(other: Any?): Boolean {
         if (other !is KnowledgeArea) return false
         return this.topic == other.topic && this.cropName == other.cropName

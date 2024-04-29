@@ -4,7 +4,7 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 plugins {
     id("org.springframework.boot") version "3.1.5" apply false
     id("io.spring.dependency-management") version "1.1.3"
-    kotlin("jvm") version "1.8.22"
+    kotlin("jvm")
 }
 
 group = "com.aes"
@@ -17,7 +17,6 @@ java {
 repositories {
     mavenCentral()
 }
-
 
 dependencyManagement {
     imports {

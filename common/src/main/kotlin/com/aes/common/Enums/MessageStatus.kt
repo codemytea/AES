@@ -9,5 +9,5 @@ enum class MessageStatus {
     FAILED,
     ENROUTE,
     REJECTED,
-    UNDELIVERABLE
+    UNDELIVERABLE,
 }

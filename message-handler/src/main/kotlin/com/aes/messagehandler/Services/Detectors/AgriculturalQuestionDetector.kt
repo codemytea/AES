@@ -16,11 +16,9 @@ import java.util.*
 class AgriculturalQuestionDetector(
     private val agriculturalQuestionExtraction: AgriculturalQuestionExtraction,
     private val expertSystemService: ExpertSystemService,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : MessageHandler {
-
     override val messagePartType: HandlableMessageType = HandlableMessageType.AGRICULTURAL_QUESTION
-
 
     /**
      * Extracts Agricultural questions from a given message and tags them.
@@ -29,8 +27,11 @@ class AgriculturalQuestionDetector(
      * @param userID
      * @return a list of the agricultural questions
      * */
-    override fun extractPartAndReturn(remainingMessage: String, userID: UUID): List<String>? {
-        //extract the agricultural questions using OpenAI
+    override fun extractPartAndReturn(
+        remainingMessage: String,
+        userID: UUID,
+    ): List<String>? {
+        // extract the agricultural questions using OpenAI
         return agriculturalQuestionExtraction.getQuestions(remainingMessage).mapNotNull { it }.ifEmpty { null }
     }
 
@@ -42,12 +43,12 @@ class AgriculturalQuestionDetector(
      * @return the answers to the given questions
      * */
     @Transactional
-    override fun generateAnswer(prompts: List<String>, userID: UUID): List<String>? {
-
+    override fun generateAnswer(
+        prompts: List<String>,
+        userID: UUID,
+    ): List<String>? {
         val user = userRepository.findByIdOrNull(userID)!!
 
         return prompts.map { expertSystemService.getAgriculturalAnswer(it, user) }
     }
-
-
 }

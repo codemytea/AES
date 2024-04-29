@@ -5,6 +5,3 @@ package com.aes.common.logging
  * logging extension.
  */
 interface Logging
-
-
-

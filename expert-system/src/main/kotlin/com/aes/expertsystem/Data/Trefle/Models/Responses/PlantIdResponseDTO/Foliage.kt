@@ -2,23 +2,20 @@ package com.aes.expertsystem.Data.Trefle.Models.Responses.PlantIdResponseDTO
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Foliage(
     /**
      * The general texture of the plant’s foliage
      */
     var texture: FoliageTexture? = null,
-
     /**
      * The leaves color(s)
      */
     var color: List<LeafColor>? = null,
-
     /**
      * Does the leaves stay all year long?
      */
-    var leaf_retention: Boolean? = null
+    var leaf_retention: Boolean? = null,
 ) {
     // Additional methods can be added here if needed
 }
@@ -29,7 +26,7 @@ class Foliage(
 enum class FoliageTexture {
     fine,
     medium,
-    coarse
+    coarse,
 }
 
 /**
@@ -48,5 +45,5 @@ enum class LeafColor {
     purple,
     magenta,
     grey,
-    black
+    black,
 }

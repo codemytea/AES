@@ -18,9 +18,8 @@ import java.io.File
  * */
 @Service
 open class EcocropDataSaveService(
-    val ecocropDataRepository: EcocropDataRepository
+    val ecocropDataRepository: EcocropDataRepository,
 ) : Logging {
-
     @Transactional
     open fun writeAllToDB() {
         writeDataToDatabase(File(this::class.java.classLoader.getResource("ecocropData.txt")!!.toURI()))

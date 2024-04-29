@@ -9,22 +9,18 @@ class MessageDTO(
      * This id is then used when getting and deleting specific messaged.
      * */
     val id: Long,
-
     /**
      * The users ID
      * */
     val userID: UUID,
-
     /**
      * The message
      * */
     var content: String = "",
-
     /**
      * The msisdn of the recipient/sender
      * */
     val phoneNumber: Long,
-
     /**
      * The current status of the message
      * */
@@ -35,5 +31,3 @@ class MessageDTO(
      * */
     var country: String? = null
 }
-
-

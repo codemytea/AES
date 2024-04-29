@@ -46,8 +46,8 @@ class Morphology(
     val storage_remarks: String? = null,
     val endosperm_ruminate: String? = null,
     val embryo_colour: String? = null,
-    val reference_id: Int? = null
-){
+    val reference_id: Int? = null,
+) {
     @Id
     val id: String = UUID.randomUUID().toString()
 }

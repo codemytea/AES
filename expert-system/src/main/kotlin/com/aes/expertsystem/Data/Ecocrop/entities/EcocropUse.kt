@@ -8,7 +8,7 @@ import java.util.*
 class EcocropUse(
     val useType: String? = null,
     val detailedUse: String? = null,
-    val usePart: String? = null
+    val usePart: String? = null,
 ) {
     @Id
     val id: String = UUID.randomUUID().toString()

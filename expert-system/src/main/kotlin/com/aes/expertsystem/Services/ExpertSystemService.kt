@@ -14,14 +14,16 @@ class ExpertSystemService(
     private val expertSystem: ExpertSystem,
     private val contextProviders: List<ContextProvider>,
     private val initialContextProviders: List<InitialContextProvider>,
-):Logging {
-
+) : Logging {
     @Transactional
-    fun getAgriculturalAnswer(message : String, user: User): String {
-
-        val initialContext = initialContextProviders.flatMap {
-            it.contextForMessage(message, user)
-        }
+    fun getAgriculturalAnswer(
+        message: String,
+        user: User,
+    ): String {
+        val initialContext =
+            initialContextProviders.flatMap {
+                it.contextForMessage(message, user)
+            }
 
         logger().info("Getting initial answer")
 
@@ -31,9 +33,10 @@ class ExpertSystemService(
 
         val newContextMessage = "$message $initialAnswer"
 
-        val fullContext = contextProviders.flatMap {
-            it.contextForMessage(newContextMessage, user)
-        }
+        val fullContext =
+            contextProviders.flatMap {
+                it.contextForMessage(newContextMessage, user)
+            }
 
         logger().info("Getting full answer")
 
@@ -42,4 +45,3 @@ class ExpertSystemService(
         }
     }
 }
-

@@ -10,15 +10,14 @@ import java.io.File
 
 @Service
 open class CropPriceSavingService(
-    val cropPriceRepository: CropPriceRepository
+    val cropPriceRepository: CropPriceRepository,
 ) : Logging {
-
     @Transactional
     open fun writeAllToDB() {
         writeDataToDatabase(
             File(
-                this::class.java.classLoader.getResource("FAOSTATSellingDataCompressed.txt")!!.toURI()
-            )
+                this::class.java.classLoader.getResource("FAOSTATSellingDataCompressed.txt")!!.toURI(),
+            ),
         )
     }
 

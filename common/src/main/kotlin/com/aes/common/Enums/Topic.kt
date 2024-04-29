@@ -11,5 +11,5 @@ enum class Topic(val notificationFrequency: Int /*days*/) {
     HARVEST(5),
     STORING(5),
     GROWING(5),
-    BUYING_SEEDS(5)
+    BUYING_SEEDS(5),
 }

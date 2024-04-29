@@ -7,12 +7,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class InformationCollection : PythonClass() {
-
     /**
      * Use NER to collect information about a user
      * */
     @PythonFunction("getNewInformation", "InformationCollectionNER.py")
-    fun getNewInformation(userMessage: String, userDetails: List<UserDetails>): Map<String, String> {
+    fun getNewInformation(
+        userMessage: String,
+        userDetails: List<UserDetails>,
+    ): Map<String, String> {
         return execute(::getNewInformation, userDetails, userMessage)
     }
 
@@ -22,9 +24,10 @@ class InformationCollection : PythonClass() {
     }
 
     @PythonFunction("removeNewInformation", "InformationRetriever.py")
-    fun removeNewInformation(userMessage: String, userDetails: List<UserDetails>): List<String> {
+    fun removeNewInformation(
+        userMessage: String,
+        userDetails: List<UserDetails>,
+    ): List<String> {
         return execute(::removeNewInformation, userMessage, userDetails)
     }
 }
-
-

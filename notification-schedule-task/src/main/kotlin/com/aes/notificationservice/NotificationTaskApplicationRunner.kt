@@ -7,9 +7,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class NotificationTaskApplicationRunner(
-    val notificationSchedulerService: NotificationSchedulerService
-): ApplicationRunner {
-
+    val notificationSchedulerService: NotificationSchedulerService,
+) : ApplicationRunner {
     override fun run(args: ApplicationArguments?) {
         notificationSchedulerService.generateAllNotifications()
     }

@@ -6,5 +6,5 @@ import jakarta.persistence.Embeddable
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Embeddable
 class DispersalAgent(
-    val description: String? = null
+    val description: String? = null,
 )

@@ -12,7 +12,8 @@ class FAOSTATReadTests {
         val fromFile = File(this::class.java.classLoader.getResource(fromFileName)!!.toURI())
         val toFile = File(fromFile.absolutePath.removeSuffix(fromFileName).plus("FAOSTATSellingDataCompressed.txt"))
         cropPriceParsingService.compressData(
-            fromFile, toFile
+            fromFile,
+            toFile,
         )
     }
 
@@ -23,7 +24,8 @@ class FAOSTATReadTests {
         val fromFile = File(this::class.java.classLoader.getResource(fromFileName)!!.toURI())
         val toFile = File(fromFile.absolutePath.removeSuffix(fromFileName).plus("FAOSTATSellingDataCompressed.txt"))
         cropPriceParsingService.compressData(
-            fromFile, toFile
+            fromFile,
+            toFile,
         )
     }
 }

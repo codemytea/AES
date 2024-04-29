@@ -34,10 +34,8 @@ import kotlin.reflect.full.memberProperties
 @SpringBootTest
 @ActiveProfiles("test")
 class ExpertSystemApplicationTests : Logging {
-
     @Autowired
     lateinit var trefleService: TrefleService
-
 
     @Autowired
     lateinit var ws: WeatherService
@@ -69,11 +67,9 @@ class ExpertSystemApplicationTests : Logging {
     @Autowired
     lateinit var srs: SeedRateService
 
-
     final inline fun <reified T> defaultNoArgConstructor(): T {
         return T::class.constructors.first { it.parameters.isEmpty() }.call()
     }
-
 
     final inline fun <reified T> List<T>.coalesce(): T {
         val newObj = defaultNoArgConstructor<T>()!!
@@ -91,16 +87,17 @@ class ExpertSystemApplicationTests : Logging {
     }
 
     fun getPlantByDTO_body(): Growth {
-        val data = trefleService.getPlantBySearchQuery(
-            PlantListDTO(
-                page = 1,
-                q = "wheat",
-            )
-        ).data.mapNotNull { //first 10
-            it.id?.let {
-                trefleService.getPlantById(Id(it))
+        val data =
+            trefleService.getPlantBySearchQuery(
+                PlantListDTO(
+                    page = 1,
+                    q = "wheat",
+                ),
+            ).data.mapNotNull { // first 10
+                it.id?.let {
+                    trefleService.getPlantById(Id(it))
+                }
             }
-        }
         val growthData = data.mapNotNull { it.data.main_species?.growth }
         return growthData.coalesce()
     }
@@ -110,10 +107,11 @@ class ExpertSystemApplicationTests : Logging {
         trefleService.allPlants(
             PlantListDTO(
                 page = 1,
-                filterNot = FilterNotDTO(
-                    edible_part = null
-                )
-            )
+                filterNot =
+                    FilterNotDTO(
+                        edible_part = null,
+                    ),
+            ),
         )
     }
 
@@ -133,22 +131,24 @@ class ExpertSystemApplicationTests : Logging {
             cropSellingService.getExpectedPriceForDateInCountry(
                 "wheat",
                 LocalDate.now().plusMonths(12),
-                "United Kingdom"
-            )
+                "United Kingdom",
+            ),
         )
     }
 
     @Test
     fun useSavedSellingData() {
-        val estimates = (0..24).forEach {
-            val date = LocalDate.now().withDayOfMonth(1).plusMonths(it.toLong())
-            val estimate = cropSellingService.getExpectedPriceForDateInCountry(
-                "Wheat",
-                date,
-                "United Kingdom of Great Britain and Northern Ireland"
-            )
-            println(date.format(DateTimeFormatter.ISO_DATE) + "," + estimate.toString())
-        }
+        val estimates =
+            (0..24).forEach {
+                val date = LocalDate.now().withDayOfMonth(1).plusMonths(it.toLong())
+                val estimate =
+                    cropSellingService.getExpectedPriceForDateInCountry(
+                        "Wheat",
+                        date,
+                        "United Kingdom of Great Britain and Northern Ireland",
+                    )
+                println(date.format(DateTimeFormatter.ISO_DATE) + "," + estimate.toString())
+            }
     }
 
     @Test
@@ -164,16 +164,19 @@ class ExpertSystemApplicationTests : Logging {
     @Test
     @Transactional
     fun seedRateTest() {
-        val a = srs.seedRateForUserSmallholding(
-            UserSmallholding(
-                user = User(),
-                location_city = "Coventry",
-                location_country = "United Kingdom",
-                smallholdingSize = 1.0f,
-                cashCrop = Crop.WHEAT,
-                soilType = SoilType.SILT,
-            ), 1000, LocalDateTime.now()
-        )
+        val a =
+            srs.seedRateForUserSmallholding(
+                UserSmallholding(
+                    user = User(),
+                    location_city = "Coventry",
+                    location_country = "United Kingdom",
+                    smallholdingSize = 1.0f,
+                    cashCrop = Crop.WHEAT,
+                    soilType = SoilType.SILT,
+                ),
+                1000,
+                LocalDateTime.now(),
+            )
         println(a)
     }
 
@@ -208,13 +211,10 @@ class ExpertSystemApplicationTests : Logging {
                 LocalDate.now(),
                 LocalDate.now().plusMonths(9),
                 "Coventry",
-                "United Kingdom"
+                "United Kingdom",
             ) {
                 (it.temperature ?: 0f) > 9f
-            })
+            },
+        )
     }
-
 }
-
-
-

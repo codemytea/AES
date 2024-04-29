@@ -12,6 +12,6 @@ interface SIDSeedDataFullRepository :
     CrudRepository<SIDSeedDataFull, String> {
     fun findFirstByGenusAndEpithet(
         genus: String,
-        epithet: String
+        epithet: String,
     ): SIDSeedDataFull?
 }

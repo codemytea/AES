@@ -8,9 +8,8 @@ import org.springframework.stereotype.Service
 @Service
 class CropGroupFetchService(
     val cropGroupEntryRepository: CropGroupEntryRepository,
-    val cropGroupRepository: CropGroupRepository
+    val cropGroupRepository: CropGroupRepository,
 ) {
-
     fun getAllMainGroupsByName(name: String): List<CropGroupEntity> {
         return cropGroupEntryRepository.findAllByNameLikeIgnoreCase("%$name%").mapNotNull {
             it.cropSubGroup
@@ -22,5 +21,4 @@ class CropGroupFetchService(
             it.cropSubGroup
         }.filter { !it.isMain() }.toSet().toList()
     }
-
 }

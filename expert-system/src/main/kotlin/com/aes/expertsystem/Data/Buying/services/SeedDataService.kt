@@ -8,13 +8,11 @@ import org.springframework.stereotype.Service
 @Service
 class SeedDataService(
     val sidSeedDataFullRepository: SIDSeedDataFullRepository,
-    val trefleService: TrefleService
+    val trefleService: TrefleService,
 ) {
-
-    fun getSeedDataForCrop(cropName: String): SIDSeedDataFull?{
+    fun getSeedDataForCrop(cropName: String): SIDSeedDataFull? {
         val cropInfo = trefleService.getPlantByCommonName(cropName)
         val (genus, epithet) = cropInfo.data.first().scientific_name.split(" ")
         return sidSeedDataFullRepository.findFirstByGenusAndEpithet(genus, epithet)
     }
-
 }

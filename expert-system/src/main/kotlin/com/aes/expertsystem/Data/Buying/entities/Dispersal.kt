@@ -13,10 +13,9 @@ class Dispersal(
     val animal_group: String? = null,
     val animal_species: String? = null,
     val reference_id: Int? = null,
-
     @Embedded
-    val dispersal_agents: DispersalAgent? = null
-){
+    val dispersal_agents: DispersalAgent? = null,
+) {
     @Id
     val id: String = UUID.randomUUID().toString()
 }

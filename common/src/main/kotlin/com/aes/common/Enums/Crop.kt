@@ -9,5 +9,5 @@ enum class Crop(val cropGroup: CropGroup, val shouldWorryAboutDrought: Boolean =
     SOY_BEANS(CropGroup.LEGUME),
     RICE(CropGroup.CEREAL_GRAIN),
     BARLEY(CropGroup.CEREAL_GRAIN),
-    TOMATO(CropGroup.FRUITING_VEG)
+    TOMATO(CropGroup.FRUITING_VEG),
 }

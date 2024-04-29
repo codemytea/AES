@@ -10,8 +10,7 @@ import java.util.*
  * Queries to get information from the DB
  * */
 @Repository
-interface UserRepository: CrudRepository<User, UUID>{
-
+interface UserRepository : CrudRepository<User, UUID> {
     fun findByPhoneNumberContaining(phoneNumber: Long): User?
 
     fun findUserById(id: UUID): User?

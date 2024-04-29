@@ -8,15 +8,13 @@ import org.springframework.stereotype.Service
 @Service
 class EcocropDataService(
     val trefleService: TrefleService,
-    val ecocropDataRepository: EcocropDataRepository
+    val ecocropDataRepository: EcocropDataRepository,
 ) {
-
-    fun getEcocropDataForCrop(crop: String): EcocropData?{
+    fun getEcocropDataForCrop(crop: String): EcocropData? {
         val c = trefleService.getPlantByCommonName(crop).data.firstOrNull() ?: return null
         val (genus, epithet) = c.scientific_name.split(" ")
         return ecocropDataRepository.findFirstByScientificName("$genus $epithet") ?: c.synonyms?.firstNotNullOfOrNull {
             ecocropDataRepository.findFirstByScientificName(it)
         }
     }
-
 }

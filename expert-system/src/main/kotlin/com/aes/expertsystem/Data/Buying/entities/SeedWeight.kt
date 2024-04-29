@@ -15,7 +15,7 @@ class SeedWeight(
     val notes: String? = null,
     val reference_id: Int? = null,
     @Embedded
-    val material_weighed: MaterialWeighed? = null
+    val material_weighed: MaterialWeighed? = null,
 ) {
     @Id
     val id: String = UUID.randomUUID().toString()

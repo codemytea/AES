@@ -12,32 +12,26 @@ data class CropPriceId(
     val cropName: String = "",
     val country: String = "",
     val fromDate: LocalDate = LocalDate.now(),
-    val toDate: LocalDate = LocalDate.now()
+    val toDate: LocalDate = LocalDate.now(),
 ) : Serializable
 
 @Entity
 @IdClass(CropPriceId::class)
 class CropPrice(
-
     @Id
     val cropName: String = "",
-
     @Id
     val country: String = "",
-
     @Id
     val fromDate: LocalDate = LocalDate.now(),
-
     @Id
     val toDate: LocalDate = LocalDate.now(),
-
-    val priceLCU: Float = 0f
-
+    val priceLCU: Float = 0f,
 ) {
     fun toFileLine(): String {
         return "$cropName!&!$country!&!${fromDate.format(DateTimeFormatter.ISO_DATE)}!&!${
             toDate.format(
-                DateTimeFormatter.ISO_DATE
+                DateTimeFormatter.ISO_DATE,
             )
         }!&!$priceLCU\n"
     }
@@ -51,7 +45,6 @@ class CropPrice(
     }
 
     companion object {
-
         fun fromFileLine(line: String): CropPrice {
             val items = line.split("!&!")
             return CropPrice(
@@ -59,7 +52,7 @@ class CropPrice(
                 items[1],
                 LocalDate.parse(items[2]),
                 LocalDate.parse(items[3]),
-                items[4].toFloat()
+                items[4].toFloat(),
             )
         }
     }

@@ -5,9 +5,14 @@ import java.util.*
 
 interface MessageHandler {
     val messagePartType: HandlableMessageType
-    fun extractPartAndReturn(remainingMessage: String, userID: UUID): List<String>?
-    fun generateAnswer(prompts : List<String>, userID: UUID): List<String>?
+
+    fun extractPartAndReturn(
+        remainingMessage: String,
+        userID: UUID,
+    ): List<String>?
+
+    fun generateAnswer(
+        prompts: List<String>,
+        userID: UUID,
+    ): List<String>?
 }
-
-
-

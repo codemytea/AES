@@ -1,9 +1,9 @@
 package com.aes.messagehandler.Services.Detectors
 
+import com.aes.common.Enums.HandlableMessageType
 import com.aes.common.Repositories.UserRepository
 import com.aes.common.logging.Logging
 import com.aes.common.logging.logger
-import com.aes.common.Enums.HandlableMessageType
 import com.aes.messagehandler.Interfaces.MessageHandler
 import com.aes.messagehandler.Python.InformationCollection
 import com.aes.messagehandler.Services.NewInformationService
@@ -16,26 +16,31 @@ import java.util.*
 class NewInformationDetector(
     private val newInformationService: NewInformationService,
     private val userRepository: UserRepository,
-    private val informationCollection: InformationCollection
+    private val informationCollection: InformationCollection,
 ) : MessageHandler, Logging {
-
     override val messagePartType: HandlableMessageType = HandlableMessageType.INFORMATION
 
-    override fun extractPartAndReturn(remainingMessage: String, userID: UUID): List<String>? {
+    override fun extractPartAndReturn(
+        remainingMessage: String,
+        userID: UUID,
+    ): List<String>? {
         newInformationService.getDetailsToDetermine(userID)?.let {
             newInformationService.saveNewInformation(remainingMessage, userID, it)
-            return informationCollection.removeNewInformation(remainingMessage, it).also{
+            return informationCollection.removeNewInformation(remainingMessage, it).also {
                 logger().info("collected following new piece of information: ${it.joinToString("")}")
             }
         }
         return null
     }
 
-    override fun generateAnswer(prompts: List<String>, userID: UUID): List<String>? {
+    override fun generateAnswer(
+        prompts: List<String>,
+        userID: UUID,
+    ): List<String>? {
         val userChoice = userRepository.findUserById(userID)?.stopCollectingInformation
         var callToAction: String? = null
 
-        //get remaining details to determine
+        // get remaining details to determine
         newInformationService.getDetailsToDetermine(userID)?.let {
             if (userChoice != true) {
                 logger().info("Asking user with id $userID for following new information: $it")

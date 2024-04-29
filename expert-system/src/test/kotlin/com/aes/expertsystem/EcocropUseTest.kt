@@ -11,38 +11,36 @@ import org.junit.jupiter.api.Test
 import java.io.File
 
 class EcocropUseTest {
-
     val letters = "abcdefghijklmnopqrstuvwxyz"
-
 
     @Test
     fun getAndStoreDataWorks() {
         val summaryService = SummaryPageParseService()
         val lettersSingle = letters.map { it.toString() }
-        val ids = lettersSingle.flatMap {
-            println("Fetching ids for letter $it")
-            summaryService.getIdsForLetter(it)
-        }
+        val ids =
+            lettersSingle.flatMap {
+                println("Fetching ids for letter $it")
+                summaryService.getIdsForLetter(it)
+            }
         println("Found ${ids.size} ids")
 
         val fullService = FullPageParseService()
         var complete = 0
-        val results = runBlocking(Dispatchers.IO) {
-            println("START OF REQUESTS")
-            ids.map { id ->
-                async {
-                    fullService.getData(id).also {
-                        complete++
-                        println("Completed $complete out of ${ids.size} ($id)")
+        val results =
+            runBlocking(Dispatchers.IO) {
+                println("START OF REQUESTS")
+                ids.map { id ->
+                    async {
+                        fullService.getData(id).also {
+                            complete++
+                            println("Completed $complete out of ${ids.size} ($id)")
+                        }
                     }
-                }
-            }.awaitAll()
-        }
+                }.awaitAll()
+            }
 
         val file = File("results.txt")
         jacksonObjectMapper().writeValue(file, results)
         println("Written results to ${file.absolutePath}")
-
     }
-
 }

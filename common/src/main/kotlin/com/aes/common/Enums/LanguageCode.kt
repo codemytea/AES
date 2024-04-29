@@ -19,7 +19,8 @@ enum class LanguageCode(val language: Language) {
     GA(Language.IRISH),
     IT(Language.ITALIAN),
     ES(Language.SPANISH),
-    NONE(Language.NONE);
+    NONE(Language.NONE),
+    ;
 
     companion object {
         fun fromLanguage(language: Language): LanguageCode? {
@@ -45,5 +46,5 @@ enum class Language(val code: String) {
     IRISH("ga"),
     ITALIAN("it"),
     SPANISH("es"),
-    NONE("none")
+    NONE("none"),
 }

@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service
 @Service
 class AgriculturalQuestionExtraction : PythonClass() {
     @PythonFunction("getQuestions", "AgriculturalQuestionExtraction.py")
-    fun getQuestions(userMessage: String):List<String?> {
+    fun getQuestions(userMessage: String): List<String?> {
         return execute(::getQuestions, userMessage)
     }
 }
-

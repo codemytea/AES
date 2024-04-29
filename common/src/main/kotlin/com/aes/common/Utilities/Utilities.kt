@@ -17,11 +17,18 @@ object Utilities {
         return LocalDateTime.of(year, month, day, hour, minute, second)
     }
 
-    fun timeToUnixTimeStamp(time: LocalDateTime, offset: ZoneOffset = ZoneOffset.UTC): Int {
+    fun timeToUnixTimeStamp(
+        time: LocalDateTime,
+        offset: ZoneOffset = ZoneOffset.UTC,
+    ): Int {
         return time.toEpochSecond(offset).toInt()
     }
 
-    fun convertIntervalAndAdd(currTime: LocalDateTime, interval: TimeIdentifiers, plusTime: Int): LocalDateTime {
+    fun convertIntervalAndAdd(
+        currTime: LocalDateTime,
+        interval: TimeIdentifiers,
+        plusTime: Int,
+    ): LocalDateTime {
         return when (interval) {
             TimeIdentifiers.YEAR -> currTime.plusYears(plusTime.toLong())
             TimeIdentifiers.MONTH -> currTime.plusMonths(plusTime.toLong())

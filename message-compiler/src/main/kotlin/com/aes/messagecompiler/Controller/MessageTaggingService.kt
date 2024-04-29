@@ -21,9 +21,8 @@ class MessageTaggingService(
     val knowledgeRepository: KnowledgeAreaRepository,
     val messageTopicsRepository: MessageTopicsRepository,
     val messageRepository: MessageRepository,
-    val knowledgeClassifier: KnowledgeClassifiers
+    val knowledgeClassifier: KnowledgeClassifiers,
 ) : Logging {
-
     fun getTopicOfMessage(message: String): Topic? {
         return knowledgeClassifier.getTopicOfMessage(listOf(message))
     }
@@ -33,7 +32,10 @@ class MessageTaggingService(
     }
 
     @Transactional
-    fun tagMessage(question: String, userId: UUID): KnowledgeArea? {
+    fun tagMessage(
+        question: String,
+        userId: UUID,
+    ): KnowledgeArea? {
         val crop = getCropOfMessage(question)
         val topic = getTopicOfMessage(question)
 
@@ -43,10 +45,11 @@ class MessageTaggingService(
                     val message = messageRepository.findFirstByUserIdAndTypeOrderByCreatedAtDesc(userId)!!
                     val topics = messageTopicsRepository.save(MessageTopics(it, message))
                     if (!message.messageTopics.any {
-                        it.sms.id == message.id &&
-                        it.knowledgeArea.topic == topic &&
-                        it.knowledgeArea.cropName == crop
-                    }) {
+                            it.sms.id == message.id &&
+                                it.knowledgeArea.topic == topic &&
+                                it.knowledgeArea.cropName == crop
+                        }
+                    ) {
                         message.messageTopics.add(topics)
                     }
                 }

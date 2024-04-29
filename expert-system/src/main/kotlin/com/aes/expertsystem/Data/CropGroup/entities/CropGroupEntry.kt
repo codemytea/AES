@@ -5,21 +5,18 @@ import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
 import java.util.*
 
-
 @Entity
 class CropGroupEntry(
     /**
      * The name of the Crop
      * */
     val name: String = "",
-
     /**
      * The crops sub-group
      * */
     @ManyToOne
-    val cropSubGroup: CropGroupEntity? = null
+    val cropSubGroup: CropGroupEntity? = null,
 ) {
-
     @Id
     val id: String = UUID.randomUUID().toString()
 

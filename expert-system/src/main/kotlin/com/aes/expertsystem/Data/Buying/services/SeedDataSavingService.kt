@@ -14,9 +14,8 @@ import java.io.File
  * */
 @Service
 open class SeedDataSavingService(
-    val sidSeedDataFullRepository: SIDSeedDataFullRepository
+    val sidSeedDataFullRepository: SIDSeedDataFullRepository,
 ) : Logging {
-
     @Transactional
     open fun writeAllToDB() {
         writeDataToDatabase(File(this::class.java.classLoader.getResource("seed_data.txt")!!.toURI()))

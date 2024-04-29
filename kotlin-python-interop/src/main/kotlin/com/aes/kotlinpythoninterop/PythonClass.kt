@@ -1,21 +1,25 @@
 package com.aes.kotlinpythoninterop
 
-import com.aes.common.Configuration.OpenAIConfiguration
+import com.aes.kotlinpythoninterop.Configuration.OpenAIConfiguration
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Service
 import java.io.File
-import java.util.*
+import java.util.UUID
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.findAnnotations
 
 @Service
 @EnableConfigurationProperties(OpenAIConfiguration::class)
-abstract class PythonClass{
-
+abstract class PythonClass {
     @Autowired
     lateinit var openAIConfiguration: OpenAIConfiguration
 
@@ -26,7 +30,10 @@ abstract class PythonClass{
      * @param args - the arguments to the python function
      * @return the result of the python function
      * */
-    protected final inline fun <reified T> execute(function: KFunction<T>, vararg args: Any?): T {
+    protected final inline fun <reified T> execute(
+        function: KFunction<T>,
+        vararg args: Any?,
+    ): T {
         val annot = function.findAnnotations(PythonFunction::class).firstOrNull()
         val functionName = annot?.functionName ?: function.name
         val scriptName = annot?.scriptName ?: "main.py"
@@ -48,7 +55,6 @@ abstract class PythonClass{
      * */
     class ArgsWrapper(val args: List<Any?>)
 
-
     /**
      * Gets the location to store transient files during teh execution process
      *
@@ -60,26 +66,27 @@ abstract class PythonClass{
             ?: throw Exception("kotlinInterop.py does not exist (required for interoperability)")
     }
 
-
     /**
      * Writes the arguments to the transient file
      *
      * @param args - the args to write
      * @param filename - the file to write the args to
      * */
-    fun writeArgumentsToFile(args: List<Any?>, filename: String) {
+    fun writeArgumentsToFile(
+        args: List<Any?>,
+        filename: String,
+    ) {
         val wrapper = ArgsWrapper(args)
         val file = File(getPathForFile(filename))
         val mapper = jacksonObjectMapper().registerModules(JavaTimeModule())
         mapper.writeValue(file, wrapper)
     }
 
-    fun cleanUp(uuid: String){
+    fun cleanUp(uuid: String) {
         File(getPathForFile("$uuid.out.txt")).delete()
         File(getPathForFile("$uuid.args.json")).delete()
         File(getPathForFile("$uuid.result.json")).delete()
     }
-
 
     /**
      * Reads the result of the Python execution
@@ -106,39 +113,45 @@ abstract class PythonClass{
      * @return the result of the function
      * @throws PythonException if Python execution fails
      * */
-    final inline fun <reified T> executeProgram(scriptName: String, functionName: String, arguments: List<Any?>): T {
-        val env
-                = mapOf("OPENAI_API_KEY" to openAIConfiguration.openAIApiKey)
-            .toList().map { "${it.first}=${it.second}" }.joinToString("&")
+    final inline fun <reified T> executeProgram(
+        scriptName: String,
+        functionName: String,
+        arguments: List<Any?>,
+    ): T {
+        val env =
+            mapOf("OPENAI_API_KEY" to openAIConfiguration.openAIApiKey)
+                .toList().map { "${it.first}=${it.second}" }.joinToString("&")
         val programRunUID = UUID.randomUUID().toString()
         writeArgumentsToFile(arguments, "$programRunUID.args.json")
         val outputFile = File(getPathForFile("$programRunUID.out.txt"))
         outputFile.writeText("")
-        val process = ProcessBuilder()
-            .command(
-                listOfNotNull(
-                    "python3",
-                    getPythonProgram(scriptName),
-                    programRunUID,
-                    functionName,
-                    getPathForFile(""),
-                    env
+        val process =
+            ProcessBuilder()
+                .command(
+                    listOfNotNull(
+                        "python3",
+                        getPythonProgram(scriptName),
+                        programRunUID,
+                        functionName,
+                        getPathForFile(""),
+                        env,
+                    ),
                 )
-            )
-            .redirectOutput(outputFile)
-            .redirectError(outputFile)
-            .start()
+                .redirectOutput(outputFile)
+                .redirectError(outputFile)
+                .start()
         var currentLines = 0
-        val job = CoroutineScope(Dispatchers.IO).async {
-            while (true) {
-                val lines = outputFile.readLines()
-                for (i in currentLines until lines.size) {
-                    println(lines[i])
+        val job =
+            CoroutineScope(Dispatchers.IO).async {
+                while (true) {
+                    val lines = outputFile.readLines()
+                    for (i in currentLines until lines.size) {
+                        println(lines[i])
+                    }
+                    currentLines = lines.size
+                    delay(100)
                 }
-                currentLines = lines.size
-                delay(100)
             }
-        }
         val result = process.onExit().join() // unused variable prevents warning being thrown in certain IDEs due to async process
         runBlocking {
             job.cancelAndJoin()
@@ -148,12 +161,12 @@ abstract class PythonClass{
             println(lines[i])
         }
 
-        return try{
+        return try {
             readResultFromFile<T>("$programRunUID.result.json")
-        } catch(e: Throwable){
+        } catch (e: Throwable) {
             throw e
         } finally {
-            //cleanUp(programRunUID)
+            // cleanUp(programRunUID)
         }
     }
 }

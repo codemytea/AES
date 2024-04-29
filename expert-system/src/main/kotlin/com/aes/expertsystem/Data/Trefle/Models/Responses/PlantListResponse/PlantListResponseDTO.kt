@@ -4,5 +4,5 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 class PlantListResponseDTO(
-    val data: List<PlantListResponseDataDTO>
+    val data: List<PlantListResponseDataDTO>,
 )

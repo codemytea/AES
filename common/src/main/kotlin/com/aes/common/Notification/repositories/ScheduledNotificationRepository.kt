@@ -11,8 +11,11 @@ import java.time.LocalDateTime
  * Queries to get information from the DB
  * */
 @Repository
-interface ScheduledNotificationRepository: CrudRepository<ScheduledNotification, String> {
+interface ScheduledNotificationRepository : CrudRepository<ScheduledNotification, String> {
     fun findAllByTimeBeforeAndAssociatedMessageIsNull(time: LocalDateTime): List<ScheduledNotification>
 
-    fun findFirstByCropAndTopicAndAssociatedMessageIsNull(crop: Crop, topic: Topic): ScheduledNotification?
+    fun findFirstByCropAndTopicAndAssociatedMessageIsNull(
+        crop: Crop,
+        topic: Topic,
+    ): ScheduledNotification?
 }

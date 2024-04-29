@@ -11,5 +11,5 @@ class WeatherInfo(
     var precipitation: Float?,
     var precipitationProbability: Float?,
     var snowfallCm: Float?,
-    var cloudCoverPercentage: Float?
+    var cloudCoverPercentage: Float?,
 )
