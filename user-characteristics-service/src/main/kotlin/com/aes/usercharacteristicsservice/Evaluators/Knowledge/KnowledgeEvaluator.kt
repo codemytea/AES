@@ -26,6 +26,10 @@ class KnowledgeEvaluator(
     private val userRepository: UserRepository,
 ) : Logging {
 
+    fun knowledgeScaleProbability(totalQuestions: Float, totalMessages: Float) : Float{
+        return (1 - (2/(1+ exp(-0.2*(totalQuestions - totalMessages))))).toFloat()
+    }
+
     /**
      * Calculates a user's expertise on a given Knowledge Area (KA) given all their messages.
      * This basic model assumes that the more questions asked about a KA, the more the user doesn't know.
@@ -48,10 +52,9 @@ class KnowledgeEvaluator(
 
                 val lastInteractionTime = user.lastInteractionTime[it.first] ?: it.first.modifiedAt
                 val decayFactor = calculateDecayFactor(user, lastInteractionTime, LocalDateTime.now())
-                val scaledKnowledge = Utils.scaleProbability(
-                    it.second.toDouble(),
-                    messages.size.toDouble(),
-                    true
+                val scaledKnowledge = knowledgeScaleProbability(
+                    it.second.toFloat(),
+                    messages.size.toFloat()
                 )
 
                 if (!user.knowledgeAreas.any { ka ->
