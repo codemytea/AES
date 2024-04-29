@@ -20,7 +20,7 @@ class MessageCompilerApplicationTests {
     lateinit var cP: CompilerPipeline
 
     @Test
-    fun dirtyTest() {
+    fun segmentationTest() {
         val temp = cP.finalSplit(
             mapOf(
                 HandlableMessageType.GENERAL to listOf("Hello. Lovely weather I like your sweater."),
@@ -34,7 +34,7 @@ class MessageCompilerApplicationTests {
     }
 
     @Test
-    fun dirtyTest2() {
+    fun improveSuggestabilityTest() {
         val temp = cP.improveSuggestability(
             mapOf(
                 HandlableMessageType.GENERAL to listOf("Hello.", "Lovely weather.", "I like your sweater."),
@@ -49,7 +49,7 @@ class MessageCompilerApplicationTests {
             ),
             User(
                 UUID.randomUUID(),
-                phoneNumber = listOf(447565533834),
+                phoneNumber = listOf(447500000000),
                 age = Age.AGED,
                 gender = Gender.FEMALE,
                 literacy = 20f,

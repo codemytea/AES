@@ -37,11 +37,11 @@ class RAGTest {
         ),
         messages = mutableListOf(
             Message(
-                message = "Hi, my name is Jacqueline",
+                message = "Hi, my name is John",
                 type = MessageType.INCOMING
             ),
             Message(
-                message = "Hi Jacqueline! How can I assist you today?",
+                message = "Hi John! How can I assist you today?",
                 type = MessageType.OUTGOING
             ),
             Message(
@@ -80,7 +80,38 @@ class RAGTest {
             "How much can I sell my apples for in a month?",
             "What is the weather like in two days? Should I be outside planting?",
             "Should I plant garlic when it is cold?",
-            "How long will my olives take to mature?"
+            "How long will my olives take to mature?",
+            "How many seeds do I need for 100 strawberry plants?",
+            "Should I plant carrot seeds?",
+            "When is the peak season for harvesting blueberries?",
+            "When should I plant potatoes?",
+            "What temperature is it best to plant cucumber plants?",
+            "Should I grow cherries?",
+            "How much can I sell my grapes for?",
+            "What's the recommended spacing between tomato plants?",
+            "How do I grow peppers?",
+            "At what temperature should I plant lettuce at?",
+            "Should I grow squash now?",
+            "When do I grow watermelons?",
+            "What's the average yield per acre for cultivating corn?",
+            "Can I grow spinach in the winter?",
+            "When should I start harvesting radishes?",
+            "Should I grow melons this year?",
+            "Is my soil type okay for growing barley?",
+            "How long does it take for pumpkins to grow?",
+            "Is now a good time to harvest tomatoes?",
+            "Should I plant rosemary plants when it's really hot?",
+            "Should I harvest apples now?",
+            "Can I harvest strawberry plants when it's raining?",
+            "Where can I grow cucumbers?",
+            "How many lettuce seeds should I plant? I want to cover 3 acres.",
+            "How long does it take for broccoli seeds to germinate?",
+            "What's the ideal humidity level for cultivating mushrooms?",
+            "What's the lifespan of a basil plant?",
+            "Can I grow basil now?",
+            "Is it better to grow peas or broad beans?",
+            "What's the difference between determinate and indeterminate tomato varieties?",
+            "What's the minimum temperature that bell peppers can tolerate?",
         )
         val answers = questions.map {
             expertSystemService.getAgriculturalAnswer(

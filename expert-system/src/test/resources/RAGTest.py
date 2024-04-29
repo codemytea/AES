@@ -17,4 +17,8 @@ def test_answer_relevance():
 
 
 test_answer_relevance()
+
+
 kotlinInterop.registerFunction("test_answer_relevance", test_answer_relevance)
+
+
