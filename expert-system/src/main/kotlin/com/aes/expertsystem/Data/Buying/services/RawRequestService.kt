@@ -8,6 +8,10 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * Society for Ecological Restoration, International Network for Seed Based Restoration and Royal Botanic Gardens Kew. (2023) Seed Information Database (SID). Available from: https://ser-sid.org/ (February 2023)
+ * */
+
 object RawRequestService {
     private const val URL = "https://fyxheguykvewpdeysvoh.supabase.co"
 
