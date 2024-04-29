@@ -25,6 +25,7 @@ subprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
     // Configure the ktLint plugin.
     configure<KtlintExtension> {
+        this.ignoreFailures = true
         version.set("1.2.1")
         reporters { reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML) }
     }

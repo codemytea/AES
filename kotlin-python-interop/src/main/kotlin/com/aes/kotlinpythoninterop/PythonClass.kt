@@ -56,7 +56,7 @@ abstract class PythonClass {
     class ArgsWrapper(val args: List<Any?>)
 
     /**
-     * Gets the location to store transient files during teh execution process
+     * Gets the location to store transient files during the execution process
      *
      * @param filename - the name of the transient file
      * @return full path to the file which should be used for transient operations
