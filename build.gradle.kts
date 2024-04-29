@@ -23,7 +23,6 @@ subprojects {
         }
     }
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
-    // Configure the ktLint plugin.
     configure<KtlintExtension> {
         this.ignoreFailures = true
         version.set("1.2.1")
