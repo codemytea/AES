@@ -189,7 +189,7 @@ class LocalQueueService : Logging {
     }
 
     /**
-     * Reads the top item of a queue using it's given type
+     * Reads the top item of a queue using its given type
      *
      * @param queueName the name of the queue you are getting the top item of
      * @return the item
