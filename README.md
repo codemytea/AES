@@ -1,7 +1,7 @@
 # AES
 An SMS-based Agricultural Extension Service tailored for smallholders in LICs.
 
-This repository contains the code for CS310 and it's associated project
+This repository contains the code for CS310 and its associated project
 
 ## Main Modules (Overview)
  - `sms-services`: Controls the sending and receiving of messages using Gateway API
