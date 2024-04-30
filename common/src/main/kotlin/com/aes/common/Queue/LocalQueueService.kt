@@ -37,7 +37,7 @@ class LocalQueueService : Logging {
         }
     }
 
-    val MAX_QUEUE_SIZE = 999 // If it's less, risk loosing items in queue, if more, means possible error in system
+    val MAX_QUEUE_SIZE = 999 // If it's less, risk losing items in queue, if more, means possible error in system
     val queueRoot = File("$topLevelDir/queues")
     val queueDir = { queueName: String -> "${queueRoot.absolutePath}/$queueName" } // the directory the queue is stored in
     val mapper = jacksonObjectMapper().registerModules(JavaTimeModule()) // JSON converter

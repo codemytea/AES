@@ -31,7 +31,6 @@ class LiteracyEvaluator(
      * Produces a result between 0.0 (meaning very illiterate) and 100.0 (meaning very literate) and saves this to the DB
      * */
     @Scheduled(cron = "0 0 1 * * ?")
-    //@Scheduled(cron = "0/10 * * ? * *")
     @Transactional
     fun calculateLiteracyLevel() {
 
