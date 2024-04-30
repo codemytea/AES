@@ -166,7 +166,7 @@ abstract class PythonClass {
         } catch (e: Throwable) {
             throw e
         } finally {
-            // cleanUp(programRunUID)
+            cleanUp(programRunUID)
         }
     }
 }

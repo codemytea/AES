@@ -60,7 +60,7 @@ class TrefleService(
     }
 
     /**
-     * Get a plant by it's common name eg corn instead of zea Trefle API
+     * Get a plant by its common name eg corn instead of zea Trefle API
      * */
     fun getPlantByCommonName(name: String): PlantListResponseDTO {
         return getPlantBySearchQuery(

@@ -35,7 +35,7 @@ class KnowledgeEvaluator(
      * This basic model assumes that the more questions asked about a KA, the more the user doesn't know.
      * This gets more accurate over more and more crop cycles.
      *
-     * Ebbinghaus curve of forgetting is also included as the longer it's passed since the user has asked a question
+     * Ebbinghaus curve of forgetting is also included as the longer time that has passed since the user has asked a question
      * about a particular topic, the more they will have forgotten about it.
      * */
     @Scheduled(cron = "0 0 1 * * ?")

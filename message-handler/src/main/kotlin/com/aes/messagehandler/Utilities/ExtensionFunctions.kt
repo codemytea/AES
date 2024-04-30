@@ -7,7 +7,6 @@ fun String?.replaceList(list: List<String>?): String {
     }
     return toReturn ?: ""
 }
-// not working?
 
 fun <E> List<E>?.ifNotNullOrEmpty(func: (List<E>) -> Unit): Boolean {
     return if (!this.isNullOrEmpty()) {
