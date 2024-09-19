@@ -5,7 +5,7 @@ import kotlinInterop
 
 
 
-client = OpenAI(api_key="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")
+client = OpenAI(api_key=kotlinInterop.getEnv("OPENAI_API_KEY"))
 
 
 def returnStop(stopRequestInformation, stopRequestNotifications):
